@@ -31,15 +31,15 @@ setTimeout(() => {
         })
     }
 
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 10; i++) {
         Points.addPoint({
-            coordinates: { x: x + 5, y: y + i - 4 },
+            coordinates: { x: x + 5, y: y + i - 9 },
             type: EPointType.Border,
             speed: { x: 0, y: 0 },
         })
     }
 
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 10; i++) {
         Points.addPoint({
             coordinates: { x: x - 5, y: y - i },
             type: EPointType.Border,
