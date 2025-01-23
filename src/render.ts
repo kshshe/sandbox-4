@@ -68,6 +68,7 @@ const drawPoints = () => {
     stats.innerHTML = [
         `Points: ${points.length}`,
         `FPS: ${Stats.data.fps.toFixed(2)}`,
+        `Average speed: ${Stats.data.averageSpeed.toFixed(2)}`,
     ].join('<br>');
 
     requestAnimationFrame(drawPoints);

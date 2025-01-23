@@ -36,15 +36,20 @@ const processFrame = () => {
                 probability: speeds[`${point.coordinates.x}_${point.coordinates.y}`] / sum
             }))
 
-            const xSpeedToShare = point.speed.x / 3
-            const ySpeedToShare = point.speed.y / 3
+            const originalSpeedX = point.speed.x
+            const originalSpeedY = point.speed.y
+            for (const { point: nPoint, probability } of normalizedAffectedPoints) {
+                const xDiff = nPoint.speed.x - originalSpeedX
+                const yDiff = nPoint.speed.y - originalSpeedY
 
-            point.speed.x -= xSpeedToShare
-            point.speed.y -= ySpeedToShare
+                const xDiffToGive = xDiff * (probability / 2)
+                const yDiffToGive = yDiff * (probability / 2)
 
-            for (const { point: affectedPoint, probability } of normalizedAffectedPoints) {
-                affectedPoint.speed.x += xSpeedToShare * probability
-                affectedPoint.speed.y += ySpeedToShare * probability
+                point.speed.x += xDiffToGive
+                point.speed.y += yDiffToGive
+
+                nPoint.speed.x -= xDiffToGive
+                nPoint.speed.y -= yDiffToGive
             }
         }
     }
@@ -56,7 +61,9 @@ export const startProcessing = async () => {
     while (true) {
         const now = performance.now()
         processFrame()
-        await wait(1)
+        const elapsedTime = performance.now() - now
+        const remainingTime = 1000 / 60 - elapsedTime
+        await wait(Math.max(0, remainingTime))
         frames++
         framesTimes.push(performance.now() - now)
         if (frames % 50 === 0) {
@@ -64,6 +71,7 @@ export const startProcessing = async () => {
             const averageFrameTime = framesTimes.reduce((acc, time) => acc + time, 0) / framesTimes.length
             const fps = 1000 / averageFrameTime
             Stats.setFps(fps)
+            Stats.setAverageSpeed(Points.getActivePoints().reduce((acc, point) => acc + Math.abs(point.speed.x) + Math.abs(point.speed.y), 0) / Points.getActivePoints().length)
         }
     }
 }
