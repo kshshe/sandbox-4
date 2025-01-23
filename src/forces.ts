@@ -19,7 +19,6 @@ const processFrame = () => {
         if (pointBySpeed) {
             point.speed.x *= 0.95
             point.speed.y *= 0.95
-            // continue;
         } else {
             point.coordinates.x += roundedSpeed.x
             point.coordinates.y += roundedSpeed.y
@@ -31,7 +30,6 @@ const processFrame = () => {
             return acc
         })
         const affectedPoints = neighbours
-            .filter(neighbour => neighbour.type !== EPointType.Border)
             .filter(neighbour => speeds[`${neighbour.coordinates.x}_${neighbour.coordinates.y}`])
         if (affectedPoints.length) {
             const sum = affectedPoints.reduce((acc, point) => acc + speeds[`${point.coordinates.x}_${point.coordinates.y}`], 0)
@@ -55,8 +53,10 @@ const processFrame = () => {
                 point.speed.x += xDiffToGive * randomX
                 point.speed.y += yDiffToGive * randomY
 
-                nPoint.speed.x -= xDiffToGive * (1 - randomX)
-                nPoint.speed.y -= yDiffToGive * (1 - randomY)
+                if (nPoint.type !== EPointType.Border) {
+                    nPoint.speed.x -= xDiffToGive * (1 - randomX)
+                    nPoint.speed.y -= yDiffToGive * (1 - randomY)
+                }
             }
         }
     }
