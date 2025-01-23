@@ -1,15 +1,17 @@
 import { TCoordinate, EPointType } from '../types'
 import { TRoundedSpeed } from './speed'
+import { Storage } from './storage'
 
 export type TPoint = {
     coordinates: TCoordinate
     type: EPointType,
-    speed: TCoordinate
+    speed: TCoordinate,
+    data?: Record<string, any>
 }
 
 export class Points {
-    private static points: TPoint[] = []
-    private static borderPoints: TPoint[] = []
+    private static points: TPoint[] = Storage.get('points', [])
+    private static borderPoints: TPoint[] = Storage.get('borderPoints', [])
 
     static addPoint(point: TPoint) {
         if (point.type === EPointType.Border) {
@@ -17,12 +19,19 @@ export class Points {
         } else {
             this.points.push(point)
         }
+        this.save()
+    }
+
+    static save() {
+        Storage.set('points', this.points)
+        Storage.set('borderPoints', this.borderPoints)
     }
 
     static deletePoint(point: TPoint) {
         const index = this.points.findIndex(p => p === point)
         if (index !== -1) {
             this.points.splice(index, 1)
+            this.save()
         }
     }
 

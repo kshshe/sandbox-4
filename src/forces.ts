@@ -59,6 +59,8 @@ const processFrame = () => {
             }
         }
     }
+
+    Points.save()
 }
 
 let framesTimes = [] as number[]

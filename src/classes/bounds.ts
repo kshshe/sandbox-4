@@ -17,7 +17,7 @@ export class Bounds {
         Bounds.bounds = bounds
         const points = Points.getPoints()
         for (const point of points) {
-            if (point.type === EPointType.Border) {
+            if (point.type === EPointType.Border && point.data?.isFromBounds) {
                 Points.deletePoint(point)
             }
         }
@@ -27,7 +27,8 @@ export class Bounds {
             Points.addPoint({
                 type: EPointType.Border,
                 coordinates: { x, y: bounds.top - 1 },
-                speed: { x: 0, y: 0 }
+                speed: { x: 0, y: 0 },
+                data: { isFromBounds: true }
             })
         }
 
@@ -36,7 +37,8 @@ export class Bounds {
             Points.addPoint({
                 type: EPointType.Border,
                 coordinates: { x: bounds.right, y },
-                speed: { x: 0, y: 0 }
+                speed: { x: 0, y: 0 },
+                data: { isFromBounds: true }
             })
         }
 
@@ -45,7 +47,8 @@ export class Bounds {
             Points.addPoint({
                 type: EPointType.Border,
                 coordinates: { x, y: bounds.bottom },
-                speed: { x: 0, y: 0 }
+                speed: { x: 0, y: 0 },
+                data: { isFromBounds: true }
             })
         }
 
@@ -54,8 +57,11 @@ export class Bounds {
             Points.addPoint({
                 type: EPointType.Border,
                 coordinates: { x: bounds.left - 1, y },
-                speed: { x: 0, y: 0 }
+                speed: { x: 0, y: 0 },
+                data: { isFromBounds: true }
             })
         }
+
+        Points.save()
     }
 }
