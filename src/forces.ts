@@ -19,16 +19,32 @@ const processFrame = () => {
         if (!pointBySpeed) {
             point.coordinates.x += roundedSpeed.x
             point.coordinates.y += roundedSpeed.y
-        } else {
-            point.speed.x /= 2
-            if (point.speed.x < 0.01) point.speed.x = 0
-            point.speed.y /= 2
-            if (point.speed.y < 0.01) point.speed.y = 0
-            if (pointBySpeed.type !== EPointType.Border) {
-                pointBySpeed.speed.x += roundedSpeed.x / 2
-                if (pointBySpeed.speed.x < 0.01) pointBySpeed.speed.x = 0
-                pointBySpeed.speed.y += roundedSpeed.y / 2
-                if (pointBySpeed.speed.y < 0.01) pointBySpeed.speed.y = 0
+        }
+
+        const speedProbabilities = Speed.getSpeedProbabilities(point.speed)
+        const speeds = speedProbabilities.reduce((acc, { probability, speed }) => {
+            acc[`${speed.x + point.coordinates.x}_${speed.y + point.coordinates.y}`] = probability
+            return acc
+        })
+        const affectedPoints = neighbours
+            .filter(neighbour => neighbour.type !== EPointType.Border)
+            .filter(neighbour => speeds[`${neighbour.coordinates.x}_${neighbour.coordinates.y}`])
+        if (affectedPoints.length) {
+            const sum = affectedPoints.reduce((acc, point) => acc + speeds[`${point.coordinates.x}_${point.coordinates.y}`], 0)
+            const normalizedAffectedPoints = affectedPoints.map(point => ({
+                point,
+                probability: speeds[`${point.coordinates.x}_${point.coordinates.y}`] / sum
+            }))
+
+            const xSpeedToShare = point.speed.x / 3
+            const ySpeedToShare = point.speed.y / 3
+
+            point.speed.x -= xSpeedToShare
+            point.speed.y -= ySpeedToShare
+
+            for (const { point: affectedPoint, probability } of normalizedAffectedPoints) {
+                affectedPoint.speed.x += xSpeedToShare * probability
+                affectedPoint.speed.y += ySpeedToShare * probability
             }
         }
     }

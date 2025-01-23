@@ -17,16 +17,33 @@ const POSSIBLE_SPEEDS: TRoundedSpeed[] = [
     { x: 1, y: 1 },
 ]
 
+const distance = (a: TCoordinate, b: TRoundedSpeed) => {
+    return Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2)
+}
+
 export class Speed {
-    static getRoundedSpeed(speed: TCoordinate) {
+    static getSpeedProbabilities(speed: TCoordinate): {
+        probability: number
+        speed: TRoundedSpeed
+    }[] {
         const vectorLength = Math.sqrt(speed.x ** 2 + speed.y ** 2)
         const normalizedSpeed = {
             x: speed.x / vectorLength,
             y: speed.y / vectorLength
         }
 
-        const distance = (a: TCoordinate, b: TRoundedSpeed) => {
-            return Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2)
+        const distances = POSSIBLE_SPEEDS.map(possibleSpeed => distance(normalizedSpeed, possibleSpeed))
+        const maxDistance = Math.max(...distances)
+        const probabilities = distances.map(d => maxDistance - d)
+        const probabilitiesWithIndex = probabilities.map((p, i) => ({ probability: p, speed: POSSIBLE_SPEEDS[i] }))
+        return probabilitiesWithIndex 
+    }
+
+    static getRoundedSpeed(speed: TCoordinate) {
+        const vectorLength = Math.sqrt(speed.x ** 2 + speed.y ** 2)
+        const normalizedSpeed = {
+            x: speed.x / vectorLength,
+            y: speed.y / vectorLength
         }
 
         const distances = POSSIBLE_SPEEDS.map(possibleSpeed => distance(normalizedSpeed, possibleSpeed))
