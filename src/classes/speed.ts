@@ -70,7 +70,7 @@ export class Speed {
         const random = Math.random()
 
         for (let i = 0; i < shuffledProbabilitiesWithIndex.length; i++) {
-            if (random < shuffledProbabilitiesWithIndex[i].probability * (POINTS_PROBABILITY_TO_CHANGE_DIRECTION_MODIFIERS[type] ?? 1)) {
+            if (random < shuffledProbabilitiesWithIndex[i].probability * (POINTS_PROBABILITY_TO_CHANGE_DIRECTION_MODIFIERS[type] ?? 0.8)) {
                 return shuffledProbabilitiesWithIndex[i].speed
             }
         }
