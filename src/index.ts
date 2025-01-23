@@ -11,7 +11,7 @@ setTimeout(() => {
             if (Math.random() < 0.9) {
                 Points.addPoint({
                     coordinates: { x, y: y + 10 },
-                    type: EPointType.Water,
+                    type: EPointType.Sand,
                     speed: { x: 0, y: 0 },
                 })
             }

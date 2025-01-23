@@ -1,12 +1,12 @@
 import { Points } from './classes/points'
 import { Speed } from './classes/speed'
-import { forces } from './forceProcessors'
+import { forcesByType } from './forceProcessors'
 import { wait } from './utils/wait'
 
 const processFrame = () => {
     const points = Points.getActivePoints()
     for (const point of points) {
-        for (const force of forces) {
+        for (const force of forcesByType[point.type]) {
             force(point)
         }
 

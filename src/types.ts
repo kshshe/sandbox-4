@@ -6,4 +6,5 @@ export type TCoordinate = {
 export enum EPointType {
     Water = 'water',
     Border = 'border',
+    Sand = 'sand',
 }
