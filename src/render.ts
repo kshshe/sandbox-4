@@ -41,14 +41,22 @@ window.addEventListener('keydown', (e) => {
     }
 })
 
+const addListeners = (element: HTMLElement, events: string[], callback: (e: Event) => void) => {
+    events.forEach(event => {
+        element.addEventListener(event, callback);
+    })
+}
+
 let isDrawing = false;
 let drawingInterval: NodeJS.Timeout | null = null;
 let drawindX = 0;
 let drawindY = 0;
-canvas.addEventListener('mousedown', (e) => {
+addListeners(canvas, ['mousedown', 'touchstart'], (e) => {
+    const offsetX = (e as MouseEvent).offsetX || (e as TouchEvent).touches[0].clientX;
+    const offsetY = (e as MouseEvent).offsetY || (e as TouchEvent).touches[0].clientY;
     isDrawing = true;
-    const x = Math.floor(e.offsetX / CONFIG.pixelSize);
-    const y = Math.floor(e.offsetY / CONFIG.pixelSize);
+    const x = Math.floor(offsetX / CONFIG.pixelSize);
+    const y = Math.floor(offsetY / CONFIG.pixelSize);
     drawindX = x;
     drawindY = y;
     drawingInterval = setInterval(() => {
@@ -62,22 +70,23 @@ canvas.addEventListener('mousedown', (e) => {
         }
     }, 1000 / 20)
 })
-canvas.addEventListener('mouseup', () => {
+addListeners(canvas, [
+    'mouseup',
+    'touchend',
+    'touchcancel',
+    'mouseout',
+], () => {
     isDrawing = false;
     if (drawingInterval) {
         clearInterval(drawingInterval);
     }
 })
-canvas.addEventListener('mouseout', () => {
-    isDrawing = false;
-    if (drawingInterval) {
-        clearInterval(drawingInterval);
-    }
-})
-canvas.addEventListener('mousemove', (e) => {
+addListeners(canvas, ['mousemove', 'touchmove'], (e) => {
     if (isDrawing) {
-        const x = Math.floor(e.offsetX / CONFIG.pixelSize);
-        const y = Math.floor(e.offsetY / CONFIG.pixelSize);
+        const offsetX = (e as MouseEvent).offsetX || (e as TouchEvent).touches[0].clientX;
+        const offsetY = (e as MouseEvent).offsetY || (e as TouchEvent).touches[0].clientY;
+        const x = Math.floor(offsetX / CONFIG.pixelSize);
+        const y = Math.floor(offsetY / CONFIG.pixelSize);
         drawindX = x;
         drawindY = y;
     }
