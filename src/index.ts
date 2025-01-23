@@ -11,7 +11,7 @@ setTimeout(() => {
             if (Math.random() < 0.9) {
                 Points.addPoint({
                     coordinates: { x, y: y + 10 },
-                    type: EPointType.Sand,
+                    type: Math.random() > 0.5 ? EPointType.Sand : EPointType.Water,
                     speed: { x: 0, y: 0 },
                 })
             }
@@ -23,17 +23,9 @@ setTimeout(() => {
     const x = Math.floor(bounds.right / 2)
     const y = Math.floor(bounds.bottom / 2)
 
-    for (let i = 0; i < 5; i++) {
+    for (let i = 1; i < 10; i++) {
         Points.addPoint({
-            coordinates: { x: x + i, y },
-            type: EPointType.Border,
-            speed: { x: 0, y: 0 },
-        })
-    }
-
-    for (let i = 0; i < 5; i++) {
-        Points.addPoint({
-            coordinates: { x: x - i, y },
+            coordinates: { x: x + i - 5, y },
             type: EPointType.Border,
             speed: { x: 0, y: 0 },
         })

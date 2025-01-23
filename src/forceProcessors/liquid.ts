@@ -6,6 +6,8 @@ const SLOTS_TO_MOVE: TRoundedSpeed[] = [
     { x: 0, y: 1 },
     { x: 1, y: 1 },
     { x: -1, y: 1 },
+    { x: 1, y: 0 },
+    { x: -1, y: 0 },
 ]
 
-export const sandLike: TForceProcessor = canMoveIfFree(SLOTS_TO_MOVE)
+export const liquid: TForceProcessor = canMoveIfFree(SLOTS_TO_MOVE)

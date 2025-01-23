@@ -34,9 +34,9 @@ export class Points {
         return this.points
     }
 
-    static getNeighbours(point: TPoint): TPoint[] {
+    static getNeighbours(point: TPoint, withBorder = true): TPoint[] {
         const { coordinates } = point
-        const points = this.getPoints()
+        const points = withBorder ? this.getPoints() : this.getActivePoints()
         const nearestPoints = points
             .filter(p => {
                 if (p === point) return false
