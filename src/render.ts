@@ -71,6 +71,7 @@ let drawingInterval: NodeJS.Timeout | null = null;
 let drawingX = 0;
 let drawingY = 0;
 addListeners(canvas, ['mousedown', 'touchstart'], (e) => {
+    e.preventDefault();
     const offsetX = (e as MouseEvent).offsetX || (e as TouchEvent).touches[0].clientX;
     const offsetY = (e as MouseEvent).offsetY || (e as TouchEvent).touches[0].clientY;
     isDrawing = true;
@@ -88,26 +89,44 @@ addListeners(canvas, ['mousedown', 'touchstart'], (e) => {
             return;
         }
         if (!points.some(point => point.coordinates.x === drawingX && point.coordinates.y === drawingY)) {
-            Points.addPoint({
-                coordinates: { x: drawingX, y: drawingY },
-                type: drawingType,
-                speed: { x: 0, y: 0 }
+            const area = [
+                {x: 0, y: -1},
+                {x: -1, y: 0},
+                {x: 1, y: 0},
+                {x: 0, y: 1},
+                {x: 0, y: 0},
+            ]
+            area.forEach(({ x, y }) => {
+                const pointThere = points.find(point => point.coordinates.x === drawingX + x && point.coordinates.y === drawingY + y);
+                if (pointThere) {
+                    return
+                }
+                return Points.addPoint({
+                    coordinates: {
+                        x: drawingX + x,
+                        y: drawingY + y
+                    },
+                    type: drawingType as EPointType,
+                    speed: { x: 0, y: 0 },
+                })
             })
+
         }
-    }, 1000 / 20)
+    }, 1000 / 200)
 })
 addListeners(canvas, [
     'mouseup',
     'touchend',
     'touchcancel',
     'mouseout',
-], () => {
+], (e) => {
     isDrawing = false;
     if (drawingInterval) {
         clearInterval(drawingInterval);
     }
 })
 addListeners(canvas, ['mousemove', 'touchmove'], (e) => {
+    e.preventDefault();
     const offsetX = (e as MouseEvent).offsetX || (e as TouchEvent).touches[0].clientX;
     const offsetY = (e as MouseEvent).offsetY || (e as TouchEvent).touches[0].clientY;
     const x = Math.floor(offsetX / CONFIG.pixelSize);
@@ -172,7 +191,7 @@ const drawPoints = () => {
         hoveredPoint && '---',
         hoveredPoint && `${hoveredPoint.type}`,
         hoveredPoint ? Math.abs(hoveredPoint?.data.temperature) > 1 && `${Math.round(hoveredPoint.data.temperature)} °C` : '0 °C',
-    ]   
+    ]
         .filter(Boolean)
         .join('<br>');
 
