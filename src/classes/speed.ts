@@ -19,36 +19,29 @@ const POSSIBLE_SPEEDS: TRoundedSpeed[] = [
 
 export class Speed {
     static getRoundedSpeed(speed: TCoordinate) {
-        const roundedSpeed: TRoundedSpeed = {
-            x: 0,
-            y: 0
-        }
-        
         const vectorLength = Math.sqrt(speed.x ** 2 + speed.y ** 2)
         const normalizedSpeed = {
             x: speed.x / vectorLength,
             y: speed.y / vectorLength
         }
 
-        const dotProduct = (a: TCoordinate, b: TCoordinate) => a.x * b.x + a.y * b.y
+        const distance = (a: TCoordinate, b: TRoundedSpeed) => {
+            return Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2)
+        }
 
-        const probabilities = POSSIBLE_SPEEDS.map(possibleSpeed => {
-            const dot = dotProduct(normalizedSpeed, possibleSpeed)
-            return (dot + 1) / 2
-        })
+        const distances = POSSIBLE_SPEEDS.map(possibleSpeed => distance(normalizedSpeed, possibleSpeed))
+        const maxDistance = Math.max(...distances)
+        const probabilities = distances.map(d => maxDistance - d)
 
         const sum = probabilities.reduce((acc, val) => acc + val, 0);
-        const normalizedProbabilities = probabilities.map(p => {
-            const normalized = p / sum
-            if (normalized < 0.3) {
-                return 0
-            }
-        })
+        const normalizedProbabilities = probabilities.map(p => p / sum)
+        const averageProbability = normalizedProbabilities.reduce((acc, val) => acc + val, 0) / normalizedProbabilities.length
+        const normalizedProbabilitiesWithoutLow = normalizedProbabilities.map(p => p > averageProbability ? p : 0)
 
         const random = Math.random()
 
-        for (let i = 0; i < normalizedProbabilities.length; i++) {
-            if (random < normalizedProbabilities[i]) {
+        for (let i = 0; i < normalizedProbabilitiesWithoutLow.length; i++) {
+            if (random < normalizedProbabilitiesWithoutLow[i]) {
                 return POSSIBLE_SPEEDS[i]
             }
         }
