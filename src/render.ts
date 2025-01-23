@@ -30,9 +30,10 @@ const drawingTypes = {
     1: EPointType.Water,
     2: EPointType.Sand,
     3: EPointType.Border,
+    4: 'eraser'
 }
 
-let drawingType = EPointType.Water;
+let drawingType: EPointType | 'eraser' = EPointType.Water;
 
 window.addEventListener('keydown', (e) => {
     const key = e.key;
@@ -67,6 +68,13 @@ addListeners(canvas, ['mousedown', 'touchstart'], (e) => {
     drawindY = y;
     drawingInterval = setInterval(() => {
         const points = Points.getPoints();
+        if (drawingType === 'eraser') {
+            const pointOnThisPlace = points.find(point => point.coordinates.x === drawindX && point.coordinates.y === drawindY);
+            if (pointOnThisPlace) {
+                Points.deletePoint(pointOnThisPlace);
+            }
+            return;
+        }
         if (!points.some(point => point.coordinates.x === drawindX && point.coordinates.y === drawindY)) {
             Points.addPoint({
                 coordinates: { x: drawindX, y: drawindY },
