@@ -21,6 +21,15 @@ const distance = (a: TCoordinate, b: TRoundedSpeed) => {
     return Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2)
 }
 
+function shake<T>(array: T[]): T[] {
+    const copy = [...array]
+    for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy
+}
+
 export class Speed {
     static getSpeedProbabilities(speed: TCoordinate): {
         probability: number
@@ -54,12 +63,14 @@ export class Speed {
         const normalizedProbabilities = probabilities.map(p => p / sum)
         const averageProbability = normalizedProbabilities.reduce((acc, val) => acc + val, 0) / normalizedProbabilities.length
         const normalizedProbabilitiesWithoutLow = normalizedProbabilities.map(p => p > averageProbability ? p : 0)
-
+        const probabilitiesWithIndex = normalizedProbabilitiesWithoutLow.map((p, i) => ({ probability: p, speed: POSSIBLE_SPEEDS[i] }))
+        const shuffledProbabilitiesWithIndex = shake(probabilitiesWithIndex)
+        
         const random = Math.random()
 
-        for (let i = 0; i < normalizedProbabilitiesWithoutLow.length; i++) {
-            if (random < normalizedProbabilitiesWithoutLow[i]) {
-                return POSSIBLE_SPEEDS[i]
+        for (let i = 0; i < shuffledProbabilitiesWithIndex.length; i++) {
+            if (random < shuffledProbabilitiesWithIndex[i].probability) {
+                return shuffledProbabilitiesWithIndex[i].speed
             }
         }
 
