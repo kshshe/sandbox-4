@@ -13,4 +13,5 @@ canvas {
     padding: 0.5em;
     font-family: monospace;
     font-size: 0.7em;
+    cursor: pointer;
 }

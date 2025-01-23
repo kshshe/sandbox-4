@@ -41,6 +41,12 @@ window.addEventListener('keydown', (e) => {
     }
 })
 
+stats.addEventListener('click', () => {
+    const keys = Object.keys(drawingTypes);
+    const index = keys.findIndex(key => drawingTypes[key] === drawingType);
+    drawingType = drawingTypes[keys[(index + 1) % keys.length]];
+})
+
 const addListeners = (element: HTMLElement, events: string[], callback: (e: Event) => void) => {
     events.forEach(event => {
         element.addEventListener(event, callback);
