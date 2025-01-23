@@ -17,9 +17,10 @@ export const canMoveIfFree = (
         })
         if (slotsToMove.length) {
             const slot = slotsToMove[Math.floor(Math.random() * slotsToMove.length)]
+            const speedLength = Math.sqrt(speed.x ** 2 + speed.y ** 2)
             const newSpeed: TCoordinate = {
-                x: slot.x / 2,
-                y: slot.y / 2
+                x: slot.x * speedLength * 0.5,
+                y: slot.y * speedLength * 0.5,
             }
             point.speed = newSpeed
         }

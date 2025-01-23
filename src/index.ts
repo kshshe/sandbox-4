@@ -6,18 +6,6 @@ import { addConsoleApi } from './utils/addConsoleApi';
 import { Bounds } from './classes/bounds';
 
 setTimeout(() => {
-    for (let y = 0; y < 10; y++) {
-        for (let x = 0; x < Bounds.getBounds().right; x++) {
-            if (Math.random() < 0.9) {
-                Points.addPoint({
-                    coordinates: { x, y: y + 10 },
-                    type: Math.random() > 0.5 ? EPointType.Sand : EPointType.Water,
-                    speed: { x: 0, y: 0 },
-                })
-            }
-        }
-    }
-
     const bounds = Bounds.getBounds()
 
     const x = Math.floor(bounds.right / 2)

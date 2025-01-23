@@ -26,6 +26,21 @@ ctx.fillRect(0, 0, canvas.width, canvas.height);
 
 const stats = document.querySelector('.stats') as HTMLDivElement;
 
+const drawingTypes = {
+    1: EPointType.Water,
+    2: EPointType.Sand,
+    3: EPointType.Border,
+}
+
+let drawingType = EPointType.Water;
+
+window.addEventListener('keydown', (e) => {
+    const key = e.key;
+    if (key in drawingTypes) {
+        drawingType = drawingTypes[key];
+    }
+})
+
 let isDrawing = false;
 let drawingInterval: NodeJS.Timeout | null = null;
 let drawindX = 0;
@@ -37,11 +52,14 @@ canvas.addEventListener('mousedown', (e) => {
     drawindX = x;
     drawindY = y;
     drawingInterval = setInterval(() => {
-        Points.addPoint({
-            coordinates: { x: drawindX, y: drawindY },
-            type: EPointType.Water,
-            speed: { x: 0, y: 0 }
-        })
+        const points = Points.getPoints();
+        if (!points.some(point => point.coordinates.x === drawindX && point.coordinates.y === drawindY)) {
+            Points.addPoint({
+                coordinates: { x: drawindX, y: drawindY },
+                type: drawingType,
+                speed: { x: 0, y: 0 }
+            })
+        }
     }, 1000 / 20)
 })
 canvas.addEventListener('mouseup', () => {
@@ -109,6 +127,10 @@ const drawPoints = () => {
         `Points: ${points.length}`,
         `FPS: ${Stats.data.fps.toFixed(2)}`,
         `Average speed: ${Stats.data.averageSpeed.toFixed(2)}`,
+        '---',
+        ...Object.entries(drawingTypes).map(([key, value]) => {
+            return `- ${key}: ${value} ${drawingType === value ? '(selected)' : ''}`
+        })
     ].join('<br>');
 
     requestAnimationFrame(drawPoints);
