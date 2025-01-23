@@ -112,8 +112,8 @@ const drawPoints = () => {
             // draw a line in speed direction from center of the point
             const centerX = point.coordinates.x * CONFIG.pixelSize + CONFIG.pixelSize / 2;
             const centerY = point.coordinates.y * CONFIG.pixelSize + CONFIG.pixelSize / 2;
-            const speedX = point.speed.x;
-            const speedY = point.speed.y;
+            const speedX = point.speed.x * 10;
+            const speedY = point.speed.y * 10;
 
             ctx.beginPath();
             ctx.moveTo(centerX, centerY);

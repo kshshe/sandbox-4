@@ -16,10 +16,13 @@ const processFrame = () => {
         const { speed } = point
         const roundedSpeed = Speed.getRoundedSpeed(speed)
         const pointBySpeed = Points.getPointBySpeed(point, roundedSpeed, neighbours)
-        if (!pointBySpeed) {
-            point.coordinates.x += roundedSpeed.x
-            point.coordinates.y += roundedSpeed.y
+        if (pointBySpeed) {
+            point.speed.x *= 0.95
+            point.speed.y *= 0.95
+            continue;
         }
+        point.coordinates.x += roundedSpeed.x
+        point.coordinates.y += roundedSpeed.y
 
         const speedProbabilities = Speed.getSpeedProbabilities(point.speed)
         const speeds = speedProbabilities.reduce((acc, { probability, speed }) => {
@@ -42,14 +45,17 @@ const processFrame = () => {
                 const xDiff = nPoint.speed.x - originalSpeedX
                 const yDiff = nPoint.speed.y - originalSpeedY
 
-                const xDiffToGive = xDiff * (probability / 2)
-                const yDiffToGive = yDiff * (probability / 2)
+                const xDiffToGive = xDiff * probability
+                const yDiffToGive = yDiff * probability
 
-                point.speed.x += xDiffToGive
-                point.speed.y += yDiffToGive
+                const randomX = Math.random()
+                const randomY = Math.random()
 
-                nPoint.speed.x -= xDiffToGive
-                nPoint.speed.y -= yDiffToGive
+                point.speed.x += xDiffToGive * randomX
+                point.speed.y += yDiffToGive * randomY
+
+                nPoint.speed.x -= xDiffToGive * (1 - randomX)
+                nPoint.speed.y -= yDiffToGive * (1 - randomY)
             }
         }
     }
