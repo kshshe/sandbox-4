@@ -21,14 +21,12 @@ const processFrame = () => {
         const pointTemperature = point.data.temperature ?? 15
         let airNeighbours = 8
         for (const neighbour of neighbours) {
-            if (neighbour.type !== EPointType.Border) {
-                airNeighbours--
-                const neighbourTemperature = neighbour.data.temperature ?? 15
-                const temperatureDiff = pointTemperature - neighbourTemperature
-                const temperatureToShare = temperatureDiff * TEMPERATURE_PART_TO_SHARE_WITH_NEIGHBOUR
-                point.data.temperature = pointTemperature - temperatureToShare
-                neighbour.data.temperature = neighbourTemperature + temperatureToShare
-            }
+            airNeighbours--
+            const neighbourTemperature = neighbour.data.temperature ?? 15
+            const temperatureDiff = pointTemperature - neighbourTemperature
+            const temperatureToShare = temperatureDiff * TEMPERATURE_PART_TO_SHARE_WITH_NEIGHBOUR
+            point.data.temperature = pointTemperature - temperatureToShare
+            neighbour.data.temperature = neighbourTemperature + temperatureToShare
         }
         const airTemperature = 15
         for (let i = 0; i < airNeighbours; i++) {
