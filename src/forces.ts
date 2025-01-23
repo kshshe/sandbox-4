@@ -1,5 +1,6 @@
 import { Points } from './classes/points'
 import { Speed } from './classes/speed'
+import { Stats } from './classes/stats'
 import { forcesByType } from './forceProcessors'
 import { EPointType } from './types'
 import { wait } from './utils/wait'
@@ -42,11 +43,11 @@ export const startProcessing = async () => {
         await wait(1)
         frames++
         framesTimes.push(performance.now() - now)
-        if (frames % 400 === 0) {
+        if (frames % 50 === 0) {
             framesTimes = framesTimes.slice(-100)
             const averageFrameTime = framesTimes.reduce((acc, time) => acc + time, 0) / framesTimes.length
             const fps = 1000 / averageFrameTime
-            console.log('FPS:', Math.round(fps), 'Frames:', frames)
+            Stats.setFps(fps)
         }
     }
 }

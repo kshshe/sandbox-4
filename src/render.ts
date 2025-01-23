@@ -1,6 +1,7 @@
 import { CONFIG, POINS_COLORS } from "./config";
 import { Points } from "./classes/points";
 import { Bounds } from "./classes/bounds";
+import { Stats } from "./classes/stats";
 
 const canvas = document.getElementById('canvas') as HTMLCanvasElement;
 const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
@@ -21,6 +22,8 @@ Bounds.setBounds({
 ctx.fillStyle = 'white';
 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+const stats = document.querySelector('.stats') as HTMLDivElement;
+
 const previouslyUsedPixels: Set<string> = new Set();
 const drawPoints = () => {
     const points = Points.getPoints();
@@ -40,6 +43,11 @@ const drawPoints = () => {
         previouslyUsedPixels.add(key);
         ctx.fillRect(point.coordinates.x * CONFIG.pixelSize, point.coordinates.y * CONFIG.pixelSize, CONFIG.pixelSize, CONFIG.pixelSize);
     })
+    
+    stats.innerHTML = [
+        `Points: ${points.length}`,
+        `FPS: ${Stats.data.fps.toFixed(2)}`,
+    ].join('<br>');
 
     requestAnimationFrame(drawPoints);
 }

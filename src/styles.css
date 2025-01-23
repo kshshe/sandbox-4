@@ -3,3 +3,14 @@ canvas {
     top: 0;
     left: 0;
 }
+
+.stats {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 0.5em;
+    font-family: monospace;
+    font-size: 1.5em;
+}
