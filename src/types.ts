@@ -13,4 +13,7 @@ export enum EPointType {
     Bomb = 'bomb',
     Ice = 'ice',
     Steam = 'steam',
+
+    ConstantCold = 'constantCold',
+    ConstantHot = 'constantHot',
 }

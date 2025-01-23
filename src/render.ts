@@ -36,7 +36,9 @@ const drawingTypes = {
     6: EPointType.IceFire,
     7: EPointType.Bomb,
     8: EPointType.Ice,
-    0: 'eraser'
+    9: EPointType.ConstantCold,
+    0: EPointType.ConstantHot,
+    '-': 'eraser'
 }
 
 let drawingType: EPointType | 'eraser' = Storage.get('drawingType', EPointType.Water);

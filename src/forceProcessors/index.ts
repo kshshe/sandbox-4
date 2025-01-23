@@ -50,6 +50,14 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
         staticForce,
         convertOnTemperature('more', 3, EPointType.Water),
     ],
+    [EPointType.ConstantCold]: [
+        staticTemperature(INITIAL_TEMPERATURE[EPointType.ConstantCold] ?? -500),
+        staticForce,
+    ],
+    [EPointType.ConstantHot]: [
+        staticTemperature(INITIAL_TEMPERATURE[EPointType.ConstantHot] ?? 500),
+        staticForce,
+    ],
     [EPointType.Steam]: [
         ...BASIC_FORCES,
         liquid,
