@@ -23,6 +23,7 @@ export const bomb: TForceProcessor = (point) => {
                 const directionToNeighborY = neighbor.coordinates.y - point.coordinates.y
                 neighbor.speed.x = directionToNeighborX * EXPLOSION_POWER
                 neighbor.speed.y = directionToNeighborY * EXPLOSION_POWER
+                neighbor.data.temperature = 1000
             }
         })
         point.type = EPointType.Fire
