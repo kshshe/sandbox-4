@@ -1,5 +1,4 @@
 import { TCoordinate, EPointType } from '../types'
-import { Bounds } from './bounds'
 import { TRoundedSpeed } from './speed'
 
 export type TPoint = {
@@ -10,9 +9,14 @@ export type TPoint = {
 
 export class Points {
     private static points: TPoint[] = []
+    private static borderPoints: TPoint[] = []
 
     static addPoint(point: TPoint) {
-        this.points.push(point)
+        if (point.type === EPointType.Border) {
+            this.borderPoints.push(point)
+        } else {
+            this.points.push(point)
+        }
     }
 
     static deletePoint(point: TPoint) {
@@ -23,11 +27,11 @@ export class Points {
     }
 
     static getPoints() {
-        return this.points
+        return [...this.points, ...this.borderPoints]
     }
 
     static getActivePoints() {
-        return this.points.filter(p => p.type !== EPointType.Border)
+        return this.points
     }
 
     static getNeighbours(point: TPoint): TPoint[] {

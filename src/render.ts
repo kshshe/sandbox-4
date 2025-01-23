@@ -21,18 +21,24 @@ Bounds.setBounds({
 ctx.fillStyle = 'white';
 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-let previouslyUsedPixels: number[] = [];
+const previouslyUsedPixels: Set<string> = new Set();
 const drawPoints = () => {
     const points = Points.getPoints();
     ctx.fillStyle = 'white';
-    previouslyUsedPixels.forEach(pixel => {
-        ctx.fillRect(pixel % boardWidth * CONFIG.pixelSize, Math.floor(pixel / boardWidth) * CONFIG.pixelSize, CONFIG.pixelSize, CONFIG.pixelSize);
+    [...previouslyUsedPixels.values()].forEach(pixel => {
+        const [x, y] = pixel.split(':').map(Number);
+        ctx.fillRect(x * CONFIG.pixelSize, y * CONFIG.pixelSize, CONFIG.pixelSize, CONFIG.pixelSize);
     })
-    previouslyUsedPixels = [];
+    previouslyUsedPixels.clear()
     points.forEach(point => {
         const pixel = point.coordinates.y * boardWidth + point.coordinates.x;
-        previouslyUsedPixels.push(pixel);
         ctx.fillStyle = POINS_COLORS[point.type];
+        const key = `${point.coordinates.x}:${point.coordinates.y}`;
+        const thereIsPointAlready = previouslyUsedPixels.has(key);
+        if (thereIsPointAlready) {
+            ctx.fillStyle = 'red';
+        }
+        previouslyUsedPixels.add(key);
         ctx.fillRect(point.coordinates.x * CONFIG.pixelSize, point.coordinates.y * CONFIG.pixelSize, CONFIG.pixelSize, CONFIG.pixelSize);
     })
 

@@ -1,10 +1,15 @@
 import { Points } from './classes/points'
 import { Speed } from './classes/speed'
+import { forces } from './forceProcessors'
 import { wait } from './utils/wait'
 
 const processFrame = () => {
     const points = Points.getActivePoints()
     for (const point of points) {
+        for (const force of forces) {
+            force(point)
+        }
+
         const neighbours = Points.getNeighbours(point)
         const { speed } = point
         const roundedSpeed = Speed.getRoundedSpeed(speed)
@@ -21,19 +26,20 @@ const processFrame = () => {
     }
 }
 
-const framesTimes = [] as number[]
+let framesTimes = [] as number[]
 let frames = 0
 export const startProcessing = async () => {
     while (true) {
-        const now = Date.now()
+        const now = performance.now()
         processFrame()
+        await wait(1)
         frames++
-        framesTimes.push(Date.now() - now)
-        if (frames % 100 === 0) {
-            framesTimes.splice(0, framesTimes.length - 100)
-            const fps = 1000 / (framesTimes.reduce((a, b) => a + b) / framesTimes.length)
-            console.log('FPS:', fps)
+        framesTimes.push(performance.now() - now)
+        if (frames % 400 === 0) {
+            framesTimes = framesTimes.slice(-100)
+            const averageFrameTime = framesTimes.reduce((acc, time) => acc + time, 0) / framesTimes.length
+            const fps = 1000 / averageFrameTime
+            console.log('FPS:', Math.round(fps), 'Frames:', frames)
         }
-        await wait(10)
     }
 }
