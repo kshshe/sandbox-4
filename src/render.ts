@@ -32,11 +32,13 @@ let drawindX = 0;
 let drawindY = 0;
 canvas.addEventListener('mousedown', (e) => {
     isDrawing = true;
+    const x = Math.floor(e.offsetX / CONFIG.pixelSize);
+    const y = Math.floor(e.offsetY / CONFIG.pixelSize);
+    drawindX = x;
+    drawindY = y;
     drawingInterval = setInterval(() => {
-        const x = Math.floor(e.offsetX / CONFIG.pixelSize);
-        const y = Math.floor(e.offsetY / CONFIG.pixelSize);
         Points.addPoint({
-            coordinates: { x, y },
+            coordinates: { x: drawindX, y: drawindY },
             type: EPointType.Water,
             speed: { x: 0, y: 0 }
         })
