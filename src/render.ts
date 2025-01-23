@@ -33,8 +33,9 @@ const drawingTypes = {
     3: EPointType.Stone,
     4: EPointType.Border,
     5: EPointType.Fire,
-    6: EPointType.Bomb,
-    7: EPointType.Ice,
+    6: EPointType.IceFire,
+    7: EPointType.Bomb,
+    8: EPointType.Ice,
     0: 'eraser'
 }
 

@@ -9,6 +9,7 @@ export enum EPointType {
     Sand = 'sand',
     Stone = 'stone',
     Fire = 'fire',
+    IceFire = 'iceFire',
     Bomb = 'bomb',
     Ice = 'ice',
     Steam = 'steam',
