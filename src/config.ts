@@ -8,6 +8,7 @@ export const POINTS_PROBABILITY_TO_CHANGE_DIRECTION_MODIFIERS: {
     [key in EPointType]?: number
 } = {
     [EPointType.Stone]: 0,
+    [EPointType.Fire]: 4,
 }
 
 export const POINS_COLORS: Record<EPointType, string> = {
@@ -15,4 +16,13 @@ export const POINS_COLORS: Record<EPointType, string> = {
     [EPointType.Sand]: '#ffcc00',
     [EPointType.Border]: '#d3d3d3',
     [EPointType.Stone]: 'gray',
+    [EPointType.Fire]: 'red',
+}
+
+export const POINTS_WEIGHTS: Record<EPointType, number> = {
+    [EPointType.Stone]: 1,
+    [EPointType.Sand]: 1,
+    [EPointType.Water]: 0.9,
+    [EPointType.Border]: Infinity,
+    [EPointType.Fire]: -0.8,
 }

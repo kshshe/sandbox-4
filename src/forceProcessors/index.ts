@@ -5,6 +5,7 @@ import { gravity } from "./gravity";
 import { airFriction } from "./airFriction";
 import { liquid } from "./liquid";
 import { drowning } from "./drowning";
+import { lifetime } from "./lifetime";
 
 export type TForceProcessor = (point: TPoint) => void
 
@@ -24,6 +25,10 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
     ],
     [EPointType.Stone]: [
         ...BASIC_FORCES,
+    ],
+    [EPointType.Fire]: [
+        ...BASIC_FORCES,
+        lifetime(30, 120)
     ],
     [EPointType.Border]: [],
 }

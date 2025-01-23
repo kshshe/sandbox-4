@@ -12,6 +12,7 @@ export type TPoint = {
 export class Points {
     private static points: TPoint[] = Storage.get('points', [])
     private static borderPoints: TPoint[] = Storage.get('borderPoints', [])
+    private static nextTickDelete: TPoint[] = []
 
     static addPoint(point: TPoint) {
         if (point.type === EPointType.Border) {
@@ -40,11 +41,19 @@ export class Points {
         }
     }
 
+    static deletePointOnNextTick(point: TPoint) {
+        this.nextTickDelete.push(point)
+    }
+
     static getPoints() {
-        return [...this.points, ...this.borderPoints]
+        return [...this.getActivePoints(), ...this.borderPoints]
     }
 
     static getActivePoints() {
+        if (this.nextTickDelete.length) {
+            this.nextTickDelete.forEach(point => this.deletePoint(point))
+            this.nextTickDelete = []
+        }
         return this.points
     }
 

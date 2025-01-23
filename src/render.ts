@@ -4,6 +4,7 @@ import { Bounds } from "./classes/bounds";
 import { Stats } from "./classes/stats";
 import { isDev } from "./utils/isDev";
 import { EPointType } from "./types";
+import { Storage } from "./classes/storage";
 
 const canvas = document.getElementById('canvas') as HTMLCanvasElement;
 const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
@@ -31,15 +32,17 @@ const drawingTypes = {
     2: EPointType.Sand,
     3: EPointType.Stone,
     4: EPointType.Border,
+    5: EPointType.Fire,
     0: 'eraser'
 }
 
-let drawingType: EPointType | 'eraser' = EPointType.Water;
+let drawingType: EPointType | 'eraser' = Storage.get('drawingType', EPointType.Water);
 
 window.addEventListener('keydown', (e) => {
     const key = e.key;
     if (key in drawingTypes) {
         drawingType = drawingTypes[key];
+        Storage.set('drawingType', drawingType);
     }
 })
 
@@ -47,6 +50,7 @@ stats.addEventListener('click', () => {
     const keys = Object.keys(drawingTypes);
     const index = keys.findIndex(key => drawingTypes[key] === drawingType);
     drawingType = drawingTypes[keys[(index + 1) % keys.length]];
+    Storage.set('drawingType', drawingType);
 })
 
 const addListeners = (element: HTMLElement, events: string[], callback: (e: Event) => void) => {
