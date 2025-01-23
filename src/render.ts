@@ -90,11 +90,11 @@ addListeners(canvas, ['mousedown', 'touchstart'], (e) => {
         }
         if (!points.some(point => point.coordinates.x === drawingX && point.coordinates.y === drawingY)) {
             const area = [
-                {x: 0, y: -1},
-                {x: -1, y: 0},
-                {x: 1, y: 0},
-                {x: 0, y: 1},
-                {x: 0, y: 0},
+                { x: 0, y: -1 },
+                { x: -1, y: 0 },
+                { x: 1, y: 0 },
+                { x: 0, y: 1 },
+                { x: 0, y: 0 },
             ]
             area.forEach(({ x, y }) => {
                 const pointThere = points.find(point => point.coordinates.x === drawingX + x && point.coordinates.y === drawingY + y);
@@ -177,6 +177,26 @@ const drawPoints = () => {
             ctx.strokeStyle = 'black';
             ctx.stroke();
         }
+
+        // draw temperature
+        // dot from blue for -100 to red for 100
+        // in the center of the point
+        // 2px
+        const temperature = point.data.temperature ?? 0;
+        const temperatureWithLimit = Math.min(100, Math.max(-100, temperature));
+        const temperatureColor = temperatureWithLimit > 0
+            ? `rgb(${Math.round(255 * temperatureWithLimit / 100)}, 0, 0)`
+            : `rgb(0, 0, ${Math.round(255 * -temperatureWithLimit / 100)})`;
+        ctx.fillStyle = temperatureColor;
+        ctx.beginPath();
+        ctx.arc(
+            point.coordinates.x * CONFIG.pixelSize + CONFIG.pixelSize / 2,
+            point.coordinates.y * CONFIG.pixelSize + CONFIG.pixelSize / 2,
+            2,
+            0,
+            2 * Math.PI
+        );
+        ctx.fill();
     })
 
     stats.innerHTML = [
