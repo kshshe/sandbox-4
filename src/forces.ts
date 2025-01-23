@@ -19,10 +19,11 @@ const processFrame = () => {
         if (pointBySpeed) {
             point.speed.x *= 0.95
             point.speed.y *= 0.95
-            continue;
+            // continue;
+        } else {
+            point.coordinates.x += roundedSpeed.x
+            point.coordinates.y += roundedSpeed.y
         }
-        point.coordinates.x += roundedSpeed.x
-        point.coordinates.y += roundedSpeed.y
 
         const speedProbabilities = Speed.getSpeedProbabilities(point.speed)
         const speeds = speedProbabilities.reduce((acc, { probability, speed }) => {
