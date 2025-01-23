@@ -19,9 +19,8 @@ const processFrame = () => {
         const neighbours = Points.getNeighbours(point)
         const { speed } = point
         const pointTemperature = point.data.temperature ?? 15
-        let airNeighbours = 8
+        const airNeighbours = 8 - neighbours.length
         for (const neighbour of neighbours) {
-            airNeighbours--
             const neighbourTemperature = neighbour.data.temperature ?? 15
             const temperatureDiff = pointTemperature - neighbourTemperature
             const temperatureToShare = temperatureDiff * TEMPERATURE_PART_TO_SHARE_WITH_NEIGHBOUR

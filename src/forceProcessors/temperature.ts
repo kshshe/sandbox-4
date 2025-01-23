@@ -1,6 +1,10 @@
 import { EPointType } from "../types";
 import { TForceProcessor } from ".";
 
+export const staticTemperature = (temperature: number): TForceProcessor => (point) => {
+    point.data.temperature = temperature
+}
+
 export const convertOnTemperature = (
     type: 'more' | 'less',
     temperature: number,

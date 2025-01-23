@@ -8,7 +8,8 @@ import { drowning } from "./drowning";
 import { lifetime } from "./lifetime";
 import { bomb } from "./bomb";
 import { staticForce } from "./static";
-import { convertOnTemperature } from "./temperature";
+import { staticTemperature, convertOnTemperature } from "./temperature";
+import { INITIAL_TEMPERATURE } from "../config";
 
 export type TForceProcessor = (point: TPoint) => void
 
@@ -33,7 +34,8 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
     ],
     [EPointType.Fire]: [
         ...BASIC_FORCES,
-        lifetime(30, 120)
+        lifetime(30, 120),
+        staticTemperature(INITIAL_TEMPERATURE[EPointType.Fire] ?? 2000),
     ],
     [EPointType.Bomb]: [
         ...BASIC_FORCES,
