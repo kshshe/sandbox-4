@@ -20,14 +20,39 @@ setTimeout(() => {
 
     const bounds = Bounds.getBounds()
 
-    for (let y = 0; y < 10; y++) {
-        for (let x = 0; x < 10; x++) {
-            Points.addPoint({
-                coordinates: { x: x + Math.round(bounds.right / 2) - 5, y: y + Math.round(bounds.bottom / 2) - 5 },
-                type: EPointType.Border,
-                speed: { x: 0, y: 0 },
-            })
-        }
+    const x = Math.floor(bounds.right / 2)
+    const y = Math.floor(bounds.bottom / 2)
+
+    for (let i = 0; i < 5; i++) {
+        Points.addPoint({
+            coordinates: { x: x + i, y },
+            type: EPointType.Border,
+            speed: { x: 0, y: 0 },
+        })
+    }
+
+    for (let i = 0; i < 5; i++) {
+        Points.addPoint({
+            coordinates: { x: x - i, y },
+            type: EPointType.Border,
+            speed: { x: 0, y: 0 },
+        })
+    }
+
+    for (let i = 0; i < 5; i++) {
+        Points.addPoint({
+            coordinates: { x: x + 5, y: y + i - 4 },
+            type: EPointType.Border,
+            speed: { x: 0, y: 0 },
+        })
+    }
+
+    for (let i = 0; i < 5; i++) {
+        Points.addPoint({
+            coordinates: { x: x - 5, y: y - i },
+            type: EPointType.Border,
+            speed: { x: 0, y: 0 },
+        })
     }
 }, 200)
 
