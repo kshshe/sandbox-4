@@ -29,8 +29,9 @@ const stats = document.querySelector('.stats') as HTMLDivElement;
 const drawingTypes = {
     1: EPointType.Water,
     2: EPointType.Sand,
-    3: EPointType.Border,
-    4: 'eraser'
+    3: EPointType.Stone,
+    4: EPointType.Border,
+    0: 'eraser'
 }
 
 let drawingType: EPointType | 'eraser' = EPointType.Water;

@@ -4,6 +4,7 @@ import { EPointType } from "../types"
 import type { TForceProcessor } from "./index"
 
 const WEIGHTS: Record<EPointType, number> = {
+    [EPointType.Stone]: 1,
     [EPointType.Sand]: 1,
     [EPointType.Water]: 0.5,
     [EPointType.Border]: Infinity,

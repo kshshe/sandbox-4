@@ -24,5 +24,8 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
         ...BASIC_FORCES,
         sandLike,
     ],
+    [EPointType.Stone]: [
+        ...BASIC_FORCES,
+    ],
     [EPointType.Border]: [],
 }
