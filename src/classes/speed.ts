@@ -51,6 +51,9 @@ export class Speed {
 
     static getRoundedSpeed(speed: TCoordinate, type: EPointType): TRoundedSpeed {
         const vectorLength = Math.sqrt(speed.x ** 2 + speed.y ** 2)
+        if (vectorLength < 0.01) {
+            return { x: 0, y: 0 }
+        }
         const normalizedSpeed = {
             x: speed.x / vectorLength,
             y: speed.y / vectorLength

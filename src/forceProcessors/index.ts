@@ -7,6 +7,8 @@ import { liquid } from "./liquid";
 import { drowning } from "./drowning";
 import { lifetime } from "./lifetime";
 import { bomb } from "./bomb";
+import { staticForce } from "./static";
+import { convertOnTemperature } from "./temperature";
 
 export type TForceProcessor = (point: TPoint) => void
 
@@ -20,6 +22,7 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
     [EPointType.Water]: [
         ...BASIC_FORCES,
         liquid,
+        convertOnTemperature('less', -2, EPointType.Ice),
     ],
     [EPointType.Sand]: [
         ...BASIC_FORCES,
@@ -34,6 +37,10 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
     [EPointType.Bomb]: [
         ...BASIC_FORCES,
         bomb,
+    ],
+    [EPointType.Ice]: [
+        staticForce,
+        convertOnTemperature('more', 3, EPointType.Water),
     ],
     [EPointType.Border]: [],
 }

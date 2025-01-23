@@ -5,6 +5,9 @@ import { forcesByType } from './forceProcessors'
 import { EPointType } from './types'
 import { wait } from './utils/wait'
 
+const TEMPERATURE_PART_TO_SHARE_WITH_NEIGHBOUR = 1 / 20
+const TEMPERATURE_PART_TO_SHARE_WITH_AIR = 1 / 300
+
 const processFrame = () => {
     const points = Points.getActivePoints()
     for (const point of points) {
@@ -15,6 +18,24 @@ const processFrame = () => {
 
         const neighbours = Points.getNeighbours(point)
         const { speed } = point
+        const pointTemperature = point.data.temperature ?? 15
+        let airNeighbours = 8
+        for (const neighbour of neighbours) {
+            if (neighbour.type !== EPointType.Border) {
+                airNeighbours--
+                const neighbourTemperature = neighbour.data.temperature ?? 15
+                const temperatureDiff = pointTemperature - neighbourTemperature
+                const temperatureToShare = temperatureDiff * TEMPERATURE_PART_TO_SHARE_WITH_NEIGHBOUR
+                point.data.temperature = pointTemperature - temperatureToShare
+                neighbour.data.temperature = neighbourTemperature + temperatureToShare
+            }
+        }
+        const airTemperature = 15
+        for (let i = 0; i < airNeighbours; i++) {
+            const temperatureDiff = pointTemperature - airTemperature
+            const temperatureToShare = temperatureDiff * TEMPERATURE_PART_TO_SHARE_WITH_AIR
+            point.data.temperature = pointTemperature - temperatureToShare
+        }
         const roundedSpeed = Speed.getRoundedSpeed(speed, point.type)
         const pointBySpeed = Points.getPointBySpeed(point, roundedSpeed, neighbours)
         if (pointBySpeed) {

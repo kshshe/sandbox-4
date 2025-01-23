@@ -10,4 +10,5 @@ export enum EPointType {
     Stone = 'stone',
     Fire = 'fire',
     Bomb = 'bomb',
+    Ice = 'ice',
 }

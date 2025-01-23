@@ -1,3 +1,4 @@
+import { INITIAL_TEMPERATURE } from '../config'
 import { TCoordinate, EPointType } from '../types'
 import { TRoundedSpeed } from './speed'
 import { Storage } from './storage'
@@ -6,7 +7,7 @@ export type TPoint = {
     coordinates: TCoordinate
     type: EPointType,
     speed: TCoordinate,
-    data?: Record<string, any>
+    data: Record<string, any>
 }
 
 export class Points {
@@ -14,11 +15,17 @@ export class Points {
     private static borderPoints: TPoint[] = Storage.get('borderPoints', [])
     private static nextTickDelete: TPoint[] = []
 
-    static addPoint(point: TPoint) {
+    static addPoint(point: Omit<TPoint, 'data'>) {
+        const pointWithData: TPoint = {
+            data: {
+                temperature: INITIAL_TEMPERATURE[point.type] ?? 15
+            },
+            ...point
+        }
         if (point.type === EPointType.Border) {
-            this.borderPoints.push(point)
+            this.borderPoints.push(pointWithData)
         } else {
-            this.points.push(point)
+            this.points.push(pointWithData)
         }
         this.save()
     }

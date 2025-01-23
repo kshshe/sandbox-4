@@ -1,5 +1,5 @@
 import { CONFIG, POINS_COLORS } from "./config";
-import { Points } from "./classes/points";
+import { Points, TPoint } from "./classes/points";
 import { Bounds } from "./classes/bounds";
 import { Stats } from "./classes/stats";
 import { isDev } from "./utils/isDev";
@@ -34,16 +34,22 @@ const drawingTypes = {
     4: EPointType.Border,
     5: EPointType.Fire,
     6: EPointType.Bomb,
+    7: EPointType.Ice,
     0: 'eraser'
 }
 
 let drawingType: EPointType | 'eraser' = Storage.get('drawingType', EPointType.Water);
+let hoveredPoint: TPoint | null = null;
 
 window.addEventListener('keydown', (e) => {
     const key = e.key;
     if (key in drawingTypes) {
         drawingType = drawingTypes[key];
         Storage.set('drawingType', drawingType);
+    }
+    if (key === 'r' && !e.ctrlKey && !e.metaKey) {
+        localStorage.clear();
+        window.location.reload();
     }
 })
 
@@ -62,28 +68,28 @@ const addListeners = (element: HTMLElement, events: string[], callback: (e: Even
 
 let isDrawing = false;
 let drawingInterval: NodeJS.Timeout | null = null;
-let drawindX = 0;
-let drawindY = 0;
+let drawingX = 0;
+let drawingY = 0;
 addListeners(canvas, ['mousedown', 'touchstart'], (e) => {
     const offsetX = (e as MouseEvent).offsetX || (e as TouchEvent).touches[0].clientX;
     const offsetY = (e as MouseEvent).offsetY || (e as TouchEvent).touches[0].clientY;
     isDrawing = true;
     const x = Math.floor(offsetX / CONFIG.pixelSize);
     const y = Math.floor(offsetY / CONFIG.pixelSize);
-    drawindX = x;
-    drawindY = y;
+    drawingX = x;
+    drawingY = y;
     drawingInterval = setInterval(() => {
         const points = Points.getPoints();
         if (drawingType === 'eraser') {
-            const pointOnThisPlace = points.find(point => point.coordinates.x === drawindX && point.coordinates.y === drawindY);
+            const pointOnThisPlace = points.find(point => point.coordinates.x === drawingX && point.coordinates.y === drawingY);
             if (pointOnThisPlace) {
                 Points.deletePoint(pointOnThisPlace);
             }
             return;
         }
-        if (!points.some(point => point.coordinates.x === drawindX && point.coordinates.y === drawindY)) {
+        if (!points.some(point => point.coordinates.x === drawingX && point.coordinates.y === drawingY)) {
             Points.addPoint({
-                coordinates: { x: drawindX, y: drawindY },
+                coordinates: { x: drawingX, y: drawingY },
                 type: drawingType,
                 speed: { x: 0, y: 0 }
             })
@@ -102,13 +108,15 @@ addListeners(canvas, [
     }
 })
 addListeners(canvas, ['mousemove', 'touchmove'], (e) => {
+    const offsetX = (e as MouseEvent).offsetX || (e as TouchEvent).touches[0].clientX;
+    const offsetY = (e as MouseEvent).offsetY || (e as TouchEvent).touches[0].clientY;
+    const x = Math.floor(offsetX / CONFIG.pixelSize);
+    const y = Math.floor(offsetY / CONFIG.pixelSize);
     if (isDrawing) {
-        const offsetX = (e as MouseEvent).offsetX || (e as TouchEvent).touches[0].clientX;
-        const offsetY = (e as MouseEvent).offsetY || (e as TouchEvent).touches[0].clientY;
-        const x = Math.floor(offsetX / CONFIG.pixelSize);
-        const y = Math.floor(offsetY / CONFIG.pixelSize);
-        drawindX = x;
-        drawindY = y;
+        drawingX = x;
+        drawingY = y;
+    } else {
+        hoveredPoint = Points.getPoints().find(point => point.coordinates.x === x && point.coordinates.y === y) || null;
     }
 })
 
@@ -159,8 +167,14 @@ const drawPoints = () => {
         '---',
         ...Object.entries(drawingTypes).map(([key, value]) => {
             return `- ${key}: ${value} ${drawingType === value ? '(selected)' : ''}`
-        })
-    ].join('<br>');
+        }),
+        '- r: clear',
+        hoveredPoint && '---',
+        hoveredPoint && `${hoveredPoint.type}`,
+        hoveredPoint ? Math.abs(hoveredPoint?.data.temperature) > 1 && `${Math.round(hoveredPoint.data.temperature)} °C` : '0 °C',
+    ]   
+        .filter(Boolean)
+        .join('<br>');
 
     requestAnimationFrame(drawPoints);
 }

@@ -18,6 +18,7 @@ export const POINS_COLORS: Record<EPointType, string> = {
     [EPointType.Stone]: 'gray',
     [EPointType.Fire]: 'red',
     [EPointType.Bomb]: 'black',
+    [EPointType.Ice]: 'lightblue',
 }
 
 export const POINTS_WEIGHTS: Record<EPointType, number> = {
@@ -27,4 +28,11 @@ export const POINTS_WEIGHTS: Record<EPointType, number> = {
     [EPointType.Border]: Infinity,
     [EPointType.Fire]: -0.8,
     [EPointType.Bomb]: 1,
+    [EPointType.Ice]: Infinity,
+}
+
+export const INITIAL_TEMPERATURE: {
+    [key in EPointType]?: number
+} = {
+    [EPointType.Ice]: -60,
 }
