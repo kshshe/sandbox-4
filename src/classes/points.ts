@@ -33,6 +33,11 @@ export class Points {
             this.points.splice(index, 1)
             this.save()
         }
+        const indexInBorder = this.borderPoints.findIndex(p => p === point)
+        if (indexInBorder !== -1) {
+            this.borderPoints.splice(indexInBorder, 1)
+            this.save()
+        }
     }
 
     static getPoints() {
