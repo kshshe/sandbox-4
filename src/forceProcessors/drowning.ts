@@ -13,7 +13,7 @@ const WEIGHTS: Record<EPointType, number> = {
 export const drowning: TForceProcessor = (point) => {
     const neighbours = Points.getNeighbours(point, false)
     const { speed, coordinates } = point
-    const roundedSpeed = Speed.getRoundedSpeed(speed)
+    const roundedSpeed = Speed.getRoundedSpeed(speed, point.type)
     const pointBySpeed = Points.getPointBySpeed(point, roundedSpeed, neighbours)
 
     if (!pointBySpeed) {

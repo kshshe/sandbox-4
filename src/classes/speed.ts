@@ -1,4 +1,5 @@
-import { TCoordinate } from "../types"
+import { POINTS_PROBABILITY_TO_CHANGE_DIRECTION_MODIFIERS } from "../config"
+import { EPointType, TCoordinate } from "../types"
 
 export type TRoundedSpeed = {
     x: -1 | 0 | 1
@@ -48,7 +49,7 @@ export class Speed {
         return probabilitiesWithIndex 
     }
 
-    static getRoundedSpeed(speed: TCoordinate) {
+    static getRoundedSpeed(speed: TCoordinate, type: EPointType): TRoundedSpeed {
         const vectorLength = Math.sqrt(speed.x ** 2 + speed.y ** 2)
         const normalizedSpeed = {
             x: speed.x / vectorLength,
@@ -61,7 +62,7 @@ export class Speed {
 
         const sum = probabilities.reduce((acc, val) => acc + val, 0);
         const normalizedProbabilities = probabilities.map(p => p / sum)
-        const averageProbability = normalizedProbabilities.reduce((acc, val) => acc + val, 0) / normalizedProbabilities.length
+        const averageProbability = normalizedProbabilities.reduce((acc, val) => acc + val, 0) / normalizedProbabilities.length / 3
         const normalizedProbabilitiesWithoutLow = normalizedProbabilities.map(p => p > averageProbability ? p : 0)
         const probabilitiesWithIndex = normalizedProbabilitiesWithoutLow.map((p, i) => ({ probability: p, speed: POSSIBLE_SPEEDS[i] }))
         const shuffledProbabilitiesWithIndex = shake(probabilitiesWithIndex)
@@ -69,7 +70,7 @@ export class Speed {
         const random = Math.random()
 
         for (let i = 0; i < shuffledProbabilitiesWithIndex.length; i++) {
-            if (random < shuffledProbabilitiesWithIndex[i].probability) {
+            if (random < shuffledProbabilitiesWithIndex[i].probability * (POINTS_PROBABILITY_TO_CHANGE_DIRECTION_MODIFIERS[type] ?? 1)) {
                 return shuffledProbabilitiesWithIndex[i].speed
             }
         }

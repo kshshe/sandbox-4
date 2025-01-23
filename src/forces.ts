@@ -14,7 +14,7 @@ const processFrame = () => {
 
         const neighbours = Points.getNeighbours(point)
         const { speed } = point
-        const roundedSpeed = Speed.getRoundedSpeed(speed)
+        const roundedSpeed = Speed.getRoundedSpeed(speed, point.type)
         const pointBySpeed = Points.getPointBySpeed(point, roundedSpeed, neighbours)
         if (pointBySpeed) {
             point.speed.x *= 0.95
