@@ -3,6 +3,7 @@ import { Points } from "./classes/points";
 import { Bounds } from "./classes/bounds";
 import { Stats } from "./classes/stats";
 import { isDev } from "./utils/isDev";
+import { EPointType } from "./types";
 
 const canvas = document.getElementById('canvas') as HTMLCanvasElement;
 const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
@@ -24,6 +25,43 @@ ctx.fillStyle = 'white';
 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
 const stats = document.querySelector('.stats') as HTMLDivElement;
+
+let isDrawing = false;
+let drawingInterval: NodeJS.Timeout | null = null;
+let drawindX = 0;
+let drawindY = 0;
+canvas.addEventListener('mousedown', (e) => {
+    isDrawing = true;
+    drawingInterval = setInterval(() => {
+        const x = Math.floor(e.offsetX / CONFIG.pixelSize);
+        const y = Math.floor(e.offsetY / CONFIG.pixelSize);
+        Points.addPoint({
+            coordinates: { x, y },
+            type: EPointType.Water,
+            speed: { x: 0, y: 0 }
+        })
+    }, 1000 / 20)
+})
+canvas.addEventListener('mouseup', () => {
+    isDrawing = false;
+    if (drawingInterval) {
+        clearInterval(drawingInterval);
+    }
+})
+canvas.addEventListener('mouseout', () => {
+    isDrawing = false;
+    if (drawingInterval) {
+        clearInterval(drawingInterval);
+    }
+})
+canvas.addEventListener('mousemove', (e) => {
+    if (isDrawing) {
+        const x = Math.floor(e.offsetX / CONFIG.pixelSize);
+        const y = Math.floor(e.offsetY / CONFIG.pixelSize);
+        drawindX = x;
+        drawindY = y;
+    }
+})
 
 const previouslyUsedPixels: Set<string> = new Set();
 const drawPoints = () => {
