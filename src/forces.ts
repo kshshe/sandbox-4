@@ -8,7 +8,8 @@ import { wait } from './utils/wait'
 const processFrame = () => {
     const points = Points.getActivePoints()
     for (const point of points) {
-        for (const force of forcesByType[point.type]) {
+        const forcesList = forcesByType[point.type] || []
+        for (const force of forcesList) {
             force(point)
         }
 
@@ -17,8 +18,8 @@ const processFrame = () => {
         const roundedSpeed = Speed.getRoundedSpeed(speed, point.type)
         const pointBySpeed = Points.getPointBySpeed(point, roundedSpeed, neighbours)
         if (pointBySpeed) {
-            point.speed.x *= 0.95
-            point.speed.y *= 0.95
+            point.speed.x *= 0.99
+            point.speed.y *= 0.99
         } else {
             point.coordinates.x += roundedSpeed.x
             point.coordinates.y += roundedSpeed.y
