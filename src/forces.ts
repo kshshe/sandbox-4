@@ -36,8 +36,8 @@ const processFrame = () => {
         const roundedSpeed = Speed.getRoundedSpeed(speed, point.type)
         const pointBySpeed = Points.getPointBySpeed(point, roundedSpeed, neighbours)
         if (pointBySpeed) {
-            point.speed.x *= 0.99
-            point.speed.y *= 0.99
+            point.speed.x *= 0.999
+            point.speed.y *= 0.999
         } else {
             point.coordinates.x += roundedSpeed.x
             point.coordinates.y += roundedSpeed.y

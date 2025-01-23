@@ -15,7 +15,12 @@ export const bomb: TForceProcessor = (point) => {
 
     point.data.lifetime++
 
-    if (point.data.lifetime > 100 && Math.random() < 0.1) {
+    if (
+        (
+            point.data.lifetime > 100 && Math.random() < 0.1
+        ) ||
+        point.data.temperature > 900
+    ) {
         const neighbors = Points.getNeighbours(point)
         neighbors.forEach((neighbor) => {
             if (neighbor.type !== EPointType.Border) {
