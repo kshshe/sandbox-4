@@ -1,6 +1,7 @@
 import { Points } from './classes/points'
 import { Speed } from './classes/speed'
 import { forcesByType } from './forceProcessors'
+import { EPointType } from './types'
 import { wait } from './utils/wait'
 
 const processFrame = () => {
@@ -19,9 +20,15 @@ const processFrame = () => {
             point.coordinates.y += roundedSpeed.y
         } else {
             point.speed.x /= 2
+            if (point.speed.x < 0.01) point.speed.x = 0
             point.speed.y /= 2
-            pointBySpeed.speed.x += roundedSpeed.x / 2
-            pointBySpeed.speed.y += roundedSpeed.y / 2
+            if (point.speed.y < 0.01) point.speed.y = 0
+            if (pointBySpeed.type !== EPointType.Border) {
+                pointBySpeed.speed.x += roundedSpeed.x / 2
+                if (pointBySpeed.speed.x < 0.01) pointBySpeed.speed.x = 0
+                pointBySpeed.speed.y += roundedSpeed.y / 2
+                if (pointBySpeed.speed.y < 0.01) pointBySpeed.speed.y = 0
+            }
         }
     }
 }

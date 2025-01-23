@@ -7,5 +7,5 @@ export const CONFIG = {
 export const POINS_COLORS: Record<EPointType, string> = {
     [EPointType.Water]: 'blue',
     [EPointType.Sand]: '#ffcc00',
-    [EPointType.Border]: '#f0f0f0',
+    [EPointType.Border]: '#d3d3d3',
 }
