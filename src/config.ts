@@ -17,6 +17,7 @@ export const POINS_COLORS: Record<EPointType, string> = {
     [EPointType.Border]: '#d3d3d3',
     [EPointType.Stone]: 'gray',
     [EPointType.Fire]: 'red',
+    [EPointType.Bomb]: 'black',
 }
 
 export const POINTS_WEIGHTS: Record<EPointType, number> = {
@@ -25,4 +26,5 @@ export const POINTS_WEIGHTS: Record<EPointType, number> = {
     [EPointType.Water]: 0.9,
     [EPointType.Border]: Infinity,
     [EPointType.Fire]: -0.8,
+    [EPointType.Bomb]: 1,
 }
