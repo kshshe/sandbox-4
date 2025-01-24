@@ -1,10 +1,11 @@
 import { Speed, TRoundedSpeed } from "./speed"
+import { Storage } from "./storage"
 
 export class Controls {
     private static state: {
         gravityDirection: TRoundedSpeed
     } = {
-        gravityDirection: Speed.rounded.down
+        gravityDirection: Storage.get('gravityDirection', Speed.rounded.down)
     }
 
     public static getGravityDirection() {
@@ -13,5 +14,6 @@ export class Controls {
 
     public static setGravityDirection(value: TRoundedSpeed) {
         this.state.gravityDirection = value
+        Storage.set('gravityDirection', value)
     }
 }
