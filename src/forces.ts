@@ -20,7 +20,6 @@ const processFrame = () => {
         const prevY = point.coordinates.y
 
         const neighbours = Points.getNeighbours(point)
-        const { speed } = point
         const pointTemperature = point.data.temperature ?? 15
         const airNeighbours = 8 - neighbours.length
         for (const neighbour of neighbours) {
@@ -36,7 +35,7 @@ const processFrame = () => {
             const temperatureToShare = temperatureDiff * TEMPERATURE_PART_TO_SHARE_WITH_AIR
             point.data.temperature = pointTemperature - temperatureToShare
         }
-        const roundedSpeed = Speed.getRoundedSpeed(speed, point.type)
+        const roundedSpeed = Speed.getRoundedSpeed(point)
         const pointBySpeed = Points.getPointBySpeed(point, roundedSpeed, neighbours)
         if (pointBySpeed) {
             point.speed.x *= 0.94

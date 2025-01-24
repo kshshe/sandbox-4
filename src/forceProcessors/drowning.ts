@@ -5,7 +5,7 @@ import type { TForceProcessor } from "./index"
 
 export const drowning: TForceProcessor = (point) => {
     const { speed, coordinates } = point
-    const roundedSpeed = Speed.getRoundedSpeed(speed, point.type)
+    const roundedSpeed = Speed.getRoundedSpeed(point)
     const pointBySpeed = Points.getPointByCoordinates({
         x: coordinates.x + roundedSpeed.x,
         y: coordinates.y + roundedSpeed.y,

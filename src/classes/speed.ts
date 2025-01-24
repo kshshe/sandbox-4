@@ -1,5 +1,6 @@
 import { POINTS_PROBABILITY_TO_CHANGE_DIRECTION_MODIFIERS } from "../config"
 import { EPointType, TCoordinate } from "../types"
+import { Points, TPoint } from "./points"
 
 export type TRoundedSpeed = {
     x: -1 | 0 | 1
@@ -46,19 +47,19 @@ export class Speed {
         bottomLeft: TRoundedSpeed
         bottomRight: TRoundedSpeed
     } = {
-        left: { x: -1, y: 0 },
-        right: { x: 1, y: 0 },
-        up: { x: 0, y: -1 },
-        down: { x: 0, y: 1 },
-        leftUp: { x: -1, y: -1 },
-        rightUp: { x: 1, y: -1 },
-        leftDown: { x: -1, y: 1 },
-        rightDown: { x: 1, y: 1 },
-        topLeft: { x: -1, y: -1 },
-        topRight: { x: 1, y: -1 },
-        bottomLeft: { x: -1, y: 1 },
-        bottomRight: { x: 1, y: 1 },
-    }
+            left: { x: -1, y: 0 },
+            right: { x: 1, y: 0 },
+            up: { x: 0, y: -1 },
+            down: { x: 0, y: 1 },
+            leftUp: { x: -1, y: -1 },
+            rightUp: { x: 1, y: -1 },
+            leftDown: { x: -1, y: 1 },
+            rightDown: { x: 1, y: 1 },
+            topLeft: { x: -1, y: -1 },
+            topRight: { x: 1, y: -1 },
+            bottomLeft: { x: -1, y: 1 },
+            bottomRight: { x: 1, y: 1 },
+        }
 
     static getSpeedProbabilities(speed: TCoordinate): {
         probability: number
@@ -77,7 +78,9 @@ export class Speed {
         return probabilitiesWithIndex
     }
 
-    static getRoundedSpeed(speed: TCoordinate, type: EPointType): TRoundedSpeed {
+    static getRoundedSpeed(point: TPoint): TRoundedSpeed {
+        const neighbours = Points.getNeighbours(point)
+        const { speed, type } = point
         const vectorLength = Math.sqrt(speed.x ** 2 + speed.y ** 2)
         if (vectorLength < 0.01) {
             return { x: 0, y: 0 }
@@ -96,7 +99,10 @@ export class Speed {
         const averageProbability = normalizedProbabilities.reduce((acc, val) => acc + val, 0) / normalizedProbabilities.length
         const normalizedProbabilitiesWithoutLow = normalizedProbabilities.map(p => p > averageProbability ? p : 0)
         const probabilitiesWithIndex = normalizedProbabilitiesWithoutLow.map((p, i) => ({ probability: p, speed: POSSIBLE_SPEEDS[i] }))
-        const shuffledProbabilitiesWithIndex = shake(probabilitiesWithIndex)
+        const shuffledProbabilitiesWithIndex = shake(probabilitiesWithIndex).filter(prob => {
+            const isNeighbour = neighbours.some(neighbour => neighbour.coordinates.x === point.coordinates.x + prob.speed.x && neighbour.coordinates.y === point.coordinates.y + prob.speed.y && neighbour !== point)
+            return !isNeighbour
+        })
 
         const random = Math.random()
 
