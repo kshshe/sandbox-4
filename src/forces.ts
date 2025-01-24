@@ -81,6 +81,7 @@ const processFrame = () => {
     }
 
     Points.save()
+    Points.updateCoordinatesIndex()
 }
 
 let framesTimes = [] as number[]

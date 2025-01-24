@@ -14,6 +14,19 @@ export class Points {
     private static points: TPoint[] = Storage.get('points', [])
     private static borderPoints: TPoint[] = Storage.get('borderPoints', [])
     private static nextTickDelete: TPoint[] = []
+    private static coordinatesIndex: Record<string, TPoint> = {}
+
+    static updateCoordinatesIndex() {
+        this.coordinatesIndex = {}
+        this.getPoints().forEach(point => {
+            const { coordinates } = point
+            this.coordinatesIndex[`${coordinates.x}:${coordinates.y}`] = point
+        })
+    }
+
+    static getPointByCoordinates(coordinates: TCoordinate): TPoint | undefined {
+        return this.coordinatesIndex[`${coordinates.x}:${coordinates.y}`]
+    }
 
     static addPoint(point: Omit<TPoint, 'data'>) {
         const pointWithData: TPoint = {
@@ -28,6 +41,7 @@ export class Points {
             this.points.push(pointWithData)
         }
         this.save()
+        this.updateCoordinatesIndex()
     }
 
     static save() {

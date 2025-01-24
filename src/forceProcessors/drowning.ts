@@ -4,10 +4,12 @@ import { POINTS_WEIGHTS } from "../config"
 import type { TForceProcessor } from "./index"
 
 export const drowning: TForceProcessor = (point) => {
-    const neighbours = Points.getNeighbours(point, false)
     const { speed, coordinates } = point
     const roundedSpeed = Speed.getRoundedSpeed(speed, point.type)
-    const pointBySpeed = Points.getPointBySpeed(point, roundedSpeed, neighbours)
+    const pointBySpeed = Points.getPointByCoordinates({
+        x: coordinates.x + roundedSpeed.x,
+        y: coordinates.y + roundedSpeed.y,
+    })
 
     if (!pointBySpeed) {
         return
