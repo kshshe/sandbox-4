@@ -16,6 +16,9 @@ const processFrame = () => {
             force(point)
         }
 
+        const prevX = point.coordinates.x
+        const prevY = point.coordinates.y
+
         const neighbours = Points.getNeighbours(point)
         const { speed } = point
         const pointTemperature = point.data.temperature ?? 15
@@ -41,6 +44,10 @@ const processFrame = () => {
         } else {
             point.coordinates.x += roundedSpeed.x
             point.coordinates.y += roundedSpeed.y
+            Points.setPointInIndex({
+                x: prevX,
+                y: prevY
+            }, point)
         }
 
         const speedProbabilities = Speed.getSpeedProbabilities(point.speed)

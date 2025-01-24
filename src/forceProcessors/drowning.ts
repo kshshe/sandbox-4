@@ -20,6 +20,8 @@ export const drowning: TForceProcessor = (point) => {
     if (myWeight > neighbourWeight) {
         point.coordinates = pointBySpeed.coordinates
         pointBySpeed.coordinates = coordinates
+        Points.setPointInIndex(pointBySpeed.coordinates, pointBySpeed)
+        Points.setPointInIndex(point.coordinates, point)
         return
     }
 }

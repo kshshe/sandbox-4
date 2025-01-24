@@ -20,8 +20,19 @@ export class Points {
         this.coordinatesIndex = {}
         this.getPoints().forEach(point => {
             const { coordinates } = point
-            this.coordinatesIndex[`${coordinates.x}:${coordinates.y}`] = point
+            this.setPointInIndex(coordinates, point)
         })
+    }
+
+    static movePointInIndex(from: TCoordinate, to: TCoordinate) {
+        const point = this.coordinatesIndex[`${from.x}:${from.y}`]
+        if (!point) return
+        delete this.coordinatesIndex[`${from.x}:${from.y}`]
+        this.setPointInIndex(to, point)
+    }
+
+    static setPointInIndex(coordinates: TCoordinate, point: TPoint) {
+        this.coordinatesIndex[`${coordinates.x}:${coordinates.y}`] = point
     }
 
     static getPointByCoordinates(coordinates: TCoordinate): TPoint | undefined {
@@ -70,6 +81,20 @@ export class Points {
         return [...this.getActivePoints(), ...this.borderPoints]
     }
 
+    static getPointsNear(coordinates: TCoordinate, withBorder = true): TPoint[] {
+        const nearCoordinates: TCoordinate[] = []
+        for (let x = coordinates.x - 2; x <= coordinates.x + 2; x++) {
+            for (let y = coordinates.y - 2; y <= coordinates.y + 2; y++) {
+                nearCoordinates.push({ x, y })
+            }
+        }
+        const pointsFromIndex = nearCoordinates.map(c => this.getPointByCoordinates(c)).filter(Boolean) as TPoint[]
+        if (withBorder) {
+            return pointsFromIndex
+        }
+        return pointsFromIndex.filter(p => p.type !== EPointType.Border)
+    }
+
     static getActivePoints() {
         if (this.nextTickDelete.length) {
             this.nextTickDelete.forEach(point => this.deletePoint(point))
@@ -80,7 +105,7 @@ export class Points {
 
     static getNeighbours(point: TPoint, withBorder = true): TPoint[] {
         const { coordinates } = point
-        const points = withBorder ? this.getPoints() : this.getActivePoints()
+        const points = this.getPointsNear(coordinates, withBorder)
         const nearestPoints = points
             .filter(p => {
                 if (p === point) return false
