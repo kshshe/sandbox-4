@@ -2,7 +2,7 @@ import { TForceProcessor } from ".";
 import { Points } from "../classes/points";
 import { EPointType } from "../types";
 
-const EXPLOSION_POWER = 20
+const EXPLOSION_POWER = 50
 
 export const bomb: TForceProcessor = (point) => {
     if (!point.data) {
