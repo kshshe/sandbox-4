@@ -13,6 +13,7 @@ export enum EPointType {
     Bomb = 'bomb',
     Ice = 'ice',
     Steam = 'steam',
+    Void = 'void',
 
     ConstantCold = 'constantCold',
     ConstantHot = 'constantHot',

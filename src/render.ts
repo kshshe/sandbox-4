@@ -40,6 +40,7 @@ const drawingTypes = {
     8: EPointType.Ice,
     9: EPointType.ConstantCold,
     0: EPointType.ConstantHot,
+    v: EPointType.Void,
     '-': 'eraser'
 }
 

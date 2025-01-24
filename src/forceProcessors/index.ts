@@ -11,6 +11,7 @@ import { staticForce } from "./static";
 import { staticTemperature, convertOnTemperature } from "./temperature";
 import { INITIAL_TEMPERATURE } from "../config";
 import { chaos } from "./chaos";
+import { voidProcessor } from "./void";
 
 export type TForceProcessor = (point: TPoint) => void
 
@@ -66,4 +67,8 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
         convertOnTemperature('less', 60, EPointType.Water),
     ],
     [EPointType.Border]: [],
+    [EPointType.Void]: [
+        voidProcessor,
+        staticForce,
+    ],
 }

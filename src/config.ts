@@ -8,6 +8,7 @@ export const POINTS_PROBABILITY_TO_CHANGE_DIRECTION_MODIFIERS: {
     [key in EPointType]?: number
 } = {
     [EPointType.Stone]: 0,
+    [EPointType.Void]: 0,
     [EPointType.Fire]: 4,
     [EPointType.IceFire]: 4,
     [EPointType.Steam]: 10,
@@ -26,6 +27,8 @@ export const POINS_COLORS: Record<EPointType, string> = {
 
     [EPointType.ConstantCold]: 'blue',
     [EPointType.ConstantHot]: 'red',
+
+    [EPointType.Void]: 'black',
 }
 
 export const POINTS_WEIGHTS: Record<EPointType, number> = {
@@ -40,6 +43,7 @@ export const POINTS_WEIGHTS: Record<EPointType, number> = {
     [EPointType.Ice]: Infinity,
     [EPointType.ConstantCold]: Infinity,
     [EPointType.ConstantHot]: Infinity,
+    [EPointType.Void]: Infinity,
 }
 
 export const INITIAL_TEMPERATURE: {
