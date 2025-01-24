@@ -20,6 +20,11 @@ export class Points {
         this.coordinatesIndex = {}
         this.getPoints().forEach(point => {
             const { coordinates } = point
+            if (this.coordinatesIndex[`${coordinates.x}:${coordinates.y}`] && this.coordinatesIndex[`${coordinates.x}:${coordinates.y}`] !== point) {
+                console.warn(`Double point in coordinates: ${coordinates.x}:${coordinates.y}`)
+                this.deletePointOnNextTick(point)
+                return
+            }
             this.setPointInIndex(coordinates, point)
         })
     }
