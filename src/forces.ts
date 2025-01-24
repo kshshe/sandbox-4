@@ -66,8 +66,8 @@ const processFrame = () => {
                 const xDiffToGive = xDiff * probability
                 const yDiffToGive = yDiff * probability
 
-                const randomX = Math.random()
-                const randomY = Math.random()
+                const randomX = Math.random() / 3
+                const randomY = Math.random() / 3
 
                 point.speed.x += xDiffToGive * randomX
                 point.speed.y += yDiffToGive * randomY
