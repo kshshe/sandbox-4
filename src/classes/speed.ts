@@ -46,7 +46,7 @@ export class Speed {
         const maxDistance = Math.max(...distances)
         const probabilities = distances.map(d => maxDistance - d)
         const probabilitiesWithIndex = probabilities.map((p, i) => ({ probability: p, speed: POSSIBLE_SPEEDS[i] }))
-        return probabilitiesWithIndex 
+        return probabilitiesWithIndex
     }
 
     static getRoundedSpeed(speed: TCoordinate, type: EPointType): TRoundedSpeed {
@@ -65,15 +65,17 @@ export class Speed {
 
         const sum = probabilities.reduce((acc, val) => acc + val, 0);
         const normalizedProbabilities = probabilities.map(p => p / sum)
-        const averageProbability = normalizedProbabilities.reduce((acc, val) => acc + val, 0) / normalizedProbabilities.length / 3
+        const averageProbability = normalizedProbabilities.reduce((acc, val) => acc + val, 0) / normalizedProbabilities.length
         const normalizedProbabilitiesWithoutLow = normalizedProbabilities.map(p => p > averageProbability ? p : 0)
         const probabilitiesWithIndex = normalizedProbabilitiesWithoutLow.map((p, i) => ({ probability: p, speed: POSSIBLE_SPEEDS[i] }))
         const shuffledProbabilitiesWithIndex = shake(probabilitiesWithIndex)
-        
+
         const random = Math.random()
 
         for (let i = 0; i < shuffledProbabilitiesWithIndex.length; i++) {
             if (random < shuffledProbabilitiesWithIndex[i].probability * (POINTS_PROBABILITY_TO_CHANGE_DIRECTION_MODIFIERS[type] ?? 0.8)) {
+                console.log(`Selected probability: ${Math.round(100 * shuffledProbabilitiesWithIndex[i].probability)
+                    }%`)
                 return shuffledProbabilitiesWithIndex[i].speed
             }
         }
