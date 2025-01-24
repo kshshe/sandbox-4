@@ -5,6 +5,8 @@ import { Stats } from "./classes/stats";
 import { isDev } from "./utils/isDev";
 import { EPointType } from "./types";
 import { Storage } from "./classes/storage";
+import { Controls } from "./classes/controls";
+import { Speed } from "./classes/speed";
 
 const canvas = document.getElementById('canvas') as HTMLCanvasElement;
 const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
@@ -53,6 +55,26 @@ window.addEventListener('keydown', (e) => {
     if (key === 'r' && !e.ctrlKey && !e.metaKey) {
         localStorage.clear();
         window.location.reload();
+    }
+
+    if (key === 'ArrowLeft') {
+        Controls.setGravityDirection(Speed.rounded.left)
+    }
+
+    if (key === 'ArrowRight') {
+        Controls.setGravityDirection(Speed.rounded.right)
+    }
+
+    if (key === 'ArrowUp') {
+        Controls.setGravityDirection(Speed.rounded.up)
+    }
+
+    if (key === 'ArrowDown') {
+        Controls.setGravityDirection(Speed.rounded.down)
+    }
+
+    if (key === ' ') {
+        Controls.setGravityDirection({ x: 0, y: 0 })
     }
 })
 
