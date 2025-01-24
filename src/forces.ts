@@ -16,71 +16,76 @@ const processFrame = () => {
             force(point)
         }
 
-        const prevX = point.coordinates.x
-        const prevY = point.coordinates.y
+        const speedLength = Math.sqrt(point.speed.x ** 2 + point.speed.y ** 2)
+        let timesProcess = Math.min(Math.max(1, Math.ceil(speedLength)), 10)
 
-        const neighbours = Points.getNeighbours(point)
-        const pointTemperature = point.data.temperature ?? 15
-        const airNeighbours = 8 - neighbours.length
-        for (const neighbour of neighbours) {
-            const neighbourTemperature = neighbour.data.temperature ?? 15
-            const temperatureDiff = pointTemperature - neighbourTemperature
-            const temperatureToShare = temperatureDiff * TEMPERATURE_PART_TO_SHARE_WITH_NEIGHBOUR
-            point.data.temperature = pointTemperature - temperatureToShare
-            neighbour.data.temperature = neighbourTemperature + temperatureToShare
-        }
-        const airTemperature = 15
-        for (let i = 0; i < airNeighbours; i++) {
-            const temperatureDiff = pointTemperature - airTemperature
-            const temperatureToShare = temperatureDiff * TEMPERATURE_PART_TO_SHARE_WITH_AIR
-            point.data.temperature = pointTemperature - temperatureToShare
-        }
-        const roundedSpeed = Speed.getRoundedSpeed(point, true)
-        const pointBySpeed = Points.getPointBySpeed(point, roundedSpeed, neighbours)
-        if (pointBySpeed) {
-            point.speed.x *= 0.94
-            point.speed.y *= 0.94
-        } else {
-            point.coordinates.x += roundedSpeed.x
-            point.coordinates.y += roundedSpeed.y
-            Points.setPointInIndex({
-                x: prevX,
-                y: prevY
-            }, point)
-        }
+        while (timesProcess--) {
+            const prevX = point.coordinates.x
+            const prevY = point.coordinates.y
 
-        const speedProbabilities = Speed.getSpeedProbabilities(point.speed)
-        const speeds = speedProbabilities.reduce((acc, { probability, speed }) => {
-            acc[`${speed.x + point.coordinates.x}_${speed.y + point.coordinates.y}`] = probability
-            return acc
-        })
-        const affectedPoints = neighbours
-            .filter(neighbour => speeds[`${neighbour.coordinates.x}_${neighbour.coordinates.y}`])
-        if (affectedPoints.length) {
-            const sum = affectedPoints.reduce((acc, point) => acc + speeds[`${point.coordinates.x}_${point.coordinates.y}`], 0)
-            const normalizedAffectedPoints = affectedPoints.map(point => ({
-                point,
-                probability: speeds[`${point.coordinates.x}_${point.coordinates.y}`] / sum
-            }))
+            const neighbours = Points.getNeighbours(point)
+            const pointTemperature = point.data.temperature ?? 15
+            const airNeighbours = 8 - neighbours.length
+            for (const neighbour of neighbours) {
+                const neighbourTemperature = neighbour.data.temperature ?? 15
+                const temperatureDiff = pointTemperature - neighbourTemperature
+                const temperatureToShare = temperatureDiff * TEMPERATURE_PART_TO_SHARE_WITH_NEIGHBOUR
+                point.data.temperature = pointTemperature - temperatureToShare
+                neighbour.data.temperature = neighbourTemperature + temperatureToShare
+            }
+            const airTemperature = 15
+            for (let i = 0; i < airNeighbours; i++) {
+                const temperatureDiff = pointTemperature - airTemperature
+                const temperatureToShare = temperatureDiff * TEMPERATURE_PART_TO_SHARE_WITH_AIR
+                point.data.temperature = pointTemperature - temperatureToShare
+            }
+            const roundedSpeed = Speed.getRoundedSpeed(point, true)
+            const pointBySpeed = Points.getPointBySpeed(point, roundedSpeed, neighbours)
+            if (pointBySpeed) {
+                point.speed.x *= 0.94
+                point.speed.y *= 0.94
+            } else {
+                point.coordinates.x += roundedSpeed.x
+                point.coordinates.y += roundedSpeed.y
+                Points.setPointInIndex({
+                    x: prevX,
+                    y: prevY
+                }, point)
+            }
 
-            const originalSpeedX = point.speed.x
-            const originalSpeedY = point.speed.y
-            for (const { point: nPoint, probability } of normalizedAffectedPoints) {
-                const xDiff = nPoint.speed.x - originalSpeedX
-                const yDiff = nPoint.speed.y - originalSpeedY
+            const speedProbabilities = Speed.getSpeedProbabilities(point.speed)
+            const speeds = speedProbabilities.reduce((acc, { probability, speed }) => {
+                acc[`${speed.x + point.coordinates.x}_${speed.y + point.coordinates.y}`] = probability
+                return acc
+            })
+            const affectedPoints = neighbours
+                .filter(neighbour => speeds[`${neighbour.coordinates.x}_${neighbour.coordinates.y}`])
+            if (affectedPoints.length) {
+                const sum = affectedPoints.reduce((acc, point) => acc + speeds[`${point.coordinates.x}_${point.coordinates.y}`], 0)
+                const normalizedAffectedPoints = affectedPoints.map(point => ({
+                    point,
+                    probability: speeds[`${point.coordinates.x}_${point.coordinates.y}`] / sum
+                }))
 
-                const xDiffToGive = xDiff * probability
-                const yDiffToGive = yDiff * probability
+                const originalSpeedX = point.speed.x
+                const originalSpeedY = point.speed.y
+                for (const { point: nPoint, probability } of normalizedAffectedPoints) {
+                    const xDiff = nPoint.speed.x - originalSpeedX
+                    const yDiff = nPoint.speed.y - originalSpeedY
 
-                const randomX = Math.random() / 3
-                const randomY = Math.random() / 3
+                    const xDiffToGive = xDiff * probability
+                    const yDiffToGive = yDiff * probability
 
-                point.speed.x += xDiffToGive * randomX
-                point.speed.y += yDiffToGive * randomY
+                    const randomX = Math.random() / 3
+                    const randomY = Math.random() / 3
 
-                if (nPoint.type !== EPointType.Border) {
-                    nPoint.speed.x -= xDiffToGive * (1 - randomX)
-                    nPoint.speed.y -= yDiffToGive * (1 - randomY)
+                    point.speed.x += xDiffToGive * randomX
+                    point.speed.y += yDiffToGive * randomY
+
+                    if (nPoint.type !== EPointType.Border) {
+                        nPoint.speed.x -= xDiffToGive * (1 - randomX)
+                        nPoint.speed.y -= yDiffToGive * (1 - randomY)
+                    }
                 }
             }
         }
