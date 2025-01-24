@@ -32,6 +32,34 @@ function shake<T>(array: T[]): T[] {
 }
 
 export class Speed {
+    static rounded: {
+        left: TRoundedSpeed
+        right: TRoundedSpeed
+        up: TRoundedSpeed
+        down: TRoundedSpeed
+        leftUp: TRoundedSpeed
+        rightUp: TRoundedSpeed
+        leftDown: TRoundedSpeed
+        rightDown: TRoundedSpeed
+        topLeft: TRoundedSpeed
+        topRight: TRoundedSpeed
+        bottomLeft: TRoundedSpeed
+        bottomRight: TRoundedSpeed
+    } = {
+        left: { x: -1, y: 0 },
+        right: { x: 1, y: 0 },
+        up: { x: 0, y: -1 },
+        down: { x: 0, y: 1 },
+        leftUp: { x: -1, y: -1 },
+        rightUp: { x: 1, y: -1 },
+        leftDown: { x: -1, y: 1 },
+        rightDown: { x: 1, y: 1 },
+        topLeft: { x: -1, y: -1 },
+        topRight: { x: 1, y: -1 },
+        bottomLeft: { x: -1, y: 1 },
+        bottomRight: { x: 1, y: 1 },
+    }
+
     static getSpeedProbabilities(speed: TCoordinate): {
         probability: number
         speed: TRoundedSpeed

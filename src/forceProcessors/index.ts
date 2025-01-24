@@ -60,6 +60,7 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
     ],
     [EPointType.Steam]: [
         ...BASIC_FORCES,
+        liquid,
         convertOnTemperature('less', 60, EPointType.Water),
     ],
     [EPointType.Border]: [],
