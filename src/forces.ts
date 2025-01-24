@@ -35,7 +35,7 @@ const processFrame = () => {
             const temperatureToShare = temperatureDiff * TEMPERATURE_PART_TO_SHARE_WITH_AIR
             point.data.temperature = pointTemperature - temperatureToShare
         }
-        const roundedSpeed = Speed.getRoundedSpeed(point)
+        const roundedSpeed = Speed.getRoundedSpeed(point, true)
         const pointBySpeed = Points.getPointBySpeed(point, roundedSpeed, neighbours)
         if (pointBySpeed) {
             point.speed.x *= 0.94

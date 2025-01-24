@@ -78,8 +78,8 @@ export class Speed {
         return probabilitiesWithIndex
     }
 
-    static getRoundedSpeed(point: TPoint): TRoundedSpeed {
-        const neighbours = Points.getNeighbours(point)
+    static getRoundedSpeed(point: TPoint, exceptNeighbours = false): TRoundedSpeed {
+        const neighbours = exceptNeighbours ? Points.getNeighbours(point) : []
         const { speed, type } = point
         const vectorLength = Math.sqrt(speed.x ** 2 + speed.y ** 2)
         if (vectorLength < 0.01) {
