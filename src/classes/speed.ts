@@ -74,8 +74,6 @@ export class Speed {
 
         for (let i = 0; i < shuffledProbabilitiesWithIndex.length; i++) {
             if (random < shuffledProbabilitiesWithIndex[i].probability * (POINTS_PROBABILITY_TO_CHANGE_DIRECTION_MODIFIERS[type] ?? 0.8)) {
-                console.log(`Selected probability: ${Math.round(100 * shuffledProbabilitiesWithIndex[i].probability)
-                    }%`)
                 return shuffledProbabilitiesWithIndex[i].speed
             }
         }
