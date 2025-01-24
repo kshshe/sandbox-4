@@ -114,30 +114,31 @@ addListeners(canvas, ['mousedown', 'touchstart'], (e) => {
             }
             return;
         }
-        if (!points.some(point => point.coordinates.x === drawingX && point.coordinates.y === drawingY)) {
-            const area = [
-                { x: 0, y: -1 },
-                { x: -1, y: 0 },
-                { x: 1, y: 0 },
-                { x: 0, y: 1 },
-                { x: 0, y: 0 },
-            ]
-            area.forEach(({ x, y }) => {
-                const pointThere = points.find(point => point.coordinates.x === drawingX + x && point.coordinates.y === drawingY + y);
-                if (pointThere) {
+        const area = [
+            { x: 0, y: -1 },
+            { x: -1, y: 0 },
+            { x: 1, y: 0 },
+            { x: 0, y: 1 },
+            { x: 0, y: 0 },
+        ]
+        area.forEach(({ x, y }) => {
+            const pointThere = points.find(point => point.coordinates.x === drawingX + x && point.coordinates.y === drawingY + y);
+            if (pointThere) {
+                if (!isDev) {
                     return
+                } else {
+                    Points.deletePoint(pointThere);
                 }
-                return Points.addPoint({
-                    coordinates: {
-                        x: drawingX + x,
-                        y: drawingY + y
-                    },
-                    type: drawingType as EPointType,
-                    speed: { x: 0, y: 0 },
-                })
+            }
+            return Points.addPoint({
+                coordinates: {
+                    x: drawingX + x,
+                    y: drawingY + y
+                },
+                type: drawingType as EPointType,
+                speed: { x: 0, y: 0 },
             })
-
-        }
+        })
     }, 1000 / 200)
 })
 addListeners(canvas, [
