@@ -2,7 +2,6 @@ import { TPoint } from "../classes/points";
 import { EPointType } from "../types";
 
 import { gravity } from "./gravity";
-import { airFriction } from "./airFriction";
 import { liquid } from "./liquid";
 import { drowning } from "./drowning";
 import { lifetime } from "./lifetime";
@@ -18,7 +17,6 @@ export type TForceProcessor = (point: TPoint) => void
 const BASIC_FORCES: TForceProcessor[] = [
     chaos,
     gravity,
-    airFriction,
     drowning,
 ]
 
