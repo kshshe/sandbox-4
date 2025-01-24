@@ -10,10 +10,12 @@ import { bomb } from "./bomb";
 import { staticForce } from "./static";
 import { staticTemperature, convertOnTemperature } from "./temperature";
 import { INITIAL_TEMPERATURE } from "../config";
+import { chaos } from "./chaos";
 
 export type TForceProcessor = (point: TPoint) => void
 
 const BASIC_FORCES: TForceProcessor[] = [
+    chaos,
     gravity,
     airFriction,
     drowning,
