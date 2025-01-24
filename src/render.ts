@@ -167,6 +167,7 @@ addListeners(canvas, ['mousemove', 'touchmove'], (e) => {
 })
 
 const previouslyUsedPixels: Set<string> = new Set();
+let frame = 0;
 const drawPoints = () => {
     const points = Points.getPoints();
     ctx.fillStyle = 'white';
@@ -226,21 +227,23 @@ const drawPoints = () => {
         ctx.fill();
     })
 
-    stats.innerHTML = [
-        `Points: ${points.length}`,
-        `FPS: ${Stats.data.fps.toFixed(2)}`,
-        `Average speed: ${Stats.data.averageSpeed.toFixed(2)}`,
-        '---',
-        ...Object.entries(drawingTypes).map(([key, value]) => {
-            return `- ${key}: ${value} ${drawingType === value ? '(selected)' : ''}`
-        }),
-        '- r: clear',
-        hoveredPoint && '---',
-        hoveredPoint && `${hoveredPoint.type}`,
-        hoveredPoint ? Math.abs(hoveredPoint?.data.temperature) > 1 && `${Math.round(hoveredPoint.data.temperature)} °C` : '0 °C',
-    ]
-        .filter(Boolean)
-        .join('<br>');
+    if (frame++ % 20 === 0) {
+        stats.innerHTML = [
+            `Points: ${points.length}`,
+            `FPS: ${Stats.data.fps.toFixed(2)}`,
+            `Average speed: ${Stats.data.averageSpeed.toFixed(2)}`,
+            '---',
+            ...Object.entries(drawingTypes).map(([key, value]) => {
+                return `- ${key}: ${value} ${drawingType === value ? '(selected)' : ''}`
+            }),
+            '- r: clear',
+            hoveredPoint && '---',
+            hoveredPoint && `${hoveredPoint.type}`,
+            hoveredPoint ? Math.abs(hoveredPoint?.data.temperature) > 1 && `${Math.round(hoveredPoint.data.temperature)} °C` : '0 °C',
+        ]
+            .filter(Boolean)
+            .join('<br>');
+    }
 
     requestAnimationFrame(drawPoints);
 }
