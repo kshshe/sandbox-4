@@ -52,6 +52,12 @@ document.querySelector('#reset')?.addEventListener('click', () => {
     window.location.reload();
 })
 
+setTimeout(() => {
+    if (typeof (DeviceMotionEvent as any).requestPermission !== 'function') {
+        document.querySelector('#gravity')?.remove();
+    }
+}, 100)
+
 document.querySelector('#gravity')?.addEventListener('click', () => {
     if (typeof (DeviceMotionEvent as any).requestPermission === 'function') {
         (DeviceMotionEvent as any).requestPermission?.()
@@ -65,7 +71,7 @@ document.querySelector('#gravity')?.addEventListener('click', () => {
                             const max = Math.max(Math.abs(x), Math.abs(y));
                             const normalizedX = x / max;
                             const normalizedY = y / max;
-                            Controls.setGravityDirection({ x: normalizedX, y: normalizedY });
+                            Controls.setGravityDirection({ x: normalizedX, y: -normalizedY });
                         } else {
                             Controls.setGravityDirection(Speed.rounded.down)
                         }
