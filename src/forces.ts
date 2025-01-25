@@ -76,15 +76,12 @@ const processFrame = () => {
                     const xDiffToGive = xDiff * probability
                     const yDiffToGive = yDiff * probability
 
-                    const randomX = Math.random() / 3
-                    const randomY = Math.random() / 3
-
-                    point.speed.x += xDiffToGive * randomX
-                    point.speed.y += yDiffToGive * randomY
+                    point.speed.x += xDiffToGive
+                    point.speed.y += yDiffToGive
 
                     if (nPoint.type !== EPointType.Border) {
-                        nPoint.speed.x -= xDiffToGive * (1 - randomX)
-                        nPoint.speed.y -= yDiffToGive * (1 - randomY)
+                        nPoint.speed.x -= xDiffToGive
+                        nPoint.speed.y -= yDiffToGive
                     }
                 }
             }
