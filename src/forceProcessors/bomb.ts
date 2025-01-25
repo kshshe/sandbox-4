@@ -1,8 +1,32 @@
 import { TForceProcessor } from ".";
-import { Points } from "../classes/points";
+import { Points, TPoint } from "../classes/points";
 import { EPointType } from "../types";
 
-const EXPLOSION_POWER = 50
+const STARTING_EXPLOSION_POWER = 10
+
+const explode = (point: TPoint, processedPoints: Set<TPoint>, rest = 3) => {
+    if (rest === 0) {
+        return
+    }
+    if (point.type === EPointType.Border) {
+        return
+    }
+    const neighbors = Points.getNeighbours(point)
+    const force = STARTING_EXPLOSION_POWER * rest
+    neighbors.forEach((neighbor) => {
+        if (neighbor.type !== EPointType.Border && !processedPoints.has(neighbor)) {
+            const directionToNeighborX = neighbor.coordinates.x - point.coordinates.x
+            const directionToNeighborY = neighbor.coordinates.y - point.coordinates.y
+            neighbor.speed.x = directionToNeighborX * force * (Math.random() + 0.5)
+            neighbor.speed.y = directionToNeighborY * force * (Math.random() + 0.5)
+            neighbor.data.temperature = 300 * rest
+            processedPoints.add(neighbor)
+        }
+    })
+    neighbors.forEach((neighbor) => {
+        explode(neighbor, processedPoints, rest - 1)
+    })
+}
 
 export const bomb: TForceProcessor = (point) => {
     if (!point.data) {
@@ -21,16 +45,7 @@ export const bomb: TForceProcessor = (point) => {
         ) ||
         point.data.temperature > 900
     ) {
-        const neighbors = Points.getNeighbours(point)
-        neighbors.forEach((neighbor) => {
-            if (neighbor.type !== EPointType.Border) {
-                const directionToNeighborX = neighbor.coordinates.x - point.coordinates.x
-                const directionToNeighborY = neighbor.coordinates.y - point.coordinates.y
-                neighbor.speed.x = directionToNeighborX * EXPLOSION_POWER
-                neighbor.speed.y = directionToNeighborY * EXPLOSION_POWER
-                neighbor.data.temperature = 1000
-            }
-        })
+        explode(point, new Set([point]))    
         point.type = EPointType.Fire
         point.data.lifetime = 0
     }
