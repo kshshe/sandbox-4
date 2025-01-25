@@ -15,3 +15,13 @@ canvas {
     font-size: 0.7em;
     cursor: pointer;
 }
+
+.buttons {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    padding: 0.5em;
+}

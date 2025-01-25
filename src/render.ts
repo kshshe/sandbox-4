@@ -47,6 +47,35 @@ const drawingTypes = {
 let drawingType: EPointType | 'eraser' = Storage.get('drawingType', EPointType.Water);
 let hoveredPoint: TPoint | null = null;
 
+document.querySelector('#reset')?.addEventListener('click', () => {
+    localStorage.clear();
+    window.location.reload();
+})
+
+document.querySelector('#gravity')?.addEventListener('click', () => {
+    if (typeof (DeviceMotionEvent as any).requestPermission === 'function') {
+        (DeviceMotionEvent as any).requestPermission?.()
+            .then(permissionState => {
+                if (permissionState === 'granted') {
+                    window.addEventListener('devicemotion', (e) => {
+                        const acceleration = e.accelerationIncludingGravity;
+                        if (acceleration) {
+                            const x = acceleration.x ?? 0;
+                            const y = acceleration.y ?? 1;
+                            const max = Math.max(Math.abs(x), Math.abs(y));
+                            const normalizedX = x / max;
+                            const normalizedY = y / max;
+                            Controls.setGravityDirection({ x: normalizedX, y: normalizedY });
+                        } else {
+                            Controls.setGravityDirection(Speed.rounded.down)
+                        }
+                    })
+                }
+            })
+            .catch(console.error);
+    }
+})
+
 window.addEventListener('keydown', (e) => {
     const key = e.key;
     if (key in drawingTypes) {
