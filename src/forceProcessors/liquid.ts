@@ -1,6 +1,6 @@
 import { Points } from "../classes/points"
 import { Speed, TRoundedSpeed } from "../classes/speed"
-import { TCoordinate } from "../types"
+import { EPointType, TCoordinate } from "../types"
 import type { TForceProcessor } from "./index"
 
 const isEqualSpeed = (speed1: TRoundedSpeed, speed2: TRoundedSpeed) => {
@@ -104,6 +104,24 @@ export const liquid: TForceProcessor = (point) => {
     const { speed } = point
     const roundedSpeed = Speed.getRoundedSpeed(point)
     const pointBySpeed = Points.getPointBySpeed(point, roundedSpeed, neighbours)
+
+    // apply pressure to every point in neighbours
+    for (const neighbourCoordinates of Speed.possibleNeighbours) {
+        const neighbour = Points.getPointByCoordinates({
+            x: point.coordinates.x + neighbourCoordinates.x,
+            y: point.coordinates.y + neighbourCoordinates.y,
+        })
+        const xDirection = neighbourCoordinates.x
+        const yDirection = neighbourCoordinates.y
+
+        if (!neighbour) {
+            point.speed.x -= xDirection * 0.002
+            point.speed.y -= yDirection * 0.002
+        } else if (neighbour.type !== EPointType.Border) {
+            neighbour.speed.x += xDirection * 0.01
+            neighbour.speed.y += yDirection * 0.01
+        }
+    }
 
     if (pointBySpeed) {
         const availableSlots = getRelativeSlots(roundedSpeed)

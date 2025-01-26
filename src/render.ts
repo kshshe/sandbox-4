@@ -133,8 +133,8 @@ let drawingX = 0;
 let drawingY = 0;
 addListeners(canvas, ['mousedown', 'touchstart'], (e) => {
     e.preventDefault();
-    const offsetX = (e as MouseEvent).offsetX || (e as TouchEvent).touches[0].clientX;
-    const offsetY = (e as MouseEvent).offsetY || (e as TouchEvent).touches[0].clientY;
+    const offsetX = (e as MouseEvent).offsetX ?? (e as TouchEvent).touches[0].clientX ?? 0;
+    const offsetY = (e as MouseEvent).offsetY ?? (e as TouchEvent).touches[0].clientY ?? 0;
     isDrawing = true;
     const x = Math.floor(offsetX / CONFIG.pixelSize);
     const y = Math.floor(offsetY / CONFIG.pixelSize);
@@ -189,8 +189,8 @@ addListeners(canvas, [
 })
 addListeners(canvas, ['mousemove', 'touchmove'], (e) => {
     e.preventDefault();
-    const offsetX = (e as MouseEvent).offsetX || (e as TouchEvent).touches[0].clientX;
-    const offsetY = (e as MouseEvent).offsetY || (e as TouchEvent).touches[0].clientY;
+    const offsetX = (e as MouseEvent).offsetX ?? (e as TouchEvent).touches[0].clientX ?? 0;
+    const offsetY = (e as MouseEvent).offsetY ?? (e as TouchEvent).touches[0].clientY ?? 0;
     const x = Math.floor(offsetX / CONFIG.pixelSize);
     const y = Math.floor(offsetY / CONFIG.pixelSize);
     if (isDrawing) {

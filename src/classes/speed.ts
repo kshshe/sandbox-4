@@ -61,6 +61,17 @@ export class Speed {
             bottomRight: { x: 1, y: 1 },
         }
 
+    static possibleNeighbours: TRoundedSpeed[] = [
+        Speed.rounded.left,
+        Speed.rounded.right,
+        Speed.rounded.up,
+        Speed.rounded.down,
+        Speed.rounded.leftUp,
+        Speed.rounded.rightUp,
+        Speed.rounded.leftDown,
+        Speed.rounded.rightDown,
+    ]
+
     static getSpeedProbabilities(speed: TCoordinate): {
         probability: number
         speed: TRoundedSpeed
