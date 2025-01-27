@@ -5,7 +5,7 @@ import { EPointType } from "../types";
 
 export const clone: TForceProcessor = (point) => {
     if (!point.data.cloneType) {
-        const neighbors = Points.getNeighbours(point).filter(neighbor => neighbor.type !== EPointType.Clone);
+        const neighbors = Points.getNeighbours(point).filter(neighbor => neighbor.type !== EPointType.Clone && neighbor.type !== EPointType.Border);
         const randomNeighbor = neighbors[Math.floor(Math.random() * neighbors.length)];
         if (randomNeighbor) {
             point.data.cloneType = randomNeighbor.type;

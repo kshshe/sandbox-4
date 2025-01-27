@@ -6,6 +6,8 @@ import { addConsoleApi } from './utils/addConsoleApi';
 import { Bounds } from './classes/bounds';
 import { Storage } from './classes/storage';
 
+Points.updateCoordinatesIndex()
+
 setTimeout(() => {
     if (!Storage.get('wasInit', false)) {
         const bounds = Bounds.getBounds()
