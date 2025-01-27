@@ -4,6 +4,7 @@ import { Stats } from './classes/stats'
 import { forcesByType } from './forceProcessors'
 import { EPointType } from './types'
 import { wait } from './utils/wait'
+import { isDev } from './utils/isDev'
 
 const TEMPERATURE_PART_TO_SHARE_WITH_NEIGHBOUR = 1 / 20
 const TEMPERATURE_PART_TO_SHARE_WITH_AIR = 1 / 300
@@ -99,7 +100,7 @@ export const startProcessing = async () => {
         const now = performance.now()
         processFrame()
         const elapsedTime = performance.now() - now
-        const remainingTime = 1000 / 60 - elapsedTime
+        const remainingTime = isDev ? 0 : 1000 / 60 - elapsedTime
         await wait(Math.max(0, remainingTime))
         frames++
         framesTimes.push(performance.now() - now)

@@ -19,7 +19,6 @@ const explode = (point: TPoint, processedPoints: Set<TPoint>, rest = 3) => {
             const directionToNeighborY = neighbor.coordinates.y - point.coordinates.y
             neighbor.speed.x = directionToNeighborX * force * (Math.random() + 0.5)
             neighbor.speed.y = directionToNeighborY * force * (Math.random() + 0.5)
-            neighbor.data.temperature = 300 * rest
             processedPoints.add(neighbor)
         }
     })
@@ -45,8 +44,7 @@ export const bomb: TForceProcessor = (point) => {
         ) ||
         point.data.temperature > 900
     ) {
-        explode(point, new Set([point]))    
-        point.type = EPointType.Fire
-        point.data.lifetime = 0
+        explode(point, new Set([point]))
+        Points.deletePointOnNextTick(point)
     }
 }
