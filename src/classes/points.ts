@@ -61,7 +61,7 @@ export class Points {
             this.points.push(pointWithData)
         }
         this.save()
-        this.updateCoordinatesIndex()
+        this.setPointInIndex(point.coordinates, pointWithData)
     }
 
     static save() {

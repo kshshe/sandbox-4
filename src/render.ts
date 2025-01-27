@@ -41,6 +41,7 @@ const drawingTypes = {
     9: EPointType.ConstantCold,
     0: EPointType.ConstantHot,
     v: EPointType.Void,
+    c: EPointType.Clone,
     '-': 'eraser'
 }
 
