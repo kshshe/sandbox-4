@@ -123,7 +123,6 @@ export const liquid: TForceProcessor = (point) => {
     const roundedSpeed = Speed.getRoundedSpeed(point)
     const pointBySpeed = Points.getPointBySpeed(point, roundedSpeed)
 
-    // apply pressure to every point in neighbours
     for (const neighbourCoordinates of Speed.possibleNeighbours) {
         const neighbour = Points.getPointByCoordinates({
             x: point.coordinates.x + neighbourCoordinates.x,
@@ -133,8 +132,8 @@ export const liquid: TForceProcessor = (point) => {
         const yDirection = neighbourCoordinates.y
 
         if (!neighbour) {
-            point.speed.x -= xDirection * 0.005
-            point.speed.y -= yDirection * 0.005
+            point.speed.x -= xDirection * 0.004
+            point.speed.y -= yDirection * 0.004
         }
     }
 
@@ -146,12 +145,8 @@ export const liquid: TForceProcessor = (point) => {
         })
         if (slotsToMove.length) {
             const slot = slotsToMove[Math.floor(random() * slotsToMove.length)]
-            const speedLength = Math.sqrt(speed.x ** 2 + speed.y ** 2)
-            const newSpeed: TCoordinate = {
-                x: slot.x * speedLength * 0.5,
-                y: slot.y * speedLength * 0.5,
-            }
-            point.speed = newSpeed
+            point.speed.x += slot.x * 0.02
+            point.speed.y += slot.y * 0.02
         }
     }
 }
