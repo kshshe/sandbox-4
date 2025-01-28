@@ -53,6 +53,10 @@ document.querySelector('#reset')?.addEventListener('click', () => {
     window.location.reload();
 })
 
+document.querySelector('#debug')?.addEventListener('click', () => {
+    Controls.setDebugMode(!Controls.getDebugMode());
+})
+
 setTimeout(() => {
     if (typeof (DeviceMotionEvent as any).requestPermission !== 'function') {
         document.querySelector('#gravity')?.remove();
@@ -205,6 +209,7 @@ addListeners(canvas, ['mousemove', 'touchmove'], (e) => {
 const previouslyUsedPixels: Set<string> = new Set();
 let frame = 0;
 const drawPoints = () => {
+    const debugMode = Controls.getDebugMode();
     const points = Points.getPoints();
     ctx.fillStyle = 'white';
     [...previouslyUsedPixels.values()].forEach(pixel => {
@@ -212,7 +217,7 @@ const drawPoints = () => {
         ctx.fillRect(x * CONFIG.pixelSize, y * CONFIG.pixelSize, CONFIG.pixelSize, CONFIG.pixelSize);
     })
 
-    if (isDev) {
+    if (debugMode) {
         ctx.fillStyle = 'white';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
@@ -222,13 +227,16 @@ const drawPoints = () => {
         const key = `${point.coordinates.x}:${point.coordinates.y}`;
         const thereIsPointAlready = previouslyUsedPixels.has(key);
         ctx.fillStyle = POINS_COLORS[point.type];
-        if (thereIsPointAlready) {
+        if (debugMode && thereIsPointAlready) {
             ctx.fillStyle = 'red';
         }
         previouslyUsedPixels.add(key);
         ctx.fillRect(point.coordinates.x * CONFIG.pixelSize, point.coordinates.y * CONFIG.pixelSize, CONFIG.pixelSize, CONFIG.pixelSize);
+        
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0.1)';
+        ctx.strokeRect(point.coordinates.x * CONFIG.pixelSize + 1, point.coordinates.y * CONFIG.pixelSize + 1, CONFIG.pixelSize - 2, CONFIG.pixelSize - 2);
 
-        if (isDev) {
+        if (debugMode) {
             // draw a line in speed direction from center of the point
             const centerX = point.coordinates.x * CONFIG.pixelSize + CONFIG.pixelSize / 2;
             const centerY = point.coordinates.y * CONFIG.pixelSize + CONFIG.pixelSize / 2;
@@ -242,25 +250,23 @@ const drawPoints = () => {
             ctx.stroke();
         }
 
-        // draw temperature
-        // dot from blue for -100 to red for 100
-        // in the center of the point
-        // 2px
-        const temperature = point.data.temperature ?? 0;
-        const temperatureWithLimit = Math.min(100, Math.max(-100, temperature));
-        const temperatureColor = temperatureWithLimit > 0
-            ? `rgb(${Math.round(255 * temperatureWithLimit / 100)}, 0, 0)`
-            : `rgb(0, 0, ${Math.round(255 * -temperatureWithLimit / 100)})`;
-        ctx.fillStyle = temperatureColor;
-        ctx.beginPath();
-        ctx.arc(
-            point.coordinates.x * CONFIG.pixelSize + CONFIG.pixelSize / 2,
-            point.coordinates.y * CONFIG.pixelSize + CONFIG.pixelSize / 2,
-            2,
-            0,
-            2 * Math.PI
-        );
-        ctx.fill();
+        if (debugMode) {
+            const temperature = point.data.temperature ?? 0;
+            const temperatureWithLimit = Math.min(100, Math.max(-100, temperature));
+            const temperatureColor = temperatureWithLimit > 0
+                ? `rgb(${Math.round(255 * temperatureWithLimit / 100)}, 0, 0)`
+                : `rgb(0, 0, ${Math.round(255 * -temperatureWithLimit / 100)})`;
+            ctx.fillStyle = temperatureColor;
+            ctx.beginPath();
+            ctx.arc(
+                point.coordinates.x * CONFIG.pixelSize + CONFIG.pixelSize / 2,
+                point.coordinates.y * CONFIG.pixelSize + CONFIG.pixelSize / 2,
+                2,
+                0,
+                2 * Math.PI
+            );
+            ctx.fill();
+        }
     })
 
     if (frame++ % 20 === 0) {
