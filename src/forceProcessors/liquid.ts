@@ -127,10 +127,10 @@ export const liquid: TForceProcessor = (point) => {
             x: point.coordinates.x + neighbourCoordinates.x,
             y: point.coordinates.y + neighbourCoordinates.y,
         })
-        const xDirection = neighbourCoordinates.x
-        const yDirection = neighbourCoordinates.y
-
         if (!neighbour) {
+            const xDirection = neighbourCoordinates.x
+            const yDirection = neighbourCoordinates.y
+    
             point.speed.x -= xDirection * 0.004
             point.speed.y -= yDirection * 0.004
         }
