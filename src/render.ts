@@ -212,10 +212,7 @@ const drawPoints = () => {
     const debugMode = Controls.getDebugMode();
     const points = Points.getPoints();
     ctx.fillStyle = 'white';
-    [...previouslyUsedPixels.values()].forEach(pixel => {
-        const [x, y] = pixel.split(':').map(Number);
-        ctx.fillRect(x * CONFIG.pixelSize, y * CONFIG.pixelSize, CONFIG.pixelSize, CONFIG.pixelSize);
-    })
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     if (debugMode) {
         ctx.fillStyle = 'white';
@@ -229,8 +226,8 @@ const drawPoints = () => {
         ctx.fillStyle = POINS_COLORS[point.type];
         if (debugMode && thereIsPointAlready) {
             ctx.fillStyle = 'red';
+            previouslyUsedPixels.add(key);
         }
-        previouslyUsedPixels.add(key);
         ctx.fillRect(point.coordinates.x * CONFIG.pixelSize, point.coordinates.y * CONFIG.pixelSize, CONFIG.pixelSize, CONFIG.pixelSize);
         
         ctx.strokeStyle = 'rgba(0, 0, 0, 0.1)';
