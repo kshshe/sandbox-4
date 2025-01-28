@@ -13,10 +13,20 @@ export type TPoint = {
 }
 
 export class Points {
+    private static _points: TPoint[] = []
     private static nextTickDelete: TPoint[] = []
     private static coordinatesIndex: Record<number, TPoint> = Storage.get('coordinatesIndex', {})
 
-    static init() {}
+    static init() {
+        this.updatePoints()
+        setInterval(() => {
+            this.updatePoints()
+        }, 100)
+    }
+
+    static updatePoints() {
+        this._points = shake(Object.values(this.coordinatesIndex).filter(Boolean))
+    }
 
     static deletePointInIndex(coordinates: TCoordinate) {
         delete this.coordinatesIndex[this.getIndexIndex(coordinates)]
@@ -51,11 +61,12 @@ export class Points {
             return
         }
         this.setPointInIndex(point.coordinates, pointWithData)
+        this._points.push(pointWithData)
         this.save()
     }
 
     private static get points() {
-        return shake(Object.values(this.coordinatesIndex).filter(Boolean))
+        return this._points
     }
 
     static save() {
@@ -66,6 +77,7 @@ export class Points {
         const pointByCoordinates = this.getPointByCoordinates(point.coordinates)
         if (pointByCoordinates === point) {
             this.deletePointInIndex(point.coordinates)
+            this.updatePoints()
         } else if (pointByCoordinates) {
             console.warn('Point not found by coordinates', point)
         }
