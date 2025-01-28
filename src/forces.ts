@@ -55,39 +55,6 @@ const processFrame = () => {
                 })
                 Points.setPointInIndex(point.coordinates, point)
             }
-
-            const speedProbabilities = Speed.getSpeedProbabilities(point.speed)
-            const speeds = speedProbabilities.reduce((acc, { probability, speed }) => {
-                acc[`${speed.x + point.coordinates.x}_${speed.y + point.coordinates.y}`] = probability
-                return acc
-            })
-            const affectedPoints = neighbours
-                .filter(neighbour => speeds[`${neighbour.coordinates.x}_${neighbour.coordinates.y}`])
-            if (affectedPoints.length) {
-                const sum = affectedPoints.reduce((acc, point) => acc + speeds[`${point.coordinates.x}_${point.coordinates.y}`], 0)
-                const normalizedAffectedPoints = affectedPoints.map(point => ({
-                    point,
-                    probability: speeds[`${point.coordinates.x}_${point.coordinates.y}`] / sum
-                }))
-
-                const originalSpeedX = point.speed.x
-                const originalSpeedY = point.speed.y
-                for (const { point: nPoint, probability } of normalizedAffectedPoints) {
-                    const xDiff = nPoint.speed.x - originalSpeedX
-                    const yDiff = nPoint.speed.y - originalSpeedY
-
-                    const xDiffToGive = xDiff * probability
-                    const yDiffToGive = yDiff * probability
-
-                    point.speed.x += xDiffToGive
-                    point.speed.y += yDiffToGive
-
-                    if (nPoint.type !== EPointType.Border) {
-                        nPoint.speed.x -= xDiffToGive
-                        nPoint.speed.y -= yDiffToGive
-                    }
-                }
-            }
         }
     }
 

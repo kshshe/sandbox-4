@@ -230,9 +230,6 @@ const drawPoints = () => {
         }
         ctx.fillRect(point.coordinates.x * CONFIG.pixelSize, point.coordinates.y * CONFIG.pixelSize, CONFIG.pixelSize, CONFIG.pixelSize);
         
-        ctx.strokeStyle = 'rgba(0, 0, 0, 0.1)';
-        ctx.strokeRect(point.coordinates.x * CONFIG.pixelSize + 1, point.coordinates.y * CONFIG.pixelSize + 1, CONFIG.pixelSize - 2, CONFIG.pixelSize - 2);
-
         if (debugMode) {
             // draw a line in speed direction from center of the point
             const centerX = point.coordinates.x * CONFIG.pixelSize + CONFIG.pixelSize / 2;
