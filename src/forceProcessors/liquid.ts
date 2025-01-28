@@ -119,7 +119,6 @@ const getRelativeSlots = (roundedSpeed: TRoundedSpeed): TRoundedSpeed[] => {
 }
 
 export const liquid: TForceProcessor = (point) => {
-    const { speed } = point
     const roundedSpeed = Speed.getRoundedSpeed(point)
     const pointBySpeed = Points.getPointBySpeed(point, roundedSpeed)
 
