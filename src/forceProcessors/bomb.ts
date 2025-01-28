@@ -45,6 +45,6 @@ export const bomb: TForceProcessor = (point) => {
         point.data.temperature > 900
     ) {
         explode(point, new Set([point]))
-        Points.deletePointOnNextTick(point)
+        Points.deletePoint(point)
     }
 }

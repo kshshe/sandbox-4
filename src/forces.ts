@@ -5,6 +5,7 @@ import { forcesByType } from './forceProcessors'
 import { EPointType } from './types'
 import { wait } from './utils/wait'
 import { isDev } from './utils/isDev'
+import { Controls } from './classes/controls'
 
 const TEMPERATURE_PART_TO_SHARE_WITH_NEIGHBOUR = 1 / 20
 const TEMPERATURE_PART_TO_SHARE_WITH_AIR = 1 / 300
@@ -41,17 +42,18 @@ const processFrame = () => {
                 point.data.temperature = pointTemperature - temperatureToShare
             }
             const roundedSpeed = Speed.getRoundedSpeed(point, true)
-            const pointBySpeed = Points.getPointBySpeed(point, roundedSpeed, neighbours)
+            const pointBySpeed = Points.getPointBySpeed(point, roundedSpeed)
             if (pointBySpeed) {
                 point.speed.x *= 0.99
                 point.speed.y *= 0.99
             } else {
                 point.coordinates.x += roundedSpeed.x
                 point.coordinates.y += roundedSpeed.y
-                Points.setPointInIndex({
+                Points.deletePointInIndex({
                     x: prevX,
                     y: prevY
-                }, point)
+                })
+                Points.setPointInIndex(point.coordinates, point)
             }
 
             const speedProbabilities = Speed.getSpeedProbabilities(point.speed)
@@ -90,7 +92,6 @@ const processFrame = () => {
     }
 
     Points.save()
-    Points.updateCoordinatesIndex()
 }
 
 let framesTimes = [] as number[]
@@ -100,7 +101,7 @@ export const startProcessing = async () => {
         const now = performance.now()
         processFrame()
         const elapsedTime = performance.now() - now
-        const remainingTime = isDev ? 0 : 1000 / 60 - elapsedTime
+        const remainingTime = Controls.getDebugMode() ? 0 : 1000 / 60 - elapsedTime
         await wait(Math.max(0, remainingTime))
         frames++
         framesTimes.push(performance.now() - now)

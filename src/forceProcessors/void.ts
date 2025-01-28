@@ -6,7 +6,7 @@ export const voidProcessor: TForceProcessor = (point) => {
     const neighbors = Points.getNeighbours(point, false)
     for (const neighbor of neighbors) {
         if (neighbor.type !== EPointType.Void) {
-            Points.deletePointOnNextTick(neighbor)
+            Points.deletePoint(neighbor)
         }
     }
 }

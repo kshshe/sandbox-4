@@ -4,8 +4,11 @@ import { POINTS_WEIGHTS } from "../config"
 import type { TForceProcessor } from "./index"
 
 export const drowning: TForceProcessor = (point) => {
-    const { speed, coordinates } = point
+    const { coordinates } = point
     const roundedSpeed = Speed.getRoundedSpeed(point)
+    if (roundedSpeed.x === 0 && roundedSpeed.y === 0) {
+        return
+    }
     const pointBySpeed = Points.getPointByCoordinates({
         x: coordinates.x + roundedSpeed.x,
         y: coordinates.y + roundedSpeed.y,
@@ -20,6 +23,8 @@ export const drowning: TForceProcessor = (point) => {
     if (myWeight > neighbourWeight) {
         point.coordinates = pointBySpeed.coordinates
         pointBySpeed.coordinates = coordinates
+        Points.deletePointInIndex(pointBySpeed.coordinates)
+        Points.deletePointInIndex(point.coordinates)
         Points.setPointInIndex(pointBySpeed.coordinates, pointBySpeed)
         Points.setPointInIndex(point.coordinates, point)
         return

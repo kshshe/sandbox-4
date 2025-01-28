@@ -2,15 +2,30 @@ import { EPointType } from "../types"
 import { Points, TPoint } from "./points"
 
 export class Bounds {
-    private static bounds = {
+    private static _bounds = {
         top: 0,
         right: 0,
         bottom: 0,
         left: 0
     }
 
+    private static witdh = 0
+
+    private static set bounds(bounds: typeof Bounds._bounds) {
+        Bounds._bounds = bounds
+        Bounds.witdh = bounds.right - bounds.left
+    }
+
+    private static get bounds() {
+        return Bounds._bounds
+    }
+
     static getBounds() {
         return Bounds.bounds
+    }
+
+    static getWidth() {
+        return Bounds.witdh
     }
 
     static setBounds(bounds: typeof Bounds.bounds) {

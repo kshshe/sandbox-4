@@ -100,10 +100,9 @@ const getRelativeSlots = (roundedSpeed: TRoundedSpeed): TRoundedSpeed[] => {
 }
 
 export const liquid: TForceProcessor = (point) => {
-    const neighbours = Points.getNeighbours(point)
     const { speed } = point
     const roundedSpeed = Speed.getRoundedSpeed(point)
-    const pointBySpeed = Points.getPointBySpeed(point, roundedSpeed, neighbours)
+    const pointBySpeed = Points.getPointBySpeed(point, roundedSpeed)
 
     // apply pressure to every point in neighbours
     for (const neighbourCoordinates of Speed.possibleNeighbours) {
@@ -123,7 +122,7 @@ export const liquid: TForceProcessor = (point) => {
     if (pointBySpeed) {
         const availableSlots = getRelativeSlots(roundedSpeed)
         const slotsToMove = availableSlots.filter((slot) => {
-            const pointBySlot = Points.getPointBySpeed(point, slot, neighbours)
+            const pointBySlot = Points.getPointBySpeed(point, slot)
             return !pointBySlot
         })
         if (slotsToMove.length) {

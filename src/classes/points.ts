@@ -1,6 +1,7 @@
 import { INITIAL_TEMPERATURE } from '../config'
 import { TCoordinate, EPointType } from '../types'
-import { TRoundedSpeed } from './speed'
+import { Bounds } from './bounds'
+import { Speed, TRoundedSpeed } from './speed'
 import { Storage } from './storage'
 
 export type TPoint = {
@@ -11,41 +12,31 @@ export type TPoint = {
 }
 
 export class Points {
-    private static points: TPoint[] = Storage.get('points', [])
-    private static borderPoints: TPoint[] = Storage.get('borderPoints', [])
     private static nextTickDelete: TPoint[] = []
-    private static coordinatesIndex: Record<string, TPoint> = {}
+    private static coordinatesIndex: Record<number, TPoint> = Storage.get('coordinatesIndex', {})
 
-    static updateCoordinatesIndex() {
-        this.coordinatesIndex = {}
-        this.getPoints().forEach(point => {
-            const { coordinates } = point
-            if (
-                point.type !== EPointType.Border &&
-                this.coordinatesIndex[`${coordinates.x}:${coordinates.y}`] &&
-                this.coordinatesIndex[`${coordinates.x}:${coordinates.y}`] !== point
-            ) {
-                console.warn(`Double point in coordinates: ${coordinates.x}:${coordinates.y}`)
-                this.deletePointOnNextTick(point)
-                return
-            }
-            this.setPointInIndex(coordinates, point)
-        })
+    static init() {}
+
+    static deletePointInIndex(coordinates: TCoordinate) {
+        delete this.coordinatesIndex[this.getIndexIndex(coordinates)]
     }
 
-    static movePointInIndex(from: TCoordinate, to: TCoordinate) {
-        const point = this.coordinatesIndex[`${from.x}:${from.y}`]
-        if (!point) return
-        delete this.coordinatesIndex[`${from.x}:${from.y}`]
-        this.setPointInIndex(to, point)
+    static getIndexIndex(coordinates: TCoordinate) {
+        const width = Bounds.getWidth()
+        const i = coordinates.y * width + coordinates.x
+        return i
     }
 
     static setPointInIndex(coordinates: TCoordinate, point: TPoint) {
-        this.coordinatesIndex[`${coordinates.x}:${coordinates.y}`] = point
+        const pointThere = this.getPointByCoordinates(coordinates)
+        if (pointThere && point !== pointThere) {
+            throw new Error(`Point already exists at ${coordinates.x}:${coordinates.y}`)
+        }
+        this.coordinatesIndex[this.getIndexIndex(coordinates)] = point
     }
 
     static getPointByCoordinates(coordinates: TCoordinate): TPoint | undefined {
-        return this.coordinatesIndex[`${coordinates.x}:${coordinates.y}`]
+        return this.coordinatesIndex[this.getIndexIndex(coordinates)]
     }
 
     static addPoint(point: Omit<TPoint, 'data'>) {
@@ -55,53 +46,49 @@ export class Points {
             },
             ...point
         }
-        if (point.type === EPointType.Border) {
-            this.borderPoints.push(pointWithData)
-        } else {
-            this.points.push(pointWithData)
+        if (this.getPointByCoordinates(point.coordinates)) {
+            return
         }
-        this.save()
         this.setPointInIndex(point.coordinates, pointWithData)
+        this.save()
+    }
+
+    private static get points() {
+        return Object.values(this.coordinatesIndex).filter(Boolean)
     }
 
     static save() {
-        Storage.set('points', this.points)
-        Storage.set('borderPoints', this.borderPoints)
+        Storage.set('coordinatesIndex', this.coordinatesIndex)
     }
 
     static deletePoint(point: TPoint) {
-        const index = this.points.findIndex(p => p === point)
-        if (index !== -1) {
-            this.points.splice(index, 1)
-            this.save()
+        const pointByCoordinates = this.getPointByCoordinates(point.coordinates)
+        if (pointByCoordinates === point) {
+            this.deletePointInIndex(point.coordinates)
+        } else if (pointByCoordinates) {
+            console.warn('Point not found by coordinates', point)
         }
-        const indexInBorder = this.borderPoints.findIndex(p => p === point)
-        if (indexInBorder !== -1) {
-            this.borderPoints.splice(indexInBorder, 1)
-            this.save()
-        }
-    }
-
-    static deletePointOnNextTick(point: TPoint) {
-        this.nextTickDelete.push(point)
     }
 
     static getPoints() {
-        return [...this.getActivePoints(), ...this.borderPoints]
+        return this.points
     }
 
     static getPointsNear(coordinates: TCoordinate, withBorder = true): TPoint[] {
-        const nearCoordinates: TCoordinate[] = []
-        for (let x = coordinates.x - 2; x <= coordinates.x + 2; x++) {
-            for (let y = coordinates.y - 2; y <= coordinates.y + 2; y++) {
-                nearCoordinates.push({ x, y })
+        const points: TPoint[] = []
+        for (const neighbourPosition of Speed.possibleNeighbours) {
+            const pointByCoordinates = this.getPointByCoordinates({
+                x: coordinates.x + neighbourPosition.x,
+                y: coordinates.y + neighbourPosition.y
+            })
+            if (pointByCoordinates) {
+                if (!withBorder && pointByCoordinates.type === EPointType.Border) {
+                    continue
+                }
+                points.push(pointByCoordinates)
             }
         }
-        const pointsFromIndex = nearCoordinates.map(c => this.getPointByCoordinates(c)).filter(Boolean) as TPoint[]
-        if (withBorder) {
-            return pointsFromIndex
-        }
-        return pointsFromIndex.filter(p => p.type !== EPointType.Border)
+        return points
     }
 
     static getActivePoints() {
@@ -109,36 +96,19 @@ export class Points {
             this.nextTickDelete.forEach(point => this.deletePoint(point))
             this.nextTickDelete = []
         }
-        return this.points
+        return this.points.filter(point => point.type !== EPointType.Border)
     }
 
     static getNeighbours(point: TPoint, withBorder = true): TPoint[] {
-        const { coordinates } = point
-        const points = this.getPointsNear(coordinates, withBorder)
-        const nearestPoints = points
-            .filter(p => {
-                if (p === point) return false
-
-                const { coordinates: pCoordinates } = p
-                const xDiff = Math.abs(coordinates.x - pCoordinates.x)
-                const yDiff = Math.abs(coordinates.y - pCoordinates.y)
-                return xDiff <= 1 && yDiff <= 1
-            })
-
-        return nearestPoints
+        return this.getPointsNear(point.coordinates, withBorder)
     }
 
-    static getPointBySpeed(fromPoint: TPoint, roundedSpeed: TRoundedSpeed, pointsList: TPoint[]): TPoint | undefined {
+    static getPointBySpeed(fromPoint: TPoint, roundedSpeed: TRoundedSpeed): TPoint | undefined {
         const { coordinates } = fromPoint
         const targetCoordinates = {
             x: coordinates.x + roundedSpeed.x,
             y: coordinates.y + roundedSpeed.y
         }
-        const targetPoint = pointsList.find(p => {
-            const { coordinates: pCoordinates } = p
-            return pCoordinates.x === targetCoordinates.x && pCoordinates.y === targetCoordinates.y
-        })
-
-        return targetPoint
+        return this.getPointByCoordinates(targetCoordinates)
     }
 }
