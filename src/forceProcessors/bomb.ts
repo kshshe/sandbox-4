@@ -1,6 +1,7 @@
 import { TForceProcessor } from ".";
 import { Points, TPoint } from "../classes/points";
 import { EPointType } from "../types";
+import { random } from "../utils/random";
 
 const STARTING_EXPLOSION_POWER = 10
 
@@ -17,8 +18,8 @@ const explode = (point: TPoint, processedPoints: Set<TPoint>, rest = 3) => {
         if (neighbor.type !== EPointType.Border && !processedPoints.has(neighbor)) {
             const directionToNeighborX = neighbor.coordinates.x - point.coordinates.x
             const directionToNeighborY = neighbor.coordinates.y - point.coordinates.y
-            neighbor.speed.x = directionToNeighborX * force * (Math.random() + 0.5)
-            neighbor.speed.y = directionToNeighborY * force * (Math.random() + 0.5)
+            neighbor.speed.x = directionToNeighborX * force * (random() + 0.5)
+            neighbor.speed.y = directionToNeighborY * force * (random() + 0.5)
             processedPoints.add(neighbor)
         }
     })
@@ -40,7 +41,7 @@ export const bomb: TForceProcessor = (point) => {
 
     if (
         (
-            point.data.lifetime > 100 && Math.random() < 0.1
+            point.data.lifetime > 100 && random() < 0.1
         ) ||
         point.data.temperature > 900
     ) {

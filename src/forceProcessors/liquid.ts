@@ -1,6 +1,7 @@
 import { Points } from "../classes/points"
 import { Speed, TRoundedSpeed } from "../classes/speed"
 import { TCoordinate } from "../types"
+import { random } from "../utils/random"
 import { shake } from "../utils/shake"
 import type { TForceProcessor } from "./index"
 
@@ -144,7 +145,7 @@ export const liquid: TForceProcessor = (point) => {
             return !pointBySlot
         })
         if (slotsToMove.length) {
-            const slot = slotsToMove[Math.floor(Math.random() * slotsToMove.length)]
+            const slot = slotsToMove[Math.floor(random() * slotsToMove.length)]
             const speedLength = Math.sqrt(speed.x ** 2 + speed.y ** 2)
             const newSpeed: TCoordinate = {
                 x: slot.x * speedLength * 0.5,

@@ -1,5 +1,6 @@
 import { POINTS_PROBABILITY_TO_CHANGE_DIRECTION_MODIFIERS } from "../config"
 import { EPointType, TCoordinate } from "../types"
+import { random } from "../utils/random"
 import { shake } from "../utils/shake"
 import { Points, TPoint } from "./points"
 
@@ -88,10 +89,10 @@ export class Speed {
             return !isNeighbour
         })
 
-        const random = Math.random()
+        const randomValue = random()
 
         for (let i = 0; i < shuffledProbabilitiesWithIndex.length; i++) {
-            if (random < shuffledProbabilitiesWithIndex[i].probability * (POINTS_PROBABILITY_TO_CHANGE_DIRECTION_MODIFIERS[type] ?? 0.8)) {
+            if (randomValue < shuffledProbabilitiesWithIndex[i].probability * (POINTS_PROBABILITY_TO_CHANGE_DIRECTION_MODIFIERS[type] ?? 0.8)) {
                 return shuffledProbabilitiesWithIndex[i].speed
             }
         }

@@ -1,5 +1,6 @@
 import { TForceProcessor } from ".";
 import { Points } from "../classes/points";
+import { random } from "../utils/random";
 
 export const lifetime = (from: number, to: number): TForceProcessor => (point) => {
     if (!point.data) {
@@ -15,7 +16,7 @@ export const lifetime = (from: number, to: number): TForceProcessor => (point) =
     if (point.data.lifetime > from) {
         const rest = point.data.lifetime - from
         const probability = 1 - rest / (to - from)
-        if (Math.random() < probability) {
+        if (random() < probability) {
             Points.deletePoint(point)
         }
     }
