@@ -229,37 +229,41 @@ const drawPoints = () => {
             previouslyUsedPixels.add(key);
         }
         ctx.fillRect(point.coordinates.x * CONFIG.pixelSize, point.coordinates.y * CONFIG.pixelSize, CONFIG.pixelSize, CONFIG.pixelSize);
-        
-        if (debugMode) {
-            // draw a line in speed direction from center of the point
-            const centerX = point.coordinates.x * CONFIG.pixelSize + CONFIG.pixelSize / 2;
-            const centerY = point.coordinates.y * CONFIG.pixelSize + CONFIG.pixelSize / 2;
-            const speedX = point.speed.x * 10;
-            const speedY = point.speed.y * 10;
 
-            ctx.beginPath();
-            ctx.moveTo(centerX, centerY);
-            ctx.lineTo(centerX + speedX * 10, centerY + speedY * 10);
-            ctx.strokeStyle = 'black';
-            ctx.stroke();
+        if (debugMode) {
+            const speedLength = Math.sqrt(point.speed.x ** 2 + point.speed.y ** 2);
+            if (speedLength > 1) {
+                const centerX = point.coordinates.x * CONFIG.pixelSize + CONFIG.pixelSize / 2;
+                const centerY = point.coordinates.y * CONFIG.pixelSize + CONFIG.pixelSize / 2;
+                const speedX = point.speed.x * 10;
+                const speedY = point.speed.y * 10;
+
+                ctx.beginPath();
+                ctx.moveTo(centerX, centerY);
+                ctx.lineTo(centerX + speedX * 10, centerY + speedY * 10);
+                ctx.strokeStyle = 'black';
+                ctx.stroke();
+            }
         }
 
         if (debugMode) {
             const temperature = point.data.temperature ?? 0;
-            const temperatureWithLimit = Math.min(100, Math.max(-100, temperature));
-            const temperatureColor = temperatureWithLimit > 0
-                ? `rgb(${Math.round(255 * temperatureWithLimit / 100)}, 0, 0)`
-                : `rgb(0, 0, ${Math.round(255 * -temperatureWithLimit / 100)})`;
-            ctx.fillStyle = temperatureColor;
-            ctx.beginPath();
-            ctx.arc(
-                point.coordinates.x * CONFIG.pixelSize + CONFIG.pixelSize / 2,
-                point.coordinates.y * CONFIG.pixelSize + CONFIG.pixelSize / 2,
-                2,
-                0,
-                2 * Math.PI
-            );
-            ctx.fill();
+            if (temperature > 16 || temperature < 5) {
+                const temperatureWithLimit = Math.min(100, Math.max(-100, temperature));
+                const temperatureColor = temperatureWithLimit > 0
+                    ? `rgb(${Math.round(255 * temperatureWithLimit / 100)}, 0, 0)`
+                    : `rgb(0, 0, ${Math.round(255 * -temperatureWithLimit / 100)})`;
+                ctx.fillStyle = temperatureColor;
+                ctx.beginPath();
+                ctx.arc(
+                    point.coordinates.x * CONFIG.pixelSize + CONFIG.pixelSize / 2,
+                    point.coordinates.y * CONFIG.pixelSize + CONFIG.pixelSize / 2,
+                    2,
+                    0,
+                    2 * Math.PI
+                );
+                ctx.fill();
+            }
         }
     })
 
