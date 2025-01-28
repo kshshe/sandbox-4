@@ -15,6 +15,10 @@ export class Controls {
         return this.state.gravityDirection
     }
 
+    public static isLowGravity() {
+        return this.state.gravityDirection.x < 0.2 && this.state.gravityDirection.y < 0.2
+    }
+
     public static setGravityDirection(value: TCoordinate) {
         this.state.gravityDirection = value
         Storage.set('gravityDirection', value)

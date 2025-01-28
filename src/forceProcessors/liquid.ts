@@ -1,3 +1,4 @@
+import { Controls } from "../classes/controls"
 import { Points } from "../classes/points"
 import { Speed, TRoundedSpeed } from "../classes/speed"
 import { TCoordinate } from "../types"
@@ -119,6 +120,9 @@ const getRelativeSlots = (roundedSpeed: TRoundedSpeed): TRoundedSpeed[] => {
 }
 
 export const liquid: TForceProcessor = (point) => {
+    const isLowGravity = Controls.isLowGravity()
+    const surfaceTensionPower = isLowGravity ? 0.01 : 0.004
+    
     const roundedSpeed = Speed.getRoundedSpeed(point)
     const pointBySpeed = Points.getPointBySpeed(point, roundedSpeed)
 
@@ -131,8 +135,8 @@ export const liquid: TForceProcessor = (point) => {
             const xDirection = neighbourCoordinates.x
             const yDirection = neighbourCoordinates.y
     
-            point.speed.x -= xDirection * 0.004
-            point.speed.y -= yDirection * 0.004
+            point.speed.x -= xDirection * surfaceTensionPower
+            point.speed.y -= yDirection * surfaceTensionPower
         }
     }
 
