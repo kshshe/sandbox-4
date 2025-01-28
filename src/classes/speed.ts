@@ -13,11 +13,11 @@ const distance = (a: TCoordinate, b: TRoundedSpeed) => {
     return Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2)
 }
 
-setInterval(() => {
-    Speed.possibleNeighbours = shake(Speed.possibleNeighbours)
-}, 100)
-
 export class Speed {
+    static shufflePossibleNeighbours() {
+        Speed.possibleNeighbours = shake(Speed.possibleNeighbours)
+    }
+
     static rounded: {
         left: TRoundedSpeed
         right: TRoundedSpeed

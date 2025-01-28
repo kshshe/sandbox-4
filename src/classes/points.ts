@@ -19,9 +19,10 @@ export class Points {
 
     static init() {
         this.updatePoints()
-        setInterval(() => {
-            this.updatePoints()
-        }, 100)
+    }
+
+    static shufflePoints() {
+        this._points = shake(this._points)
     }
 
     static updatePoints() {

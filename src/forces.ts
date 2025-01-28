@@ -59,6 +59,8 @@ const processFrame = () => {
     }
 
     Points.save()
+    Points.shufflePoints()
+    Speed.shufflePossibleNeighbours()
 }
 
 let framesTimes = [] as number[]

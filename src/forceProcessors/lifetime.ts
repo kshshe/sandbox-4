@@ -15,7 +15,10 @@ export const lifetime = (from: number, to: number): TForceProcessor => (point) =
 
     if (point.data.lifetime > from) {
         const rest = point.data.lifetime - from
-        const probability = 1 - rest / (to - from)
+        let probability = 1 - rest / (to - from)
+        if (point.data.lifetime > to) {
+            probability = 1
+        }
         if (random() < probability) {
             Points.deletePoint(point)
         }

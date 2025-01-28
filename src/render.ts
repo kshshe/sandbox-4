@@ -275,6 +275,7 @@ const drawPoints = () => {
             '- r: clear',
             hoveredPoint && '---',
             hoveredPoint && `${hoveredPoint.type}`,
+            hoveredPoint && hoveredPoint.data?.lifetime && `Lifetime: ${hoveredPoint.data.lifetime}`,
             hoveredPoint ? Math.abs(hoveredPoint?.data.temperature) > 1 && `${Math.round(hoveredPoint.data.temperature)} °C` : '0 °C',
         ]
             .filter(Boolean)
