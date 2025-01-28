@@ -38,6 +38,28 @@ setTimeout(() => {
                 speed: { x: 0, y: 0 },
             })
         }
+
+        // fill with water
+        for (let i = 0; i < 10; i++) {
+            for (let j = 0; j < 10; j++) {
+                Points.addPoint({
+                    coordinates: { x: x - 5 + i, y: y - 9 + j },
+                    type: EPointType.Water,
+                    speed: { x: 0, y: 1 },
+                })
+            }
+        }
+
+        for (let i = 0; i < 10; i++) {
+            for (let j = 0; j < 10; j++) {
+                Points.addPoint({
+                    coordinates: { x: x - 5 + i, y: y + j + 5 },
+                    type: EPointType.Sand,
+                    speed: { x: 0, y: 0 },
+                })
+            }
+        }
+
         Storage.set('wasInit', true)
     }
 }, 200)
