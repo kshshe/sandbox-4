@@ -13,6 +13,9 @@ const TEMPERATURE_PART_TO_SHARE_WITH_AIR = 1 / 300
 const processFrame = () => {
     const points = Points.getActivePoints()
     for (const point of points) {
+        if (point.wasDeleted) {
+            continue
+        }
         const forcesList = forcesByType[point.type] || []
         for (const force of forcesList) {
             force(point)

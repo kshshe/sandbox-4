@@ -9,12 +9,12 @@ export type TPoint = {
     coordinates: TCoordinate
     type: EPointType,
     speed: TCoordinate,
-    data: Record<string, any>
+    data: Record<string, any>,
+    wasDeleted?: boolean
 }
 
 export class Points {
     private static _points: TPoint[] = []
-    private static nextTickDelete: TPoint[] = []
     private static coordinatesIndex: Record<number, TPoint> = Storage.get('coordinatesIndex', {})
 
     static init() {
@@ -40,6 +40,9 @@ export class Points {
     }
 
     static setPointInIndex(coordinates: TCoordinate, point: TPoint) {
+        if (point.wasDeleted) {
+            return
+        }
         const pointThere = this.getPointByCoordinates(coordinates)
         if (pointThere && point !== pointThere) {
             throw new Error(`Point already exists at ${coordinates.x}:${coordinates.y}`)
@@ -78,6 +81,7 @@ export class Points {
         const pointByCoordinates = this.getPointByCoordinates(point.coordinates)
         if (pointByCoordinates === point) {
             this.deletePointInIndex(point.coordinates)
+            point.wasDeleted = true
             this.updatePoints()
         } else if (pointByCoordinates) {
             console.warn('Point not found by coordinates', point)
@@ -106,10 +110,6 @@ export class Points {
     }
 
     static getActivePoints() {
-        if (this.nextTickDelete.length) {
-            this.nextTickDelete.forEach(point => this.deletePoint(point))
-            this.nextTickDelete = []
-        }
         return this.points.filter(point => point.type !== EPointType.Border)
     }
 
