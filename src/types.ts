@@ -15,6 +15,8 @@ export enum EPointType {
     Steam = 'steam',
     Void = 'void',
     Clone = 'clone',
+    Gas = 'gas',
+    FireEmitter = 'fireEmitter',
 
     ConstantCold = 'constantCold',
     ConstantHot = 'constantHot',

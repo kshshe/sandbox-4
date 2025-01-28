@@ -13,6 +13,7 @@ export const POINTS_PROBABILITY_TO_CHANGE_DIRECTION_MODIFIERS: {
     [EPointType.Fire]: 4,
     [EPointType.IceFire]: 4,
     [EPointType.Steam]: 10,
+    [EPointType.Gas]: 10,
 }
 
 export const POINS_COLORS: Record<EPointType, string> = {
@@ -26,6 +27,7 @@ export const POINS_COLORS: Record<EPointType, string> = {
     [EPointType.Ice]: 'lightblue',
     [EPointType.Steam]: 'lightgray',
     [EPointType.Clone]: 'green',
+    [EPointType.Gas]: 'lightgray',
 
     [EPointType.ConstantCold]: 'blue',
     [EPointType.ConstantHot]: 'red',
@@ -47,6 +49,7 @@ export const POINTS_WEIGHTS: Record<EPointType, number> = {
     [EPointType.ConstantHot]: Infinity,
     [EPointType.Void]: Infinity,
     [EPointType.Clone]: Infinity,
+    [EPointType.Gas]: 0,
 }
 
 export const INITIAL_TEMPERATURE: {
@@ -59,4 +62,21 @@ export const INITIAL_TEMPERATURE: {
 
     [EPointType.ConstantCold]: -500,
     [EPointType.ConstantHot]: 500,
+}
+
+export const drawingTypes = {
+    1: EPointType.Water,
+    2: EPointType.Sand,
+    3: EPointType.Stone,
+    4: EPointType.Border,
+    5: EPointType.Fire,
+    6: EPointType.IceFire,
+    7: EPointType.Bomb,
+    8: EPointType.Ice,
+    9: EPointType.ConstantCold,
+    0: EPointType.ConstantHot,
+    v: EPointType.Void,
+    c: EPointType.Clone,
+    g: EPointType.Gas,
+    '-': 'eraser'
 }

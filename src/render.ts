@@ -1,4 +1,4 @@
-import { CONFIG, POINS_COLORS } from "./config";
+import { CONFIG, drawingTypes, POINS_COLORS } from "./config";
 import { Points, TPoint } from "./classes/points";
 import { Bounds } from "./classes/bounds";
 import { Stats } from "./classes/stats";
@@ -28,22 +28,6 @@ ctx.fillStyle = 'white';
 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
 const stats = document.querySelector('.stats') as HTMLDivElement;
-
-const drawingTypes = {
-    1: EPointType.Water,
-    2: EPointType.Sand,
-    3: EPointType.Stone,
-    4: EPointType.Border,
-    5: EPointType.Fire,
-    6: EPointType.IceFire,
-    7: EPointType.Bomb,
-    8: EPointType.Ice,
-    9: EPointType.ConstantCold,
-    0: EPointType.ConstantHot,
-    v: EPointType.Void,
-    c: EPointType.Clone,
-    '-': 'eraser'
-}
 
 let drawingType: EPointType | 'eraser' = Storage.get('drawingType', EPointType.Water);
 let hoveredPoint: TPoint | null = null;

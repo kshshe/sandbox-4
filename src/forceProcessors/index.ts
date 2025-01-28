@@ -12,6 +12,7 @@ import { INITIAL_TEMPERATURE } from "../config";
 import { chaos } from "./chaos";
 import { voidProcessor } from "./void";
 import { clone } from "./clone";
+import { emitter } from "./emitter";
 
 export type TForceProcessor = (point: TPoint) => void
 
@@ -59,6 +60,15 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
     [EPointType.ConstantHot]: [
         staticTemperature(INITIAL_TEMPERATURE[EPointType.ConstantHot] ?? 500),
         staticForce,
+    ],
+    [EPointType.Gas]: [
+        ...BASIC_FORCES,
+        convertOnTemperature('more', 250, EPointType.FireEmitter),
+    ],
+    [EPointType.FireEmitter]: [
+        ...BASIC_FORCES,
+        lifetime(30, 120),
+        emitter(EPointType.Fire),
     ],
     [EPointType.Clone]: [
         staticForce,
