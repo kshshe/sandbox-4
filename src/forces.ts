@@ -46,10 +46,9 @@ const processFrame = () => {
             }
             const roundedSpeed = Speed.getRoundedSpeed(point, true)
             const pointBySpeed = Points.getPointBySpeed(point, roundedSpeed)
-            if (pointBySpeed) {
-                point.speed.x *= 0.97
-                point.speed.y *= 0.97
-            } else {
+            point.speed.x *= 0.95
+            point.speed.y *= 0.95
+            if (!pointBySpeed) {
                 point.coordinates.x += roundedSpeed.x
                 point.coordinates.y += roundedSpeed.y
                 Points.deletePointInIndex({
