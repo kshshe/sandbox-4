@@ -1,5 +1,6 @@
 import { INITIAL_TEMPERATURE } from '../config'
 import { TCoordinate, EPointType } from '../types'
+import { shake } from '../utils/shake'
 import { Bounds } from './bounds'
 import { Speed, TRoundedSpeed } from './speed'
 import { Storage } from './storage'
@@ -54,7 +55,7 @@ export class Points {
     }
 
     private static get points() {
-        return Object.values(this.coordinatesIndex).filter(Boolean)
+        return shake(Object.values(this.coordinatesIndex).filter(Boolean))
     }
 
     static save() {
