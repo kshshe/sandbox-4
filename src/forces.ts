@@ -4,11 +4,11 @@ import { Stats } from './classes/stats'
 import { forcesByType } from './forceProcessors'
 import { EPointType } from './types'
 import { wait } from './utils/wait'
-import { isDev } from './utils/isDev'
 import { Controls } from './classes/controls'
 
 const TEMPERATURE_PART_TO_SHARE_WITH_NEIGHBOUR = 1 / 20
 const TEMPERATURE_PART_TO_SHARE_WITH_AIR = 1 / 300
+const MAX_SPEED = 6
 
 const processFrame = () => {
     const points = Points.getActivePoints()
@@ -21,7 +21,12 @@ const processFrame = () => {
             force(point)
         }
 
-        const speedLength = Math.sqrt(point.speed.x ** 2 + point.speed.y ** 2)
+        let speedLength = Math.sqrt(point.speed.x ** 2 + point.speed.y ** 2)
+        if (speedLength > MAX_SPEED) {
+            point.speed.x *= MAX_SPEED / speedLength
+            point.speed.y *= MAX_SPEED / speedLength
+            speedLength = MAX_SPEED
+        }
         let timesProcess = Math.min(Math.max(1, Math.ceil(speedLength)), 10)
 
         while (timesProcess--) {
