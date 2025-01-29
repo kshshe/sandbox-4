@@ -121,7 +121,7 @@ const getRelativeSlots = (roundedSpeed: TRoundedSpeed): TRoundedSpeed[] => {
 
 export const liquid: TForceProcessor = (point) => {
     const isLowGravity = Controls.isLowGravity()
-    const surfaceTensionPower = isLowGravity ? 0.01 : 0.002
+    const surfaceTensionPower = isLowGravity ? 0.01 : 0.0005
     
     const roundedSpeed = Speed.getRoundedSpeed(point)
     const pointBySpeed = Points.getPointBySpeed(point, roundedSpeed)
@@ -137,7 +137,7 @@ export const liquid: TForceProcessor = (point) => {
             point.speed.x -= xDirection * surfaceTensionPower
             point.speed.y -= yDirection * surfaceTensionPower
         }
-        if (neighbour?.type === point.type) {
+        if (isLowGravity && neighbour?.type === point.type) {
             point.speed.x += xDirection * (surfaceTensionPower / 2)
             point.speed.y += yDirection * (surfaceTensionPower / 2)
         }
