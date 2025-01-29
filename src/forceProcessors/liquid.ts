@@ -138,8 +138,8 @@ export const liquid: TForceProcessor = (point) => {
             point.speed.y -= yDirection * surfaceTensionPower
         }
         if (neighbour?.type === point.type) {
-            point.speed.x += xDirection * surfaceTensionPower
-            point.speed.y += yDirection * surfaceTensionPower
+            point.speed.x += xDirection * (surfaceTensionPower / 2)
+            point.speed.y += yDirection * (surfaceTensionPower / 2)
         }
     }
 
