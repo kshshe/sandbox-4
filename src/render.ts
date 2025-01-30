@@ -203,6 +203,7 @@ const drawPoints = () => {
 
     if (frame++ % 20 === 0) {
         stats.innerHTML = [
+            `Load: ${(Stats.data.load * 100).toFixed(2)}%`,
             `Points: ${points.length}`,
             `FPS: ${Stats.data.fps.toFixed(2)}`,
             `Average speed: ${Stats.data.averageSpeed.toFixed(2)}`,

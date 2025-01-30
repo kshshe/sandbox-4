@@ -81,7 +81,7 @@ const processFrame = () => {
             }
         }
 
-        if (index % 100 === 0) {
+        if (+index % 100 === 0) {
             Speed.shufflePossibleNeighbours()
         }
     }
@@ -95,9 +95,12 @@ let frames = 0
 export const startProcessing = async () => {
     while (true) {
         const now = performance.now()
+        const availableTime = Controls.getDebugMode() ? 0 : 1000 / 60
         processFrame()
         const elapsedTime = performance.now() - now
-        const remainingTime = Controls.getDebugMode() ? 0 : 1000 / 60 - elapsedTime
+        const remainingTime = availableTime - elapsedTime
+        const timeElapsedPercent = elapsedTime / availableTime
+        Stats.setLoad(timeElapsedPercent)
         await wait(Math.max(0, remainingTime))
         frames++
         framesTimes.push(performance.now() - now)
