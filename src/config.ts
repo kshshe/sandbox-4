@@ -118,6 +118,10 @@ export const POINT_TYPE_ICON: {
     eraser: '🧽',
 }
 
+if (Object.values(POINT_TYPE_ICON).length !== new Set(Object.values(POINT_TYPE_ICON)).size) {
+    console.warn('Duplicate icons')
+}
+
 export const POINTS_SHORTCUTS: {
     [key: string]: EPointType | 'eraser'
 } = {
