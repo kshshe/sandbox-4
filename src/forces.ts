@@ -111,13 +111,13 @@ const processFrame = () => {
 
 let framesTimes = [] as number[]
 let frames = 0
+const availableTime = 1000 / 60
 export const startProcessing = async () => {
     while (true) {
         const now = performance.now()
-        const availableTime = Controls.getDebugMode() ? 0 : 1000 / 60
         processFrame()
         const elapsedTime = performance.now() - now
-        const remainingTime = availableTime - elapsedTime
+        const remainingTime = Controls.getDebugMode() ? 0 : availableTime - elapsedTime
         const timeElapsedPercent = elapsedTime / availableTime
         Stats.setLoad(timeElapsedPercent)
         await wait(Math.max(0, remainingTime))
