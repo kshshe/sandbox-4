@@ -28,7 +28,6 @@ ctx.fillRect(0, 0, canvas.width, canvas.height);
 
 const stats = document.querySelector('.stats') as HTMLDivElement;
 
-let drawingType: EPointType | 'eraser' = Storage.get('drawingType', EPointType.Water);
 let hoveredPoint: TPoint | null = null;
 
 document.querySelector('#reset')?.addEventListener('click', () => {
@@ -41,9 +40,10 @@ document.querySelector('#debug')?.addEventListener('click', () => {
 })
 
 window.addEventListener('keydown', (e) => {
+    const drawingType = Controls.getDrawingType();
     const key = e.key;
     if (key in drawingTypes) {
-        drawingType = drawingTypes[key];
+        Controls.setDrawingType(drawingTypes[key]);
         Storage.set('drawingType', drawingType);
     }
     if (key === 'r' && !e.ctrlKey && !e.metaKey) {
@@ -53,9 +53,10 @@ window.addEventListener('keydown', (e) => {
 })
 
 stats.addEventListener('click', () => {
+    const drawingType = Controls.getDrawingType();
     const keys = Object.keys(drawingTypes);
     const index = keys.findIndex(key => drawingTypes[key] === drawingType);
-    drawingType = drawingTypes[keys[(index + 1) % keys.length]];
+    Controls.setDrawingType(drawingTypes[keys[(index + 1) % keys.length]]);
     Storage.set('drawingType', drawingType);
 })
 
@@ -70,6 +71,7 @@ let drawingInterval: NodeJS.Timeout | null = null;
 let drawingX = 0;
 let drawingY = 0;
 addListeners(canvas, ['mousedown', 'touchstart'], (e) => {
+    const drawingType = Controls.getDrawingType();
     e.preventDefault();
     const offsetX = (e as MouseEvent).offsetX ?? (e as TouchEvent).touches[0].clientX ?? 0;
     const offsetY = (e as MouseEvent).offsetY ?? (e as TouchEvent).touches[0].clientY ?? 0;
@@ -206,6 +208,7 @@ const drawPoints = () => {
     })
 
     if (frame++ % 20 === 0) {
+        const drawingType = Controls.getDrawingType();
         const activePoints = points.filter(point => !Points.isUnused(point));
         stats.innerHTML = [
             `Iteration: ${Storage.get('iteration', 0)}`,
