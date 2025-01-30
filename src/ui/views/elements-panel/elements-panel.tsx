@@ -16,13 +16,33 @@ export const ElementsPanel: React.FC = () => {
     const closePanel = () => {
       setIsClosing(true);
       setTimeout(() => {
-        setIsClosing(false);
         setIsOpened(false);
+        setIsClosing(false);
       }, 300);
     };
     window.addEventListener("click", closePanel);
     return () => {
       window.removeEventListener("click", closePanel);
+    };
+  }, [isOpened]);
+
+  React.useEffect(() => {
+    const handleSpace = (e: KeyboardEvent) => {
+      if (e.key === " ") {
+        if (!isOpened) {
+          setIsOpened(true);
+        } else {
+          setIsClosing(true);
+          setTimeout(() => {
+            setIsOpened(false);
+            setIsClosing(false);
+          }, 300);
+        }
+      }
+    };
+    window.addEventListener("keyup", handleSpace);
+    return () => {
+      window.removeEventListener("keyup", handleSpace);
     };
   }, [isOpened]);
 
