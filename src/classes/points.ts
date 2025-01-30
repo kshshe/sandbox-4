@@ -23,6 +23,13 @@ export class Points {
         this.updatePoints()
     }
 
+    static deleteAllPoints() {
+        this._points = []
+        this.coordinatesIndex = {}
+        this.unusedPoints = new WeakSet()
+        Storage.set('wasInit', false)
+    }
+
     static isUnused(point: TPoint) {
         return this.unusedPoints.has(point)
     }

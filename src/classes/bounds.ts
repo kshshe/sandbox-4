@@ -1,19 +1,22 @@
 import { EPointType } from "../types"
-import { Points, TPoint } from "./points"
+import { Points } from "./points"
+import { Storage } from "./storage"
 
 export class Bounds {
-    private static _bounds = {
+    private static _bounds = Storage.get('bounds', {
         top: 0,
         right: 0,
         bottom: 0,
         left: 0
-    }
+    })
 
-    private static witdh = 0
+    private static witdh = Storage.get('width', 0)
 
     private static set bounds(bounds: typeof Bounds._bounds) {
         Bounds._bounds = bounds
         Bounds.witdh = bounds.right - bounds.left
+        Storage.set('bounds', bounds)
+        Storage.set('width', Bounds.witdh)
     }
 
     private static get bounds() {
@@ -29,6 +32,13 @@ export class Bounds {
     }
 
     static setBounds(bounds: typeof Bounds.bounds) {
+        const areBoundsNew = Bounds.bounds.top === 0 && Bounds.bounds.right === 0 && Bounds.bounds.bottom === 0 && Bounds.bounds.left === 0
+        const areBountsEqual = Bounds.bounds.top === bounds.top && Bounds.bounds.right === bounds.right && Bounds.bounds.bottom === bounds.bottom && Bounds.bounds.left === bounds.left
+
+        if (!areBoundsNew && !areBountsEqual) {
+            Points.deleteAllPoints()
+        }
+
         Bounds.bounds = bounds
         const points = Points.getPoints()
         for (const point of points) {
