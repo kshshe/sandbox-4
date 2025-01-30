@@ -56,6 +56,10 @@ export class Points {
     }
 
     static deletePointInIndex(coordinates: TCoordinate) {
+        const point = this.getPointByCoordinates(coordinates)
+        if (point) {
+            this.markNeighboursAsUsed(point)
+        }
         delete this.coordinatesIndex[this.getIndexIndex(coordinates)]
     }
 

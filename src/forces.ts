@@ -25,7 +25,7 @@ const processFrame = () => {
         if (point.wasDeleted) {
             continue
         }
-        if (!isUnused) {
+        if (!isUnused || iteration % MAX_UNUSED_ITERATIONS * 4 === 0) {
             const forcesList = forcesByType[point.type] || []
             for (const force of forcesList) {
                 force(point)
