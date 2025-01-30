@@ -7,6 +7,7 @@ import { wait } from './utils/wait'
 import { Controls } from './classes/controls'
 import { Storage } from './classes/storage'
 import { CANT_BE_UNSED } from './config'
+import { Bounds } from './classes/bounds'
 
 const TEMPERATURE_PART_TO_SHARE_WITH_NEIGHBOUR = 1 / 20
 const TEMPERATURE_PART_TO_SHARE_WITH_AIR = 1 / 300
@@ -19,6 +20,14 @@ let iteration = Storage.get('iteration', 0)
 
 const processFrame = () => {
     const points = Points.getActivePoints()
+
+    const {
+        left,
+        right,
+        top,
+        bottom
+    } = Bounds.getBounds()
+
     iteration++
     for (const index in points) {
         const point = points[index]
@@ -102,6 +111,11 @@ const processFrame = () => {
 
         if (+index % 100 === 0) {
             Speed.shufflePossibleNeighbours()
+        }
+
+        const isOutOfBounds = point.coordinates.x < left || point.coordinates.x > right || point.coordinates.y < top || point.coordinates.y > bottom
+        if (isOutOfBounds) {
+            Points.deletePoint(point)
         }
     }
 
