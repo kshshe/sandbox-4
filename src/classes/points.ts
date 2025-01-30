@@ -41,9 +41,16 @@ export class Points {
 
     static markNeighboursAsUsed(point: TPoint) {
         this.markPointAsUsed(point)
-        const neighbours = this.getNeighbours(point)
-        for (const neighbour of neighbours) {
-            this.markPointAsUsed(neighbour)
+        for (let x = -2; x <= 2; x++) {
+            for (let y = -2; y <= 2; y++) {
+                const neighbour = this.getPointByCoordinates({
+                    x: point.coordinates.x + x,
+                    y: point.coordinates.y + y
+                })
+                if (neighbour) {
+                    this.markPointAsUsed(neighbour)
+                }
+            }
         }
     }
 
@@ -114,6 +121,7 @@ export class Points {
     }
 
     static deletePoint(point: TPoint) {
+        this.markNeighboursAsUsed(point)
         const pointByCoordinates = this.getPointByCoordinates(point.coordinates)
         if (pointByCoordinates === point) {
             this.deletePointInIndex(point.coordinates)
