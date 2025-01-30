@@ -1,5 +1,6 @@
 import { TForceProcessor } from ".";
 import { Points } from "../classes/points";
+import { Storage } from "../classes/storage";
 import { random } from "../utils/random";
 
 export const lifetime = (from: number, to: number): TForceProcessor => (point) => {
@@ -12,6 +13,7 @@ export const lifetime = (from: number, to: number): TForceProcessor => (point) =
     }
 
     point.data.lifetime++
+    point.lastMoveOnIteration = Storage.get('iteration', 0)
 
     if (point.data.lifetime > from) {
         const rest = point.data.lifetime - from

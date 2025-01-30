@@ -35,6 +35,19 @@ export const POINS_COLORS: Record<EPointType, string> = {
     [EPointType.Void]: 'black',
 }
 
+export const CANT_BE_UNSED: {
+    [key in EPointType]?: boolean
+} = {
+    [EPointType.Border]: true,
+    [EPointType.Void]: true,
+    [EPointType.Clone]: true,
+    [EPointType.ConstantCold]: true,
+    [EPointType.ConstantHot]: true,
+    [EPointType.FireEmitter]: true,
+    [EPointType.Fire]: true,
+    [EPointType.IceFire]: true,
+}
+
 export const POINTS_WEIGHTS: Record<EPointType, number> = {
     [EPointType.Stone]: 1,
     [EPointType.Sand]: 1,

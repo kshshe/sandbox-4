@@ -11,14 +11,37 @@ export type TPoint = {
     speed: TCoordinate,
     data: Record<string, any>,
     wasDeleted?: boolean
+    lastMoveOnIteration?: number
 }
 
 export class Points {
     private static _points: TPoint[] = []
     private static coordinatesIndex: Record<number, TPoint> = Storage.get('coordinatesIndex', {})
+    private static unusedPoints: WeakSet<TPoint> = new WeakSet()
 
     static init() {
         this.updatePoints()
+    }
+
+    static isUnused(point: TPoint) {
+        return this.unusedPoints.has(point)
+    }
+
+    static markPointAsUnused(point: TPoint) {
+        this.unusedPoints.add(point)
+    }
+
+    static markPointAsUsed(point: TPoint) {
+        this.unusedPoints.delete(point)
+        point.lastMoveOnIteration = Storage.get('iteration', 0)
+    }
+
+    static markNeighboursAsUsed(point: TPoint) {
+        this.markPointAsUsed(point)
+        const neighbours = this.getNeighbours(point)
+        for (const neighbour of neighbours) {
+            this.markPointAsUsed(neighbour)
+        }
     }
 
     static shufflePoints() {
@@ -47,6 +70,11 @@ export class Points {
         if (pointThere && point !== pointThere) {
             throw new Error(`Point already exists at ${coordinates.x}:${coordinates.y}`)
         }
+        if (point === pointThere) {
+            return
+        }
+        this.unusedPoints.delete(point)
+        point.lastMoveOnIteration = Storage.get('iteration', 0)
         this.coordinatesIndex[this.getIndexIndex(coordinates)] = point
     }
 
@@ -110,7 +138,17 @@ export class Points {
     }
 
     static getActivePoints() {
-        return this.points.filter(point => point.type !== EPointType.Border)
+        return this.points.filter(point => {
+            if (point.type === EPointType.Border) {
+                return false
+            }
+
+            if (point.wasDeleted) {
+                return false
+            }
+
+            return true
+        })
     }
 
     static getNeighbours(point: TPoint, withBorder = true): TPoint[] {

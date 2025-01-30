@@ -6,7 +6,6 @@ import { isDev } from "./utils/isDev";
 import { EPointType } from "./types";
 import { Storage } from "./classes/storage";
 import { Controls } from "./classes/controls";
-import { Speed } from "./classes/speed";
 
 const canvas = document.getElementById('canvas') as HTMLCanvasElement;
 const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
@@ -198,13 +197,26 @@ const drawPoints = () => {
                 );
                 ctx.fill();
             }
+
+            if (Points.isUnused(point)) {
+                ctx.strokeStyle = 'red';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(
+                    point.coordinates.x * CONFIG.pixelSize + 1,
+                    point.coordinates.y * CONFIG.pixelSize + 1,
+                    CONFIG.pixelSize - 2,
+                    CONFIG.pixelSize - 2
+                );
+            }
         }
     })
 
     if (frame++ % 20 === 0) {
+        const activePoints = points.filter(point => !Points.isUnused(point));
         stats.innerHTML = [
+            `Iteration: ${Storage.get('iteration', 0)}`,
             `Load: ${(Stats.data.load * 100).toFixed(2)}%`,
-            `Points: ${points.length}`,
+            `Points: ${activePoints.length} / ${points.length} (${(activePoints.length / points.length * 100).toFixed(2)}%)`,
             `FPS: ${Stats.data.fps.toFixed(2)}`,
             `Average speed: ${Stats.data.averageSpeed.toFixed(2)}`,
             '---',

@@ -1,5 +1,6 @@
 import { Points } from "../classes/points"
 import { Speed } from "../classes/speed"
+import { Storage } from "../classes/storage"
 import { POINTS_WEIGHTS } from "../config"
 import type { TForceProcessor } from "./index"
 
@@ -27,6 +28,10 @@ export const drowning: TForceProcessor = (point) => {
         Points.deletePointInIndex(point.coordinates)
         Points.setPointInIndex(pointBySpeed.coordinates, pointBySpeed)
         Points.setPointInIndex(point.coordinates, point)
+        point.lastMoveOnIteration = Storage.get('iteration', 0)
+        pointBySpeed.lastMoveOnIteration = Storage.get('iteration', 0)
+        Points.markNeighboursAsUsed(point)
+        Points.markNeighboursAsUsed(pointBySpeed)
         return
     }
 }

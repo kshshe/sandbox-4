@@ -5,21 +5,31 @@ import { forcesByType } from './forceProcessors'
 import { EPointType } from './types'
 import { wait } from './utils/wait'
 import { Controls } from './classes/controls'
+import { Storage } from './classes/storage'
+import { CANT_BE_UNSED } from './config'
 
 const TEMPERATURE_PART_TO_SHARE_WITH_NEIGHBOUR = 1 / 20
 const TEMPERATURE_PART_TO_SHARE_WITH_AIR = 1 / 300
 const MAX_SPEED = 6
+const MAX_UNUSED_ITERATIONS = 200
+const MAX_UNUSED_SPEED = 0.3
+
+let iteration = Storage.get('iteration', 0)
 
 const processFrame = () => {
     const points = Points.getActivePoints()
+    iteration++
     for (const index in points) {
         const point = points[index]
+        const isUnused = Points.isUnused(point)
         if (point.wasDeleted) {
             continue
         }
-        const forcesList = forcesByType[point.type] || []
-        for (const force of forcesList) {
-            force(point)
+        if (!isUnused) {
+            const forcesList = forcesByType[point.type] || []
+            for (const force of forcesList) {
+                force(point)
+            }
         }
 
         let speedLength = Math.sqrt(point.speed.x ** 2 + point.speed.y ** 2)
@@ -29,6 +39,10 @@ const processFrame = () => {
             speedLength = MAX_SPEED
         }
         let timesProcess = Math.min(Math.max(1, Math.ceil(speedLength)), 10)
+
+        if (!CANT_BE_UNSED[point.type] && speedLength < MAX_UNUSED_SPEED && point.lastMoveOnIteration && iteration - point.lastMoveOnIteration > MAX_UNUSED_ITERATIONS) {
+            Points.markPointAsUnused(point)
+        }
 
         while (timesProcess--) {
             const prevX = point.coordinates.x
@@ -50,32 +64,36 @@ const processFrame = () => {
                 const temperatureToShare = temperatureDiff * TEMPERATURE_PART_TO_SHARE_WITH_AIR
                 point.data.temperature = pointTemperature - temperatureToShare
             }
-            const roundedSpeed = Speed.getRoundedSpeed(point, true)
-            const pointBySpeed = Points.getPointBySpeed(point, roundedSpeed)
-            point.speed.x *= 0.95
-            point.speed.y *= 0.95
-            if (!pointBySpeed) {
-                point.coordinates.x += roundedSpeed.x
-                point.coordinates.y += roundedSpeed.y
-                Points.deletePointInIndex({
-                    x: prevX,
-                    y: prevY
-                })
-                Points.setPointInIndex(point.coordinates, point)
-            }
-
-            if (speedLength > 5) {
-                for (const neighbourDirection of Speed.possibleNeighbours) {
-                    const neighbour = Points.getPointByCoordinates({
-                        x: point.coordinates.x + neighbourDirection.x,
-                        y: point.coordinates.y + neighbourDirection.y,
+            if (!isUnused) {
+                const roundedSpeed = Speed.getRoundedSpeed(point, true)
+                const pointBySpeed = Points.getPointBySpeed(point, roundedSpeed)
+                point.speed.x *= 0.95
+                point.speed.y *= 0.95
+                if (!pointBySpeed) {
+                    point.coordinates.x += roundedSpeed.x
+                    point.coordinates.y += roundedSpeed.y
+                    point.lastMoveOnIteration = iteration
+                    Points.markNeighboursAsUsed(point)
+                    Points.deletePointInIndex({
+                        x: prevX,
+                        y: prevY
                     })
-                    if (neighbour && neighbour.type !== EPointType.Border) {
-                        const diffX = point.coordinates.x - neighbour.coordinates.x
-                        const diffY = point.coordinates.y - neighbour.coordinates.y
+                    Points.setPointInIndex(point.coordinates, point)
+                }
 
-                        neighbour.speed.x -= diffX * 0.05
-                        neighbour.speed.y -= diffY * 0.05
+                if (speedLength > 5) {
+                    for (const neighbourDirection of Speed.possibleNeighbours) {
+                        const neighbour = Points.getPointByCoordinates({
+                            x: point.coordinates.x + neighbourDirection.x,
+                            y: point.coordinates.y + neighbourDirection.y,
+                        })
+                        if (neighbour && neighbour.type !== EPointType.Border) {
+                            const diffX = point.coordinates.x - neighbour.coordinates.x
+                            const diffY = point.coordinates.y - neighbour.coordinates.y
+
+                            neighbour.speed.x -= diffX * 0.05
+                            neighbour.speed.y -= diffY * 0.05
+                        }
                     }
                 }
             }
@@ -88,6 +106,7 @@ const processFrame = () => {
 
     Points.save()
     Points.shufflePoints()
+    Storage.set('iteration', iteration)
 }
 
 let framesTimes = [] as number[]

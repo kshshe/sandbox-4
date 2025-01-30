@@ -6,6 +6,7 @@ import { random } from "../utils/random";
 const STARTING_EXPLOSION_POWER = 10
 
 const explode = (point: TPoint, processedPoints: Set<TPoint>, rest = 3) => {
+    Points.markNeighboursAsUsed(point)
     if (rest === 0) {
         return
     }
