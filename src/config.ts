@@ -38,6 +38,7 @@ export const POINS_COLORS: Record<EPointType, string> = {
 export const CANT_BE_UNSED: {
     [key in EPointType]?: boolean
 } = {
+    [EPointType.Bomb]: true,
     [EPointType.Border]: true,
     [EPointType.Void]: true,
     [EPointType.Clone]: true,

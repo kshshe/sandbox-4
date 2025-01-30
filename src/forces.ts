@@ -11,7 +11,8 @@ import { CANT_BE_UNSED } from './config'
 const TEMPERATURE_PART_TO_SHARE_WITH_NEIGHBOUR = 1 / 20
 const TEMPERATURE_PART_TO_SHARE_WITH_AIR = 1 / 300
 const MAX_SPEED = 6
-const MAX_UNUSED_ITERATIONS = 200
+const MAX_UNUSED_ITERATIONS = 50
+const USE_POINT_EVERY_N_ITERATION = MAX_UNUSED_ITERATIONS * 10
 const MAX_UNUSED_SPEED = 0.3
 
 let iteration = Storage.get('iteration', 0)
@@ -25,7 +26,7 @@ const processFrame = () => {
         if (point.wasDeleted) {
             continue
         }
-        if (!isUnused || iteration % MAX_UNUSED_ITERATIONS * 4 === 0) {
+        if (!isUnused || iteration % USE_POINT_EVERY_N_ITERATION === 0) {
             const forcesList = forcesByType[point.type] || []
             for (const force of forcesList) {
                 force(point)

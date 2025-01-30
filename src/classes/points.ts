@@ -1,4 +1,4 @@
-import { INITIAL_TEMPERATURE } from '../config'
+import { CANT_BE_UNSED, INITIAL_TEMPERATURE } from '../config'
 import { TCoordinate, EPointType } from '../types'
 import { shake } from '../utils/shake'
 import { Bounds } from './bounds'
@@ -21,9 +21,6 @@ export class Points {
 
     static init() {
         this.updatePoints()
-        this._points.forEach(point => {
-            this.markPointAsUsed(point)
-        })
     }
 
     static isUnused(point: TPoint) {
@@ -31,6 +28,9 @@ export class Points {
     }
 
     static markPointAsUnused(point: TPoint) {
+        if (CANT_BE_UNSED[point.type]) {
+            return
+        }
         this.unusedPoints.add(point)
     }
 
