@@ -41,36 +41,6 @@ document.querySelector('#debug')?.addEventListener('click', () => {
     Controls.setDebugMode(!Controls.getDebugMode());
 })
 
-setTimeout(() => {
-    if (typeof (DeviceMotionEvent as any).requestPermission !== 'function') {
-        document.querySelector('#gravity')?.remove();
-    }
-}, 100)
-
-document.querySelector('#gravity')?.addEventListener('click', () => {
-    if (typeof (DeviceMotionEvent as any).requestPermission === 'function') {
-        (DeviceMotionEvent as any).requestPermission?.()
-            .then(permissionState => {
-                if (permissionState === 'granted') {
-                    window.addEventListener('devicemotion', (e) => {
-                        const acceleration = e.accelerationIncludingGravity;
-                        if (acceleration) {
-                            const x = acceleration.x ?? 0;
-                            const y = acceleration.y ?? 1;
-                            const max = Math.max(Math.abs(x), Math.abs(y));
-                            const normalizedX = x / max;
-                            const normalizedY = y / max;
-                            Controls.setGravityDirection({ x: normalizedX, y: -normalizedY });
-                        } else {
-                            Controls.setGravityDirection(Speed.rounded.down)
-                        }
-                    })
-                }
-            })
-            .catch(console.error);
-    }
-})
-
 window.addEventListener('keydown', (e) => {
     const key = e.key;
     if (key in drawingTypes) {
@@ -80,26 +50,6 @@ window.addEventListener('keydown', (e) => {
     if (key === 'r' && !e.ctrlKey && !e.metaKey) {
         localStorage.clear();
         window.location.reload();
-    }
-
-    if (key === 'ArrowLeft') {
-        Controls.setGravityDirection(Speed.rounded.left)
-    }
-
-    if (key === 'ArrowRight') {
-        Controls.setGravityDirection(Speed.rounded.right)
-    }
-
-    if (key === 'ArrowUp') {
-        Controls.setGravityDirection(Speed.rounded.up)
-    }
-
-    if (key === 'ArrowDown') {
-        Controls.setGravityDirection(Speed.rounded.down)
-    }
-
-    if (key === ' ') {
-        Controls.setGravityDirection({ x: 0, y: 0 })
     }
 })
 
