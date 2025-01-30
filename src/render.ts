@@ -199,14 +199,8 @@ const drawPoints = () => {
             }
 
             if (Points.isUnused(point)) {
-                ctx.strokeStyle = 'red';
-                ctx.lineWidth = 2;
-                ctx.strokeRect(
-                    point.coordinates.x * CONFIG.pixelSize + 1,
-                    point.coordinates.y * CONFIG.pixelSize + 1,
-                    CONFIG.pixelSize - 2,
-                    CONFIG.pixelSize - 2
-                );
+                ctx.fillStyle = 'rgba(255, 0, 0, 0.3)';
+                ctx.fillRect(point.coordinates.x * CONFIG.pixelSize, point.coordinates.y * CONFIG.pixelSize, CONFIG.pixelSize, CONFIG.pixelSize);
             }
         }
     })

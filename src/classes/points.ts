@@ -21,6 +21,9 @@ export class Points {
 
     static init() {
         this.updatePoints()
+        this._points.forEach(point => {
+            this.markPointAsUsed(point)
+        })
     }
 
     static isUnused(point: TPoint) {
@@ -94,6 +97,7 @@ export class Points {
         }
         this.setPointInIndex(point.coordinates, pointWithData)
         this._points.push(pointWithData)
+        this.markNeighboursAsUsed(pointWithData)
         this.save()
     }
 
