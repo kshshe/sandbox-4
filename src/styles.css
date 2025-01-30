@@ -12,8 +12,8 @@ canvas {
     color: white;
     padding: 0.5em;
     font-family: monospace;
-    font-size: 0.7em;
-    cursor: pointer;
+    font-size: 1em;
+    pointer-events: none;
 }
 
 .buttons {

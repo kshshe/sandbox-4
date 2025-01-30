@@ -96,3 +96,25 @@ export const drawingTypes = {
     g: EPointType.Gas,
     '-': 'eraser'
 }
+
+export const POINT_TYPE_ICON: {
+    [key in EPointType]?: string
+} & {
+    eraser?: string
+} = {
+    [EPointType.Water]: '💧',
+    [EPointType.Sand]: '🏖️',
+    [EPointType.Stone]: '🪨',
+    [EPointType.Border]: '🚧',
+    [EPointType.Fire]: '🔥',
+    [EPointType.IceFire]: '🧊🔥',
+    [EPointType.Bomb]: '💣',
+    [EPointType.Ice]: '🧊',
+    [EPointType.Steam]: '💨',
+    [EPointType.Clone]: '🧬',
+    [EPointType.Gas]: '💨',
+    [EPointType.Void]: '⚫',
+    [EPointType.ConstantCold]: '❄️♾️',
+    [EPointType.ConstantHot]: '🔥♾️',
+    eraser: '🧽',
+}

@@ -5,6 +5,7 @@ import { EPointType } from './types';
 import { addConsoleApi } from './utils/addConsoleApi';
 import { Bounds } from './classes/bounds';
 import { Storage } from './classes/storage';
+import './ui/main'
 
 Points.init()
 

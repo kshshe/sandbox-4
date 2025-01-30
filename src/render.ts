@@ -6,6 +6,7 @@ import { isDev } from "./utils/isDev";
 import { EPointType } from "./types";
 import { Storage } from "./classes/storage";
 import { Controls } from "./classes/controls";
+import { Speed } from "./classes/speed";
 
 const canvas = document.getElementById('canvas') as HTMLCanvasElement;
 const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
@@ -39,27 +40,6 @@ document.querySelector('#debug')?.addEventListener('click', () => {
     Controls.setDebugMode(!Controls.getDebugMode());
 })
 
-window.addEventListener('keydown', (e) => {
-    const drawingType = Controls.getDrawingType();
-    const key = e.key;
-    if (key in drawingTypes) {
-        Controls.setDrawingType(drawingTypes[key]);
-        Storage.set('drawingType', drawingType);
-    }
-    if (key === 'r' && !e.ctrlKey && !e.metaKey) {
-        localStorage.clear();
-        window.location.reload();
-    }
-})
-
-stats.addEventListener('click', () => {
-    const drawingType = Controls.getDrawingType();
-    const keys = Object.keys(drawingTypes);
-    const index = keys.findIndex(key => drawingTypes[key] === drawingType);
-    Controls.setDrawingType(drawingTypes[keys[(index + 1) % keys.length]]);
-    Storage.set('drawingType', drawingType);
-})
-
 const addListeners = (element: HTMLElement, events: string[], callback: (e: Event) => void) => {
     events.forEach(event => {
         element.addEventListener(event, callback);
@@ -83,20 +63,18 @@ addListeners(canvas, ['mousedown', 'touchstart'], (e) => {
     drawingInterval = setInterval(() => {
         const points = Points.getPoints();
         if (drawingType === 'eraser') {
-            const pointOnThisPlace = points.find(point => point.coordinates.x === drawingX && point.coordinates.y === drawingY);
-            if (pointOnThisPlace) {
-                Points.deletePoint(pointOnThisPlace);
-            }
+            Speed.possibleNeighbours.forEach(({ x, y }) => {
+                const pointOnThisPlace = Points.getPointByCoordinates({
+                    x: drawingX + x,
+                    y: drawingY + y
+                });
+                if (pointOnThisPlace) {
+                    Points.deletePoint(pointOnThisPlace);
+                }
+            })
             return;
         }
-        const area = [
-            { x: 0, y: -1 },
-            { x: -1, y: 0 },
-            { x: 1, y: 0 },
-            { x: 0, y: 1 },
-            { x: 0, y: 0 },
-        ]
-        area.forEach(({ x, y }) => {
+        Speed.possibleNeighbours.forEach(({ x, y }) => {
             const pointThere = points.find(point => point.coordinates.x === drawingX + x && point.coordinates.y === drawingY + y);
             if (pointThere) {
                 if (!isDev) {
@@ -116,6 +94,7 @@ addListeners(canvas, ['mousedown', 'touchstart'], (e) => {
         })
     }, 1000 / 200)
 })
+
 addListeners(canvas, [
     'mouseup',
     'touchend',
@@ -127,6 +106,7 @@ addListeners(canvas, [
         clearInterval(drawingInterval);
     }
 })
+
 addListeners(canvas, ['mousemove', 'touchmove'], (e) => {
     e.preventDefault();
     const offsetX = (e as MouseEvent).offsetX ?? (e as TouchEvent).touches[0].clientX ?? 0;
@@ -216,16 +196,11 @@ const drawPoints = () => {
             `Points: ${activePoints.length} / ${points.length} (${(activePoints.length / points.length * 100).toFixed(2)}%)`,
             `FPS: ${Stats.data.fps.toFixed(2)}`,
             `Average speed: ${Stats.data.averageSpeed.toFixed(2)}`,
-            '---',
-            ...Object.entries(drawingTypes).map(([key, value]) => {
-                return `- ${key}: ${value} ${drawingType === value ? '(selected)' : ''}`
-            }),
-            '- r: clear',
             hoveredPoint && '---',
             hoveredPoint && `${hoveredPoint.type}`,
             hoveredPoint?.wasDeleted && 'Deleted',
             hoveredPoint && hoveredPoint.data?.lifetime && `Lifetime: ${hoveredPoint.data.lifetime}`,
-            hoveredPoint ? Math.abs(hoveredPoint?.data.temperature) > 1 && `${Math.round(hoveredPoint.data.temperature)} °C` : '0 °C',
+            hoveredPoint ? Math.abs(hoveredPoint?.data.temperature) > 1 && `${Math.round(hoveredPoint.data.temperature)} °C` : null,
         ]
             .filter(Boolean)
             .join('<br>');
