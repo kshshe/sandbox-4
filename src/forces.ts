@@ -12,7 +12,8 @@ const MAX_SPEED = 6
 
 const processFrame = () => {
     const points = Points.getActivePoints()
-    for (const point of points) {
+    for (const index in points) {
+        const point = points[index]
         if (point.wasDeleted) {
             continue
         }
@@ -79,11 +80,14 @@ const processFrame = () => {
                 }
             }
         }
+
+        if (index % 100 === 0) {
+            Speed.shufflePossibleNeighbours()
+        }
     }
 
     Points.save()
     Points.shufflePoints()
-    Speed.shufflePossibleNeighbours()
 }
 
 let framesTimes = [] as number[]

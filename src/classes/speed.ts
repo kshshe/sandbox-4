@@ -57,7 +57,7 @@ export class Speed {
         Speed.rounded.rightDown,
     ]
 
-    static getRoundedSpeed(point: TPoint, exceptNeighbours = false): TRoundedSpeed {
+    static getRoundedSpeed(point: TPoint, exceptNeighbours = false, possibleNeighbours = Speed.possibleNeighbours): TRoundedSpeed {
         const neighbours = exceptNeighbours ? Points.getNeighbours(point) : []
         const { speed, type } = point
         const vectorLength = Math.sqrt(speed.x ** 2 + speed.y ** 2)
@@ -70,7 +70,7 @@ export class Speed {
         }
 
         let maxDistance = -Infinity
-        const distances = Speed.possibleNeighbours.map(possibleSpeed => {
+        const distances = possibleNeighbours.map(possibleSpeed => {
             const d = distance(normalizedSpeed, possibleSpeed)
             if (d > maxDistance) {
                 maxDistance = d

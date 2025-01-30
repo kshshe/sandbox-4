@@ -17,7 +17,6 @@ import { emitter } from "./emitter";
 export type TForceProcessor = (point: TPoint) => void
 
 const BASIC_FORCES: TForceProcessor[] = [
-    chaos,
     gravity,
     drowning,
 ]
@@ -63,6 +62,7 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
     ],
     [EPointType.Gas]: [
         ...BASIC_FORCES,
+        chaos(1000),
         convertOnTemperature('more', 250, EPointType.FireEmitter),
     ],
     [EPointType.FireEmitter]: [
@@ -76,7 +76,7 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
     ],
     [EPointType.Steam]: [
         ...BASIC_FORCES,
-        liquid,
+        chaos(100),
         convertOnTemperature('less', 60, EPointType.Water),
     ],
     [EPointType.Border]: [],

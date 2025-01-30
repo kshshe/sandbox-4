@@ -1,10 +1,7 @@
 import { TForceProcessor } from ".";
 import { random } from "../utils/random";
 
-export const chaos: TForceProcessor = (point) => {
-    const speedLength = Math.sqrt(point.speed.x ** 2 + point.speed.y ** 2);
-    if (speedLength < 0.001) {
-        point.speed.x += (random() * 2 - 1) * 0.02;
-        point.speed.y += (random() * 2 - 1) * 0.02;
-    }
+export const chaos = (power: number = 1): TForceProcessor => (point) => {
+    point.speed.x += (random() * 2 - 1) * 0.0002 * power
+    point.speed.y += (random() * 2 - 1) * 0.0002 * power
 }
