@@ -80,8 +80,6 @@ addListeners(canvas, ['mousedown', 'touchstart'], (e) => {
             if (pointThere) {
                 if (!isDev) {
                     return
-                } else {
-                    Points.deletePoint(pointThere);
                 }
             }
             return Points.addPoint({
