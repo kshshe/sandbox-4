@@ -110,7 +110,6 @@ export const POINT_TYPE_ICON: {
     [EPointType.IceFire]: '🧊🔥',
     [EPointType.Bomb]: '💣',
     [EPointType.Ice]: '🧊',
-    [EPointType.Steam]: '💨',
     [EPointType.Clone]: '🧬',
     [EPointType.Gas]: '💨',
     [EPointType.Void]: '⚫',
