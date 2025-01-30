@@ -2,7 +2,7 @@ import React from "react";
 import { useControls } from "../../hooks/useControls";
 import styles from "./elements-panel.module.scss";
 import classNames from "classnames";
-import { POINT_TYPE_ICON } from "../../../config";
+import { POINS_COLORS, POINT_TYPE_ICON } from "../../../config";
 
 export const ElementsPanel: React.FC = () => {
   const [isClosing, setIsClosing] = React.useState(false);
@@ -56,6 +56,10 @@ export const ElementsPanel: React.FC = () => {
           onClick={() => {
             setDrawingType(type as any);
             setIsOpened(false);
+          }}
+          style={{
+            // inset shadow by POINS_COLORS
+            boxShadow: `0 0 0 2px ${POINS_COLORS[type]}`,
           }}
         >
           {POINT_TYPE_ICON[type]}
