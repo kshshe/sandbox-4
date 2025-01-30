@@ -62,8 +62,9 @@ addListeners(canvas, ['mousedown', 'touchstart'], (e) => {
     drawingY = y;
     drawingInterval = setInterval(() => {
         const points = Points.getPoints();
+        const neighboursAndSelf = [...Speed.possibleNeighbours, { x: 0, y: 0 }];
         if (drawingType === 'eraser') {
-            Speed.possibleNeighbours.forEach(({ x, y }) => {
+            neighboursAndSelf.forEach(({ x, y }) => {
                 const pointOnThisPlace = Points.getPointByCoordinates({
                     x: drawingX + x,
                     y: drawingY + y
@@ -74,7 +75,7 @@ addListeners(canvas, ['mousedown', 'touchstart'], (e) => {
             })
             return;
         }
-        Speed.possibleNeighbours.forEach(({ x, y }) => {
+        neighboursAndSelf.forEach(({ x, y }) => {
             const pointThere = points.find(point => point.coordinates.x === drawingX + x && point.coordinates.y === drawingY + y);
             if (pointThere) {
                 if (!isDev) {
