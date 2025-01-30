@@ -25,6 +25,11 @@ export class Storage {
         }, 1000);
     }
 
+    public static clear() {
+        this.data = {};
+        this.save();
+    }
+
     private static save() {
         try {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(this.data));

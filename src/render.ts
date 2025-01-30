@@ -31,15 +31,6 @@ const stats = document.querySelector('.stats') as HTMLDivElement;
 
 let hoveredPoint: TPoint | null = null;
 
-document.querySelector('#reset')?.addEventListener('click', () => {
-    localStorage.clear();
-    window.location.reload();
-})
-
-document.querySelector('#debug')?.addEventListener('click', () => {
-    Controls.setDebugMode(!Controls.getDebugMode());
-})
-
 const addListeners = (element: HTMLElement, events: string[], callback: (e: Event) => void) => {
     events.forEach(event => {
         element.addEventListener(event, callback);
