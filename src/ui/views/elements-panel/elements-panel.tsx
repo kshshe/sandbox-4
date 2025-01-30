@@ -2,7 +2,7 @@ import React from "react";
 import { useControls } from "../../hooks/useControls";
 import styles from "./elements-panel.module.scss";
 import classNames from "classnames";
-import { POINS_COLORS, POINT_TYPE_ICON } from "../../../config";
+import { POINS_COLORS, POINT_TYPE_ICON, POINTS_SHORTCUTS, REVERSED_POINTS_SHORTCUTS } from "../../../config";
 
 export const ElementsPanel: React.FC = () => {
   const [isClosing, setIsClosing] = React.useState(false);
@@ -38,6 +38,11 @@ export const ElementsPanel: React.FC = () => {
             setIsClosing(false);
           }, 300);
         }
+      }
+
+      if (POINTS_SHORTCUTS[e.key]) {
+        setDrawingType(POINTS_SHORTCUTS[e.key]);
+        setIsOpened(false);
       }
     };
     window.addEventListener("keyup", handleSpace);
@@ -83,6 +88,9 @@ export const ElementsPanel: React.FC = () => {
           }}
         >
           {POINT_TYPE_ICON[type]}
+          {REVERSED_POINTS_SHORTCUTS[type] && (
+            <span className={styles.shortcut}>{REVERSED_POINTS_SHORTCUTS[type]}</span>
+          )}
         </button>
       ))}
     </div>
