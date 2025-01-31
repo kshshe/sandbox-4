@@ -15,6 +15,14 @@
     }
 }
 
+.lastFPS {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    font-size: 10px;
+    color: #000000a6;
+}
+
 .fps {
     display: flex;
     flex-direction: row;

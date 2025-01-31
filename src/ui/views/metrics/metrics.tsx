@@ -59,6 +59,7 @@ export const Metrics: React.FC = () => {
     document.addEventListener("mousemove", onMouseMove);
     return () => document.removeEventListener("mousemove", onMouseMove);
   }, []);
+  const lastFPS = Math.round(fpsHistory[fpsHistory.length - 1]);
   return (
     <div
       className={classNames(styles.metrics, {
@@ -66,6 +67,7 @@ export const Metrics: React.FC = () => {
       })}
       ref={metricsRef}
     >
+      <div className={styles.lastFPS}>{lastFPS} FPS</div>
       <div className={styles.fps}>
         {fpsHistory.map((fps, index) => {
           const percent = (fps / 60) * 100;
