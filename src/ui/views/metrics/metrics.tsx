@@ -154,6 +154,10 @@ export const Metrics: React.FC = () => {
         <a href="https://t.me/kshshe" target="_blank" rel="noreferrer">
           developer
         </a>
+        ,{' '}
+        <a href="https://github.com/kshshe/sandbox-4" target="_blank" rel="noreferrer">
+          code
+        </a>
       </div>
     </div>
   );
