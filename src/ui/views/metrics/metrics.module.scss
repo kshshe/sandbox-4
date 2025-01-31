@@ -8,6 +8,11 @@
     border-radius: 4px;
     box-shadow: 0 2px 4px 0 #000000a6;
     pointer-events: none;
+    transition: opacity 0.2s;
+
+    &.transparent {
+        opacity: 0.5;
+    }
 }
 
 .fps {
