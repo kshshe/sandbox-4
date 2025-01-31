@@ -2,6 +2,56 @@ import React from "react";
 import styles from "./metrics.module.scss";
 import { Stats } from "../../../classes/stats";
 import classNames from "classnames";
+import { Points } from "../../../classes/points";
+
+const ProcessedPointsMeter: React.FC = () => {
+  const [pointsTotal, setPointsTotal] = React.useState(0);
+  const [pointsProcessed, setPointsProcessed] = React.useState(0);
+
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      const points = Points.getActivePoints();
+      setPointsTotal(points.length);
+      const active = points.filter((point) => !Points.isUnused(point));
+      setPointsProcessed(active.length);
+    }, 100);
+    return () => clearInterval(interval);
+  }, []);
+
+  const processedPercent = (pointsProcessed / pointsTotal) * 100;
+  return (
+    <div className={styles.processedPointsMeter}>
+      <svg
+        className={styles.processedPointsMeterChart}
+        viewBox="0 0 40 40"
+        width="40"
+        height="40"
+      >
+        <circle cx="20" cy="20" r="15" fill="#ddd" />
+        <path
+          d={`
+            M 20,20
+            L 20,5
+            A 15,15 0 ${processedPercent > 50 ? 1 : 0} 1 ${
+            20 + 15 * Math.sin((processedPercent * Math.PI) / 50)
+          },${20 - 15 * Math.cos((processedPercent * Math.PI) / 50)}
+            Z
+          `}
+          fill={`rgba(${[
+            Math.floor(processedPercent * 2.55),
+            Math.floor(255 - processedPercent * 2.55),
+            0,
+          ].join(",")})`}
+        />
+      </svg>
+      <div className={styles.processedPointsMeterText}>
+        Processing <strong>{Math.round(processedPercent)}%</strong> of points
+        <br />
+        {pointsProcessed} of {pointsTotal}
+      </div>
+    </div>
+  );
+};
 
 const LoadMeter: React.FC = () => {
   const [load, setLoad] = React.useState(0);
@@ -89,6 +139,7 @@ export const Metrics: React.FC = () => {
         })}
       </div>
       <LoadMeter />
+      <ProcessedPointsMeter />
     </div>
   );
 };
