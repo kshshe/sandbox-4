@@ -13,7 +13,8 @@
     "classnames": "^2.5.1",
     "parcel": "^2.13.3",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-tooltip": "^5.28.0"
   },
   "devDependencies": {
     "@parcel/transformer-sass": "^2.13.3",

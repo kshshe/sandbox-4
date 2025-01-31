@@ -3,6 +3,7 @@ import { useControls } from "../../hooks/useControls";
 import styles from "./elements-panel.module.scss";
 import classNames from "classnames";
 import { POINS_COLORS, POINT_TYPE_ICON, POINTS_SHORTCUTS, REVERSED_POINTS_SHORTCUTS } from "../../../config";
+import { Tooltip } from 'react-tooltip'
 
 export const ElementsPanel: React.FC = () => {
   const [isClosing, setIsClosing] = React.useState(false);
@@ -86,12 +87,20 @@ export const ElementsPanel: React.FC = () => {
             // inset shadow by POINS_COLORS
             boxShadow: `0 0 0 2px ${POINS_COLORS[type]}`,
           }}
+          data-tooltip-id={`tooltip-${type}`}
         >
           {POINT_TYPE_ICON[type]}
           {REVERSED_POINTS_SHORTCUTS[type] && (
             <span className={styles.shortcut}>{REVERSED_POINTS_SHORTCUTS[type]}</span>
           )}
         </button>
+      ))}
+      {Object.keys(POINT_TYPE_ICON).map((type) => (
+        <Tooltip
+          key={type}
+          id={`tooltip-${type}`}
+          content={type}
+        />
       ))}
     </div>
   );
