@@ -103,12 +103,9 @@ addListeners(canvas, ['mousemove', 'touchmove'], (e) => {
     const offsetY = (e as MouseEvent).offsetY ?? (e as TouchEvent).touches[0].clientY ?? 0;
     const x = Math.floor(offsetX / CONFIG.pixelSize);
     const y = Math.floor(offsetY / CONFIG.pixelSize);
-    if (isDrawing) {
-        drawingX = x;
-        drawingY = y;
-    } else {
-        hoveredPoint = Points.getPoints().find(point => point.coordinates.x === x && point.coordinates.y === y) || null;
-    }
+    drawingX = x;
+    drawingY = y;
+    hoveredPoint = Points.getPoints().find(point => point.coordinates.x === x && point.coordinates.y === y) || null;
 })
 
 const previouslyUsedPixels: Set<string> = new Set();
@@ -176,6 +173,11 @@ const drawPoints = () => {
             }
         }
     })
+
+    // draw a rectangle around the drawing area (drawingX and drawingY variables)
+    ctx.strokeStyle = 'rgba(0, 0, 0, 0.5)';
+    ctx.lineWidth = 1;
+    ctx.strokeRect((drawingX - 1) * CONFIG.pixelSize, (drawingY - 1) * CONFIG.pixelSize, CONFIG.pixelSize * 3, CONFIG.pixelSize * 3);
 
     if (frame++ % 20 === 0) {
         stats.innerHTML = [
