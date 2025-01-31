@@ -5,6 +5,12 @@ import { random } from "../utils/random";
 
 const STARTING_EXPLOSION_POWER = 10
 
+const CONVERTION_MAP: {
+    [key in EPointType]?: EPointType
+} = {
+    [EPointType.StaticStone]: EPointType.Stone,
+}
+
 const explode = (point: TPoint, processedPoints: Set<TPoint>, rest = 3) => {
     Points.markNeighboursAsUsed(point)
     if (rest === 0) {
@@ -21,6 +27,9 @@ const explode = (point: TPoint, processedPoints: Set<TPoint>, rest = 3) => {
             const directionToNeighborY = neighbor.coordinates.y - point.coordinates.y
             neighbor.speed.x = directionToNeighborX * force * (random() + 0.5)
             neighbor.speed.y = directionToNeighborY * force * (random() + 0.5)
+            if (CONVERTION_MAP[neighbor.type]) {
+                neighbor.type = CONVERTION_MAP[neighbor.type]!
+            }
             processedPoints.add(neighbor)
         }
     })
