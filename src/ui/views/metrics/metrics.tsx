@@ -18,6 +18,10 @@ const ProcessedPointsMeter: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
+  if (pointsTotal === 0) {
+    return null;
+  }
+
   const processedPercent = Math.min(99.99, (pointsProcessed / pointsTotal) * 100);
   return (
     <div className={styles.processedPointsMeter}>
