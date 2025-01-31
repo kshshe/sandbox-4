@@ -82,6 +82,7 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
     [EPointType.BurningWood]: [
         staticForce,
         lifetime(500, 1000),
+        staticTemperature(800),
         emitter(EPointType.Fire, 0.2),
     ],
     [EPointType.FireEmitter]: [
