@@ -19,6 +19,9 @@ export const SettingsPanel: React.FC = () => {
 
   React.useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
+      if (e.key !== "d") {
+        return;
+      }
       setIsDebugMode(!isDebugMode);
     };
     window.addEventListener("keyup", handleKey);
