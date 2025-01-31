@@ -1,9 +1,11 @@
+import './scss.d.ts';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 
 import { ElementsPanel } from './views/elements-panel/elements-panel';
 import { SettingsPanel } from './views/settings-panel/settings-panel';
 import { ResetButton } from './views/reset-button/reset-button';
+import { Metrics } from './views/metrics/metrics';
 
 const body = document.querySelector('#react');
 if (body) {
@@ -11,5 +13,6 @@ if (body) {
         <ElementsPanel />
         <SettingsPanel />
         <ResetButton />
+        <Metrics />
     </>);
 }

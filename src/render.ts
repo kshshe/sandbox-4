@@ -181,10 +181,7 @@ const drawPoints = () => {
         const drawingType = Controls.getDrawingType();
         const activePoints = points.filter(point => !Points.isUnused(point));
         stats.innerHTML = [
-            `Iteration: ${Storage.get('iteration', 0)}`,
-            `Load: ${(Stats.data.load * 100).toFixed(2)}%`,
             `Points: ${activePoints.length} / ${points.length} (${(activePoints.length / points.length * 100).toFixed(2)}%)`,
-            `FPS: ${Stats.data.fps.toFixed(2)}`,
             `Average speed: ${Stats.data.averageSpeed.toFixed(2)}`,
             hoveredPoint && '---',
             hoveredPoint && `${hoveredPoint.type}`,

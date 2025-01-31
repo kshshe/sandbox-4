@@ -1,0 +1,41 @@
+.metrics {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+    padding: 5px;
+    background: white;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px 0 #000000a6;
+    pointer-events: none;
+}
+
+.fps {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-end;
+    height: 40px;
+    gap: 1px;
+
+    .fpsBar {
+        background-color: black;
+        width: 2px;
+        max-height: 100%;
+        flex: 0 0 2px;
+    }
+}
+
+.loadMeter {
+    margin-top: 5px;
+    height: 4px;
+    width: 100%;
+    background-color: #00000012;
+    padding: 1px 0;
+
+    .loadMeterBar {
+        height: 100%;
+        background-color: #000000;
+        transition: width 0.02s, background-color 0.02s;
+    }
+}
