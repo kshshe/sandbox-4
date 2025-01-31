@@ -1,10 +1,10 @@
 import React from "react";
 import styles from "./settings-panel.module.scss";
-import classNames from "classnames";
 import { useControls } from "../../hooks/useControls";
 
 export const SettingsPanel: React.FC = () => {
   const [isOpened, setIsOpened] = React.useState(false);
+  const [isDebugMode, setIsDebugMode] = useControls("debugMode");
 
   React.useEffect(() => {
     if (!isOpened) {
@@ -17,6 +17,14 @@ export const SettingsPanel: React.FC = () => {
     return () => window.removeEventListener("click", handleOutsideClick);
   }, [isOpened]);
 
+  React.useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      setIsDebugMode(!isDebugMode);
+    };
+    window.addEventListener("keyup", handleKey);
+    return () => window.removeEventListener("keyup", handleKey);
+  }, [isDebugMode]);
+
   const button = (
     <button
       className={styles.floatingButton}
@@ -28,8 +36,6 @@ export const SettingsPanel: React.FC = () => {
       ⚙️
     </button>
   );
-
-  const [isDebugMode, setIsDebugMode] = useControls("debugMode");
 
   const modal = (
     <div
