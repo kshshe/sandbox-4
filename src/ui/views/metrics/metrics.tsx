@@ -22,9 +22,13 @@ const ProcessedPointsMeter: React.FC = () => {
     return null;
   }
 
-  const processedPercent = Math.min(99.99, (pointsProcessed / pointsTotal) * 100);
+  const processedPercent = Math.min(
+    99.99,
+    (pointsProcessed / pointsTotal) * 100
+  );
   return (
     <div className={styles.processedPointsMeter}>
+      <div className={styles.processedPointsMeterText}>Processing:</div>
       <svg
         className={styles.processedPointsMeterChart}
         viewBox="0 0 40 40"
@@ -49,7 +53,7 @@ const ProcessedPointsMeter: React.FC = () => {
         />
       </svg>
       <div className={styles.processedPointsMeterText}>
-        Processing <strong>{Math.round(processedPercent)}%</strong> of points
+        <strong>{Math.round(processedPercent)}%</strong> of points
         <br />
         {pointsProcessed} of {pointsTotal}
       </div>
