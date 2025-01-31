@@ -178,12 +178,7 @@ const drawPoints = () => {
     })
 
     if (frame++ % 20 === 0) {
-        const drawingType = Controls.getDrawingType();
-        const activePoints = points.filter(point => !Points.isUnused(point));
         stats.innerHTML = [
-            `Points: ${activePoints.length} / ${points.length} (${(activePoints.length / points.length * 100).toFixed(2)}%)`,
-            `Average speed: ${Stats.data.averageSpeed.toFixed(2)}`,
-            hoveredPoint && '---',
             hoveredPoint && `${hoveredPoint.type}`,
             hoveredPoint?.wasDeleted && 'Deleted',
             hoveredPoint && hoveredPoint.data?.lifetime && `Lifetime: ${hoveredPoint.data.lifetime}`,
