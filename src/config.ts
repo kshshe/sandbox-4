@@ -21,6 +21,8 @@ export const POINTS_PROBABILITY_TO_CHANGE_DIRECTION_MODIFIERS: {
     [EPointType.StaticStone]: 0,
     [EPointType.Void]: 0,
     [EPointType.Clone]: 0,
+    [EPointType.Wood]: 0,
+    [EPointType.BurningWood]: 0,
     [EPointType.Fire]: 4,
     [EPointType.IceFire]: 4,
     [EPointType.Steam]: 10,
@@ -42,6 +44,8 @@ export const POINS_COLORS: Record<EPointType, string> = {
     [EPointType.Clone]: 'green',
     [EPointType.Gas]: 'lightgray',
     [EPointType.Lava]: 'red',
+    [EPointType.Wood]: '#8b4513',
+    [EPointType.BurningWood]: 'red',
 
     [EPointType.ConstantCold]: 'blue',
     [EPointType.ConstantHot]: 'red',
@@ -61,6 +65,7 @@ export const CANT_BE_UNSED: {
     [EPointType.FireEmitter]: true,
     [EPointType.Fire]: true,
     [EPointType.IceFire]: true,
+    [EPointType.BurningWood]: true,
 }
 
 export const POINTS_WEIGHTS: Record<EPointType, number> = {
@@ -74,6 +79,8 @@ export const POINTS_WEIGHTS: Record<EPointType, number> = {
     [EPointType.Bomb]: 1,
     [EPointType.Gas]: 0,
 
+    [EPointType.Wood]: Infinity,
+    [EPointType.BurningWood]: Infinity,
     [EPointType.StaticStone]: Infinity,
     [EPointType.Border]: Infinity,
     [EPointType.Ice]: Infinity,
@@ -95,23 +102,7 @@ export const INITIAL_TEMPERATURE: {
 
     [EPointType.ConstantCold]: -500,
     [EPointType.ConstantHot]: 500,
-}
-
-export const drawingTypes = {
-    1: EPointType.Water,
-    2: EPointType.Sand,
-    3: EPointType.Stone,
-    4: EPointType.Border,
-    5: EPointType.Fire,
-    6: EPointType.IceFire,
-    7: EPointType.Bomb,
-    8: EPointType.Ice,
-    9: EPointType.ConstantCold,
-    0: EPointType.ConstantHot,
-    v: EPointType.Void,
-    c: EPointType.Clone,
-    g: EPointType.Gas,
-    '-': 'eraser'
+    [EPointType.BurningWood]: 800,
 }
 
 export const POINT_TYPE_ICON: {
@@ -123,6 +114,7 @@ export const POINT_TYPE_ICON: {
     [EPointType.Sand]: '🏖️',
     [EPointType.Stone]: '🪨',
     [EPointType.Lava]: '🌋',
+    [EPointType.Wood]: '🌳',
     [EPointType.Border]: '🚧',
     [EPointType.Fire]: '🔥',
     [EPointType.IceFire]: '🧊🔥',

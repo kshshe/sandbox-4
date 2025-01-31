@@ -75,6 +75,15 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
         chaos(1000),
         convertOnTemperature('more', 250, EPointType.FireEmitter),
     ],
+    [EPointType.Wood]: [
+        staticForce,
+        convertOnTemperature('more', 750, EPointType.BurningWood),
+    ],
+    [EPointType.BurningWood]: [
+        staticForce,
+        lifetime(500, 1000),
+        emitter(EPointType.Fire, 0.2),
+    ],
     [EPointType.FireEmitter]: [
         ...BASIC_FORCES,
         lifetime(30, 120),

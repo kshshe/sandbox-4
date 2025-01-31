@@ -1,10 +1,8 @@
-import { CONFIG, drawingTypes, POINS_COLORS } from "./config";
+import { CONFIG, POINS_COLORS } from "./config";
 import { Points, TPoint } from "./classes/points";
 import { Bounds } from "./classes/bounds";
-import { Stats } from "./classes/stats";
 import { isDev } from "./utils/isDev";
 import { EPointType } from "./types";
-import { Storage } from "./classes/storage";
 import { Controls } from "./classes/controls";
 import { Speed } from "./classes/speed";
 

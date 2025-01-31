@@ -4,8 +4,11 @@ import { Speed } from "../classes/speed";
 import { EPointType } from "../types";
 import { random } from "../utils/random";
 
-export const emitter = (pointType: EPointType): TForceProcessor => (point) => {
+export const emitter = (pointType: EPointType, intencity = 1): TForceProcessor => (point) => {
     if (random() < 0.9) {
+        return
+    }
+    if (random() > intencity) {
         return
     }
     for (const direction of Speed.possibleNeighbours) {
