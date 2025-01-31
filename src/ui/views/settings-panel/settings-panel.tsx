@@ -19,11 +19,9 @@ export const SettingsPanel: React.FC = () => {
 
   const button = (
     <button
-      className={classNames(styles.floatingButton, {
-        [styles.isOpened]: isOpened,
-      })}
+      className={styles.floatingButton}
       onClick={(e) => {
-        setIsOpened(true);
+        setIsOpened(o => !o);
         e.stopPropagation();
       }}
     >
