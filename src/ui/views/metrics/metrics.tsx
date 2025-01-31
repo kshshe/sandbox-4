@@ -18,7 +18,7 @@ const ProcessedPointsMeter: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const processedPercent = (pointsProcessed / pointsTotal) * 100;
+  const processedPercent = Math.min(99.99, (pointsProcessed / pointsTotal) * 100);
   return (
     <div className={styles.processedPointsMeter}>
       <svg
