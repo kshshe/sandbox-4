@@ -148,6 +148,9 @@ export const Metrics: React.FC = () => {
       </div>
       <LoadMeter />
       <ProcessedPointsMeter />
+      <div className={styles.hint}>
+        <strong>d</strong> - toggle debug mode
+      </div>
     </div>
   );
 };
