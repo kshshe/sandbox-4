@@ -13,6 +13,7 @@ import { chaos } from "./chaos";
 import { voidProcessor } from "./void";
 import { clone } from "./clone";
 import { emitter } from "./emitter";
+import { dynamite } from "./dynamite";
 
 export type TForceProcessor = (point: TPoint) => void
 
@@ -57,6 +58,10 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
     [EPointType.Bomb]: [
         ...BASIC_FORCES,
         bomb,
+    ],
+    [EPointType.Dynamite]: [
+        staticForce,
+        dynamite,
     ],
     [EPointType.Ice]: [
         staticForce,

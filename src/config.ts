@@ -46,6 +46,7 @@ export const POINS_COLORS: Record<EPointType, string> = {
     [EPointType.Lava]: 'red',
     [EPointType.Wood]: '#8b4513',
     [EPointType.BurningWood]: 'red',
+    [EPointType.Dynamite]: '#ff4444',
 
     [EPointType.ConstantCold]: 'blue',
     [EPointType.ConstantHot]: 'red',
@@ -66,6 +67,7 @@ export const CANT_BE_UNSED: {
     [EPointType.Fire]: true,
     [EPointType.IceFire]: true,
     [EPointType.BurningWood]: true,
+    [EPointType.Dynamite]: true,
 }
 
 export const POINTS_WEIGHTS: Record<EPointType, number> = {
@@ -79,6 +81,7 @@ export const POINTS_WEIGHTS: Record<EPointType, number> = {
     [EPointType.Bomb]: 1,
     [EPointType.Gas]: 0,
 
+    [EPointType.Dynamite]: Infinity,
     [EPointType.Wood]: Infinity,
     [EPointType.BurningWood]: Infinity,
     [EPointType.StaticStone]: Infinity,
@@ -119,6 +122,7 @@ export const POINT_TYPE_ICON: {
     [EPointType.Fire]: '🔥',
     [EPointType.IceFire]: '🧊🔥',
     [EPointType.Bomb]: '💣',
+    [EPointType.Dynamite]: '💥',
     [EPointType.Ice]: '🧊',
     [EPointType.Clone]: '🧬',
     [EPointType.Gas]: '💨',

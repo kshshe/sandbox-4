@@ -21,6 +21,7 @@ export enum EPointType {
     FireEmitter = 'fireEmitter',
     Wood = 'wood',
     BurningWood = 'burningWood',
+    Dynamite = 'dynamite',
 
     ConstantCold = 'constantCold',
     ConstantHot = 'constantHot',
