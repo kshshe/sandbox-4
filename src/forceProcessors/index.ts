@@ -46,7 +46,7 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
     ],
     [EPointType.Fire]: [
         ...BASIC_FORCES,
-        lifetime(30, 120),
+        lifetime(8, 50),
         staticTemperature(INITIAL_TEMPERATURE[EPointType.Fire] ?? 2000),
     ],
     [EPointType.IceFire]: [
