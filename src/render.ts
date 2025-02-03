@@ -162,6 +162,13 @@ const drawPoints = () => {
             ctx.fillRect(point.coordinates.x * CONFIG.pixelSize, point.coordinates.y * CONFIG.pixelSize, CONFIG.pixelSize, CONFIG.pixelSize);
         }
 
+        if (point.type === EPointType.Metal && point.data.temperature > 0) {
+            // add a red overlay depending on temperature
+            const temperatureColor = `rgba(255, 0, 0, ${Math.min(1, Math.max(0, point.data.temperature / 300))})`;
+            ctx.fillStyle = temperatureColor;
+            ctx.fillRect(point.coordinates.x * CONFIG.pixelSize, point.coordinates.y * CONFIG.pixelSize, CONFIG.pixelSize, CONFIG.pixelSize);
+        }
+
         if (debugMode) {
             if (Points.isUnused(point)) {
                 // draw a cross on unused points
@@ -201,7 +208,7 @@ const drawPoints = () => {
             hoveredPoint && `${hoveredPoint.type}`,
             hoveredPoint?.wasDeleted && 'Deleted',
             hoveredPoint && hoveredPoint.data?.lifetime && `Lifetime: ${hoveredPoint.data.lifetime}`,
-            hoveredPoint && hoveredPoint.data?.charge && `Charge: ${hoveredPoint.data.charge}`,
+            hoveredPoint && hoveredPoint.data?.charge && `Charge: ${Math.round(hoveredPoint.data.charge)}`,
             hoveredCoordinates && `Coordinates: ${hoveredCoordinates.x}:${hoveredCoordinates.y}`,
             hoveredCoordinates && `Temperature: ${Math.round(TemperatureGrid.getTemperatureOnPoint(hoveredCoordinates.x, hoveredCoordinates.y))} °C`,
         ]

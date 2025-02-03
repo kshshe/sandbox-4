@@ -33,7 +33,7 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
     ],
     [EPointType.Metal]: [
         staticForce,
-        throttle(directionToGround, 60),
+        throttle(directionToGround, 10),
         sendCharge,
     ],
     [EPointType.Electricity_Spark]: [

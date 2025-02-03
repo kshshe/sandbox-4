@@ -6,7 +6,7 @@ const sendChargeFromTo = (from: TPoint, to: TPoint) => {
     const amoutToSend = from.data.charge ?? 0
     to.data.charge = (to.data.charge ?? 0) + amoutToSend * 0.98
     from.data.charge = 0
-    to.data.temperature += amoutToSend * 0.1
+    to.data.temperature += amoutToSend * 0.2
 }
 
 export const sendCharge: TForceProcessor = (point) => {
