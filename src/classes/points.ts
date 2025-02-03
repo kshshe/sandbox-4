@@ -103,7 +103,9 @@ export class Points {
         return this.coordinatesIndex[this.getIndexIndex(coordinates)]
     }
 
-    static addPoint(point: Omit<TPoint, 'data'>) {
+    static addPoint(point: Omit<TPoint, 'data'> & {
+        data?: TPoint['data']
+    }) {
         const pointWithData: TPoint = {
             data: {
                 temperature: INITIAL_TEMPERATURE[point.type] ?? 15
