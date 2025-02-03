@@ -18,6 +18,8 @@ export class Speed {
         Speed.possibleNeighbours = shake(Speed.possibleNeighbours)
     }
 
+    static self: TRoundedSpeed = { x: 0, y: 0 }
+
     static rounded: {
         left: TRoundedSpeed
         right: TRoundedSpeed

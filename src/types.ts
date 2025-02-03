@@ -24,6 +24,9 @@ export enum EPointType {
     Dynamite = 'dynamite',
     LiquidGas = 'liquidGas',
     Foam = 'foam',
+    Metal = 'metal',
+    Electricity_Ground = 'electricityGround',
+    Electricity_Spark = 'electricitySpark',
 
     ConstantCold = 'constantCold',
     ConstantHot = 'constantHot',

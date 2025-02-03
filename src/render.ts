@@ -144,6 +144,24 @@ const drawPoints = () => {
             }
         }
 
+        if (point.data.directionToGround) {
+            const centerX = point.coordinates.x * CONFIG.pixelSize + CONFIG.pixelSize / 2;
+            const centerY = point.coordinates.y * CONFIG.pixelSize + CONFIG.pixelSize / 2;
+            const arrowSize = 5;
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY);
+            ctx.lineTo(centerX + point.data.directionToGround.x * arrowSize, centerY + point.data.directionToGround.y * arrowSize);
+            ctx.strokeStyle = 'rgba(0, 0, 0, 0.5)';
+            ctx.stroke();
+        }
+
+        if (point.data.charge) {
+            // yellowish color depending on charge value
+            const chargeColor = `rgba(255, 255, 0, ${Math.min(1, Math.max(0, point.data.charge / 10))})`;
+            ctx.fillStyle = chargeColor;
+            ctx.fillRect(point.coordinates.x * CONFIG.pixelSize, point.coordinates.y * CONFIG.pixelSize, CONFIG.pixelSize, CONFIG.pixelSize);
+        }
+
         if (debugMode) {
             if (Points.isUnused(point)) {
                 // draw a cross on unused points
@@ -183,6 +201,7 @@ const drawPoints = () => {
             hoveredPoint && `${hoveredPoint.type}`,
             hoveredPoint?.wasDeleted && 'Deleted',
             hoveredPoint && hoveredPoint.data?.lifetime && `Lifetime: ${hoveredPoint.data.lifetime}`,
+            hoveredPoint && hoveredPoint.data?.charge && `Charge: ${hoveredPoint.data.charge}`,
             hoveredCoordinates && `Coordinates: ${hoveredCoordinates.x}:${hoveredCoordinates.y}`,
             hoveredCoordinates && `Temperature: ${Math.round(TemperatureGrid.getTemperatureOnPoint(hoveredCoordinates.x, hoveredCoordinates.y))} °C`,
         ]

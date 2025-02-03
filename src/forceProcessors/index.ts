@@ -14,6 +14,11 @@ import { voidProcessor } from "./void";
 import { clone } from "./clone";
 import { emitter } from "./emitter";
 import { dynamite } from "./dynamite";
+import { ground } from "./ground";
+import { directionToGround } from "./directionToGround";
+import { throttle } from "./utils/throttle";
+import { spark } from "./spark";
+import { sendCharge } from "./sendCharge";
 
 export type TForceProcessor = (point: TPoint) => void
 
@@ -25,6 +30,20 @@ const BASIC_FORCES: TForceProcessor[] = [
 export const forcesByType: Record<EPointType, TForceProcessor[]> = {
     [EPointType.Foam]: [
         staticForce,
+    ],
+    [EPointType.Metal]: [
+        staticForce,
+        throttle(directionToGround, 60),
+        sendCharge,
+    ],
+    [EPointType.Electricity_Spark]: [
+        ...BASIC_FORCES,
+        chaos(1),
+        spark,
+    ],
+    [EPointType.Electricity_Ground]: [
+        staticForce,
+        throttle(ground, 10),
     ],
     [EPointType.Water]: [
         ...BASIC_FORCES,

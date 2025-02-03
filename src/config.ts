@@ -27,6 +27,14 @@ export const POINTS_PROBABILITY_TO_CHANGE_DIRECTION_MODIFIERS: {
     [EPointType.IceFire]: 4,
     [EPointType.Steam]: 10,
     [EPointType.Gas]: 10,
+    [EPointType.Electricity_Spark]: 10,
+}
+
+export const POINTS_CAN_ACCEPT_ELECTRICITY: {
+    [key in EPointType]?: boolean
+} = {
+    [EPointType.Metal]: true,
+    [EPointType.Electricity_Ground]: true,
 }
 
 export const POINS_COLORS: Record<EPointType, string> = {
@@ -49,6 +57,9 @@ export const POINS_COLORS: Record<EPointType, string> = {
     [EPointType.Dynamite]: '#ff4444',
     [EPointType.LiquidGas]: '#00ccff',
     [EPointType.Foam]: '#f0e68c',
+    [EPointType.Metal]: '#c0c0c0',
+    [EPointType.Electricity_Ground]: '#a0a0a0',
+    [EPointType.Electricity_Spark]: '#ffff00',
 
     [EPointType.ConstantCold]: 'blue',
     [EPointType.ConstantHot]: 'red',
@@ -70,6 +81,8 @@ export const CANT_BE_UNSED: {
     [EPointType.IceFire]: true,
     [EPointType.BurningWood]: true,
     [EPointType.Dynamite]: true,
+    [EPointType.Electricity_Ground]: true,
+    [EPointType.Electricity_Spark]: true,
 }
 
 export const POINTS_HEAT_CAPACITY: {
@@ -86,6 +99,10 @@ export const POINTS_HEAT_CAPACITY: {
 
     steam: 0.1,
     gas: 0.1,
+
+    [EPointType.Electricity_Ground]: 1,
+    [EPointType.Metal]: 0.5,
+    [EPointType.Dynamite]: 4,
 
     constantCold: 100,
     constantHot: 100,
@@ -106,7 +123,10 @@ export const POINTS_WEIGHTS: Record<EPointType, number> = {
     [EPointType.Steam]: -0.1,
     [EPointType.Bomb]: 1,
     [EPointType.Gas]: 0,
+    [EPointType.Electricity_Spark]: 1,
 
+    [EPointType.Electricity_Ground]: Infinity,
+    [EPointType.Metal]: Infinity,
     [EPointType.Foam]: Infinity,
     [EPointType.Dynamite]: Infinity,
     [EPointType.Wood]: Infinity,
@@ -134,6 +154,8 @@ export const INITIAL_TEMPERATURE: {
     [EPointType.ConstantCold]: -500,
     [EPointType.ConstantHot]: 500,
     [EPointType.BurningWood]: 800,
+
+    [EPointType.Electricity_Spark]: 100,
 }
 
 export const POINT_TYPE_ICON: {
@@ -145,6 +167,9 @@ export const POINT_TYPE_ICON: {
     [EPointType.Sand]: '🏖️',
     [EPointType.Stone]: '🪨',
     [EPointType.Lava]: '🌋',
+    [EPointType.Metal]: '🔩',
+    [EPointType.Electricity_Ground]: '⚡🪨',
+    [EPointType.Electricity_Spark]: '⚡',
     [EPointType.Wood]: '🌳',
     [EPointType.Border]: '🚧',
     [EPointType.Fire]: '🔥',
@@ -178,6 +203,7 @@ export const POINTS_SHORTCUTS: {
     c: EPointType.Clone,
     g: EPointType.Gas,
     v: EPointType.Void,
+    m: EPointType.Metal,
     e: 'eraser',
 }
 
