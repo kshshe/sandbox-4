@@ -56,7 +56,7 @@ export class Bounds {
         for (let x = bounds.left - 1; x < bounds.right + 2; x++) {
             Points.addPoint({
                 type: EPointType.Border,
-                coordinates: { x, y: bounds.top - 1 },
+                coordinates: { x, y: bounds.top },
                 speed: { x: 0, y: 0 },
                 data: { isFromBounds: true }
             })
@@ -66,7 +66,7 @@ export class Bounds {
         for (let y = bounds.top - 1; y < bounds.bottom + 1; y++) {
             Points.addPoint({
                 type: EPointType.Border,
-                coordinates: { x: bounds.right, y },
+                coordinates: { x: bounds.right - 1, y },
                 speed: { x: 0, y: 0 },
                 data: { isFromBounds: true }
             })
@@ -76,7 +76,7 @@ export class Bounds {
         for (let x = bounds.left - 1; x < bounds.right + 1; x++) {
             Points.addPoint({
                 type: EPointType.Border,
-                coordinates: { x, y: bounds.bottom },
+                coordinates: { x, y: bounds.bottom - 1 },
                 speed: { x: 0, y: 0 },
                 data: { isFromBounds: true }
             })
@@ -86,7 +86,7 @@ export class Bounds {
         for (let y = bounds.top - 1; y < bounds.bottom + 1; y++) {
             Points.addPoint({
                 type: EPointType.Border,
-                coordinates: { x: bounds.left - 1, y },
+                coordinates: { x: bounds.left, y },
                 speed: { x: 0, y: 0 },
                 data: { isFromBounds: true }
             })
