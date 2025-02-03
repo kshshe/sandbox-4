@@ -72,8 +72,13 @@
     }
 }
 
+.temperatureMapContainer {
+    margin-top: 5px;
+}
+
 .temperatureMap {
     position: static;
-    width: 50%;
-    margin-top: 5px;
+
+    transform-origin: left top;
+    transform: scale(0.5);
 }

@@ -44,7 +44,16 @@ const TemperatureMap: React.FC = () => {
             x + bounds.left,
             y + bounds.top
           );
-          ctx.fillStyle = temperature > 0 ? `rgba(255, 0, 0, ${Math.min(1, temperature / Math.abs(maxTemp))})` : `rgba(0, 0, 255, ${Math.min(1, -temperature / Math.abs(minTemp))})`;
+          ctx.fillStyle =
+            temperature > 0
+              ? `rgba(255, 0, 0, ${Math.min(
+                  1,
+                  temperature / Math.abs(maxTemp)
+                )})`
+              : `rgba(0, 0, 255, ${Math.min(
+                  1,
+                  -temperature / Math.abs(minTemp)
+                )})`;
           ctx.fillRect(x, y, 1, 1);
         }
       }
@@ -56,12 +65,20 @@ const TemperatureMap: React.FC = () => {
   }, [canvasRef.current, width, height]);
 
   return (
-    <canvas
-      className={styles.temperatureMap}
-      ref={canvasRef}
-      width={width}
-      height={height}
-    />
+    <div
+      style={{
+        width: `${width / 2}px`,
+        height: `${height / 2}px`,
+      }}
+      className={styles.temperatureMapContainer}
+    >
+      <canvas
+        className={styles.temperatureMap}
+        ref={canvasRef}
+        width={width}
+        height={height}
+      />
+    </div>
   );
 };
 
