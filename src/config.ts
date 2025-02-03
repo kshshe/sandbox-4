@@ -92,7 +92,7 @@ export const POINTS_HEAT_CAPACITY: {
     fire: 100,
     iceFire: 100,
 
-    [EPointType.Foam]: 30,
+    [EPointType.Foam]: 200,
 }
 
 export const POINTS_WEIGHTS: Record<EPointType, number> = {
