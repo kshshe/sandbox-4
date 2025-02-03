@@ -100,9 +100,10 @@ export class TemperatureGrid {
                 if (!hasPointHere) {
                     // move temperature to the air
                     const airTemperature = this.AIR_TARGET_TEMPERATURE;
-                    const temperatureDiff = temperature - airTemperature;
-                    const temperatureToShareWithAir = temperatureDiff * 0.005;
-                    this.setTemperatureOnPoint(x, y, temperature - temperatureToShareWithAir);
+                    const newTemperature = this.getTemperatureOnPoint(x, y);
+                    const temperatureDiff = newTemperature - airTemperature;
+                    const temperatureToShareWithAir = temperatureDiff * 0.001;
+                    this.setTemperatureOnPoint(x, y, newTemperature - temperatureToShareWithAir);
                 }
             }
         }
