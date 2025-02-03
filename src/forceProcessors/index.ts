@@ -25,7 +25,6 @@ const BASIC_FORCES: TForceProcessor[] = [
 export const forcesByType: Record<EPointType, TForceProcessor[]> = {
     [EPointType.Foam]: [
         staticForce,
-        convertOnTemperature('more', 200, EPointType.FireEmitter),
     ],
     [EPointType.Water]: [
         ...BASIC_FORCES,

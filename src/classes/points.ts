@@ -2,6 +2,7 @@ import { CANT_BE_UNSED, INITIAL_TEMPERATURE } from '../config'
 import { TCoordinate, EPointType } from '../types'
 import { shake } from '../utils/shake'
 import { Bounds } from './bounds'
+import { Controls } from './controls'
 import { Speed, TRoundedSpeed } from './speed'
 import { Storage } from './storage'
 
@@ -111,7 +112,7 @@ export class Points {
         }
         const pointWithData: TPoint = {
             data: {
-                temperature: INITIAL_TEMPERATURE[point.type] ?? 15
+                temperature: INITIAL_TEMPERATURE[point.type] ?? Controls.getBaseTemperature()
             },
             ...point
         }
