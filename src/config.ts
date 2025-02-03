@@ -120,7 +120,7 @@ export const INITIAL_TEMPERATURE: {
     [EPointType.Ice]: -60,
     [EPointType.Lava]: 1000,
     [EPointType.Steam]: 60,
-    [EPointType.Fire]: 2000,
+    [EPointType.Fire]: 700,
     [EPointType.IceFire]: -700,
 
     [EPointType.ConstantCold]: -500,

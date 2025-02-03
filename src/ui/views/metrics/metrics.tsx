@@ -3,6 +3,69 @@ import styles from "./metrics.module.scss";
 import { Stats } from "../../../classes/stats";
 import classNames from "classnames";
 import { Points } from "../../../classes/points";
+import { Bounds } from "../../../classes/bounds";
+import { TemperatureGrid } from "../../../classes/temperatureGrid";
+
+const TemperatureMap: React.FC = () => {
+  const canvasRef = React.useRef<HTMLCanvasElement>(null);
+  const bounds = Bounds.getBounds();
+  const width = bounds.right - bounds.left;
+  const height = bounds.bottom - bounds.top;
+
+  React.useEffect(() => {
+    const ctx = canvasRef.current?.getContext("2d");
+    if (!ctx) {
+      return;
+    }
+    let frameId: number | null = null;
+    const onFrame = () => {
+      let maxTemp = 1;
+      let minTemp = -1;
+      for (let x = 0; x < width; x++) {
+        for (let y = 0; y < height; y++) {
+          const temperature = TemperatureGrid.getTemperatureOnPoint(
+            x + bounds.left,
+            y + bounds.top
+          );
+          maxTemp = Math.max(maxTemp, temperature);
+          minTemp = Math.min(minTemp, temperature);
+        }
+      }
+
+      ctx.fillStyle = "white";
+      ctx.fillRect(0, 0, width, height);
+
+      if (maxTemp === minTemp) {
+        frameId = window.requestAnimationFrame(onFrame);
+        return;
+      }
+
+      for (let x = 0; x < width; x++) {
+        for (let y = 0; y < height; y++) {
+          const temperature = TemperatureGrid.getTemperatureOnPoint(
+            x + bounds.left,
+            y + bounds.top
+          );
+          ctx.fillStyle = temperature > 0 ? `rgba(255, 0, 0, ${Math.min(1, temperature / Math.abs(maxTemp))})` : `rgba(0, 0, 255, ${Math.min(1, -temperature / Math.abs(minTemp))})`;
+          ctx.fillRect(x, y, 1, 1);
+        }
+      }
+
+      frameId = window.requestAnimationFrame(onFrame);
+    };
+    frameId = window.requestAnimationFrame(onFrame);
+    return () => window.cancelAnimationFrame(frameId as number);
+  }, [canvasRef.current, width, height]);
+
+  return (
+    <canvas
+      className={styles.temperatureMap}
+      ref={canvasRef}
+      width={width}
+      height={height}
+    />
+  );
+};
 
 const ProcessedPointsMeter: React.FC = () => {
   const [pointsTotal, setPointsTotal] = React.useState(0);
@@ -147,6 +210,7 @@ export const Metrics: React.FC = () => {
         })}
       </div>
       <LoadMeter />
+      <TemperatureMap />
       <ProcessedPointsMeter />
       <div className={styles.hint}>
         <strong>d</strong> - debug mode
@@ -154,8 +218,12 @@ export const Metrics: React.FC = () => {
         <a href="https://t.me/kshshe" target="_blank" rel="noreferrer">
           developer
         </a>
-        ,{' '}
-        <a href="https://github.com/kshshe/sandbox-4" target="_blank" rel="noreferrer">
+        ,{" "}
+        <a
+          href="https://github.com/kshshe/sandbox-4"
+          target="_blank"
+          rel="noreferrer"
+        >
           code
         </a>
       </div>
