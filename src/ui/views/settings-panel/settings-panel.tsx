@@ -70,6 +70,17 @@ export const SettingsPanel: React.FC = () => {
             onChange={(e) => setBaseTemperature(+e.target.value)}
           />
         </p>
+        <p>
+          <button
+            onClick={() => {
+              setIsDebugMode(false);
+              setBaseTemperature(20);
+              setIsOpened(false);
+            }}
+          >
+            Reset
+          </button>
+        </p>
       </div>
     </div>
   );
