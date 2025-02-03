@@ -1,10 +1,10 @@
 import { POINTS_HEAT_CAPACITY } from "../config";
 import { Bounds } from "./bounds";
+import { Controls } from "./controls";
 import { Points } from "./points";
 import { Storage } from "./storage";
 
 export class TemperatureGrid {
-    private static AIR_TARGET_TEMPERATURE = 20;
     private static temperatureGrid: number[][] = Storage.get("TemperatureGrid.temperatureGrid", []);
 
     private static save() {
@@ -12,11 +12,12 @@ export class TemperatureGrid {
     }
 
     public static initGrid() {
+        const baseTemperature = Controls.getBaseTemperature();
         const bounds = Bounds.getBounds();
         this.temperatureGrid = [];
         for (let x = bounds.left; x <= bounds.right; x++) {
             for (let y = bounds.top; y <= bounds.bottom; y++) {
-                this.setTemperatureOnPoint(x, y, this.AIR_TARGET_TEMPERATURE);
+                this.setTemperatureOnPoint(x, y, baseTemperature);
             }
         }
     }
@@ -29,24 +30,30 @@ export class TemperatureGrid {
     }
 
     public static updateGridFromPoints() {
+        const baseTemperature = Controls.getBaseTemperature();
         const points = [...Points.getPoints()]
 
         for (const point of points) {
             const x = point.coordinates.x;
             const y = point.coordinates.y;
-            this.setTemperatureOnPoint(x, y, point.data.temperature ?? this.AIR_TARGET_TEMPERATURE);
+            this.setTemperatureOnPoint(x, y, point.data.temperature ?? baseTemperature);
         }
         this.save();
     }
 
     public static getTemperatureOnPoint(x: number, y: number): number {
-        return this.temperatureGrid[x]?.[y] ?? this.AIR_TARGET_TEMPERATURE;
+        const baseTemperature = Controls.getBaseTemperature();
+        return this.temperatureGrid[x]?.[y] ?? baseTemperature;
     }
 
     private static getNeighbourConfig(x, y, isDiagonal) {
         const basicConfig = {
             temp: this.getTemperatureOnPoint(x, y),
             coefficent: isDiagonal ? 0.75 : 1,
+        }
+        const bounds = Bounds.getBounds();
+        if (x < bounds.left || x > bounds.right || y < bounds.top || y > bounds.bottom) {
+            basicConfig.coefficent = 0.01;
         }
         const hasPointThere = Points.getPointByCoordinates({ x, y });
         if (hasPointThere) {
@@ -90,7 +97,8 @@ export class TemperatureGrid {
                 this.setTemperatureOnPoint(x, y, temperature + temperatureToShare);
 
                 if (!hasPointHere) {
-                    const airTemperature = this.AIR_TARGET_TEMPERATURE;
+                    const baseTemperature = Controls.getBaseTemperature();
+                    const airTemperature = baseTemperature;
                     const newTemperature = this.getTemperatureOnPoint(x, y);
                     const temperatureDiff = newTemperature - airTemperature;
                     const temperatureToShareWithAir = temperatureDiff * 0.01;

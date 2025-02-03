@@ -10,9 +10,11 @@ export class Controls {
     static state: {
         debugMode: boolean
         drawingType: EPointType | 'eraser'
+        baseTemperature: number
     } = {
         debugMode: Storage.get('Controls.debugMode', false),
-        drawingType: Storage.get('Controls.drawingType', EPointType.Water)
+        drawingType: Storage.get('Controls.drawingType', EPointType.Water),
+        baseTemperature: Storage.get('Controls.baseTemperature', 20)
     }
 
     private static subscribers: TSubscriber[] = []
@@ -57,5 +59,13 @@ export class Controls {
 
     public static setDebugMode(value: boolean) {
         this.setState('debugMode', value)
+    }
+
+    public static getBaseTemperature() {
+        return this.state.baseTemperature
+    }
+
+    public static setBaseTemperature(value: number) {
+        this.setState('baseTemperature', value)
     }
 }

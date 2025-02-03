@@ -5,6 +5,7 @@ import { useControls } from "../../hooks/useControls";
 export const SettingsPanel: React.FC = () => {
   const [isOpened, setIsOpened] = React.useState(false);
   const [isDebugMode, setIsDebugMode] = useControls("debugMode");
+  const [baseTemperature, setBaseTemperature] = useControls("baseTemperature");
 
   React.useEffect(() => {
     if (!isOpened) {
@@ -32,7 +33,7 @@ export const SettingsPanel: React.FC = () => {
     <button
       className={styles.floatingButton}
       onClick={(e) => {
-        setIsOpened(o => !o);
+        setIsOpened((o) => !o);
         e.stopPropagation();
       }}
     >
@@ -48,14 +49,25 @@ export const SettingsPanel: React.FC = () => {
       }}
     >
       <div>
-        <label>
+        <p>
+          <label>Debug mode</label>
           <input
             type="checkbox"
             checked={isDebugMode}
             onChange={(e) => setIsDebugMode(e.target.checked)}
+          />{" "}
+          Enabled
+        </p>
+        <p>
+          <label>Air temperature: {baseTemperature}°C</label>
+          <input
+            type="range"
+            min={-200}
+            max={200}
+            value={baseTemperature}
+            onChange={(e) => setBaseTemperature(+e.target.value)}
           />
-          <span>Debug mode</span>
-        </label>
+        </p>
       </div>
     </div>
   );
