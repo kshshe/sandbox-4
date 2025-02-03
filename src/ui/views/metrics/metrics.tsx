@@ -19,8 +19,8 @@ const TemperatureMap: React.FC = () => {
     }
     let frameId: number | null = null;
     const onFrame = () => {
-      let maxTemp = 1;
-      let minTemp = -1;
+      let maxTemp = 500;
+      let minTemp = -500;
       for (let x = 0; x < width; x++) {
         for (let y = 0; y < height; y++) {
           const temperature = TemperatureGrid.getTemperatureOnPoint(

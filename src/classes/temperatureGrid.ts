@@ -93,7 +93,7 @@ export class TemperatureGrid {
                     const airTemperature = this.AIR_TARGET_TEMPERATURE;
                     const newTemperature = this.getTemperatureOnPoint(x, y);
                     const temperatureDiff = newTemperature - airTemperature;
-                    const temperatureToShareWithAir = temperatureDiff * 0.001;
+                    const temperatureToShareWithAir = temperatureDiff * 0.01;
                     this.setTemperatureOnPoint(x, y, newTemperature - temperatureToShareWithAir);
                 }
             }
