@@ -52,12 +52,12 @@ export const SettingsPanel: React.FC = () => {
         <p>
           <label>Debug mode</label>
           <label>
-          <input
-            type="checkbox"
-            checked={isDebugMode}
-            onChange={(e) => setIsDebugMode(e.target.checked)}
-          />{" "}
-          Enabled
+            <input
+              type="checkbox"
+              checked={isDebugMode}
+              onChange={(e) => setIsDebugMode(e.target.checked)}
+            />{" "}
+            Enabled
           </label>
         </p>
         <p>
