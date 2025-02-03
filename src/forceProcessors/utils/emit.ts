@@ -19,8 +19,8 @@ export const emit = (point: TPoint, targetType: EPointType) => {
                     y: point.coordinates.y + direction.y,
                 },
                 speed: {
-                    x: direction.x,
-                    y: direction.y,
+                    x: direction.x / 10,
+                    y: direction.y / 10,
                 },
                 type: targetType,
             })

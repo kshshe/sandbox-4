@@ -87,7 +87,7 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
     ],
     [EPointType.Wood]: [
         staticForce,
-        convertOnTemperature('more', 750, EPointType.BurningWood),
+        convertOnTemperature('more', 400, EPointType.BurningWood),
     ],
     [EPointType.BurningWood]: [
         staticForce,
