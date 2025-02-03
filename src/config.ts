@@ -47,6 +47,7 @@ export const POINS_COLORS: Record<EPointType, string> = {
     [EPointType.Wood]: '#8b4513',
     [EPointType.BurningWood]: 'red',
     [EPointType.Dynamite]: '#ff4444',
+    [EPointType.LiquidGas]: '#00ccff',
 
     [EPointType.ConstantCold]: 'blue',
     [EPointType.ConstantHot]: 'red',
@@ -75,7 +76,8 @@ export const POINTS_HEAT_CAPACITY: {
 } = {
     water: 1,
     sand: 1,
-
+    
+    liquidGas: 2,
     stone: 2,
     staticStone: 2,
     lava: 2,
@@ -94,6 +96,7 @@ export const POINTS_WEIGHTS: Record<EPointType, number> = {
     [EPointType.Stone]: 1,
     [EPointType.Sand]: 1,
     [EPointType.Water]: 0.9,
+    [EPointType.LiquidGas]: 0.89,
     [EPointType.Lava]: 2,
     [EPointType.Fire]: -0.8,
     [EPointType.IceFire]: -0.8,
@@ -122,6 +125,7 @@ export const INITIAL_TEMPERATURE: {
     [EPointType.Steam]: 60,
     [EPointType.Fire]: 700,
     [EPointType.IceFire]: -700,
+    [EPointType.LiquidGas]: -350,
 
     [EPointType.ConstantCold]: -500,
     [EPointType.ConstantHot]: 500,
@@ -149,6 +153,7 @@ export const POINT_TYPE_ICON: {
     [EPointType.Void]: '⚫',
     [EPointType.ConstantCold]: '❄️♾️',
     [EPointType.ConstantHot]: '🔥♾️',
+    [EPointType.LiquidGas]: '💧💨',
     eraser: '🧽',
 }
 
