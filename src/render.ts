@@ -5,6 +5,7 @@ import { isDev } from "./utils/isDev";
 import { EPointType } from "./types";
 import { Controls } from "./classes/controls";
 import { Speed } from "./classes/speed";
+import { TemperatureGrid } from "./classes/temperatureGrid";
 
 const canvas = document.getElementById('canvas') as HTMLCanvasElement;
 const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
@@ -28,6 +29,7 @@ ctx.fillRect(0, 0, canvas.width, canvas.height);
 const stats = document.querySelector('.stats') as HTMLDivElement;
 
 let hoveredPoint: TPoint | null = null;
+let hoveredCoordinates: { x: number, y: number } | null = null;
 
 const addListeners = (element: HTMLElement, events: string[], callback: (e: Event) => void) => {
     events.forEach(event => {
@@ -103,6 +105,7 @@ addListeners(canvas, ['mousemove', 'touchmove'], (e) => {
     const y = Math.floor(offsetY / CONFIG.pixelSize);
     drawingX = x;
     drawingY = y;
+    hoveredCoordinates = { x, y };
     hoveredPoint = Points.getPoints().find(point => point.coordinates.x === x && point.coordinates.y === y) || null;
 })
 
@@ -113,11 +116,6 @@ const drawPoints = () => {
     const points = Points.getPoints();
     ctx.fillStyle = 'white';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    if (debugMode) {
-        ctx.fillStyle = 'white';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-    }
 
     previouslyUsedPixels.clear()
     points.forEach(point => {
@@ -147,30 +145,33 @@ const drawPoints = () => {
         }
 
         if (debugMode) {
-            const temperature = point.data.temperature ?? 0;
-            if (temperature > 16 || temperature < 5) {
-                const temperatureWithLimit = Math.min(100, Math.max(-100, temperature));
-                const temperatureColor = temperatureWithLimit > 0
-                    ? `rgb(${Math.round(255 * temperatureWithLimit / 100)}, 0, 0)`
-                    : `rgb(0, 0, ${Math.round(255 * -temperatureWithLimit / 100)})`;
-                ctx.fillStyle = temperatureColor;
-                ctx.beginPath();
-                ctx.arc(
-                    point.coordinates.x * CONFIG.pixelSize + CONFIG.pixelSize / 2,
-                    point.coordinates.y * CONFIG.pixelSize + CONFIG.pixelSize / 2,
-                    2,
-                    0,
-                    2 * Math.PI
-                );
-                ctx.fill();
-            }
-
             if (Points.isUnused(point)) {
-                ctx.fillStyle = 'rgba(255, 0, 0, 0.3)';
-                ctx.fillRect(point.coordinates.x * CONFIG.pixelSize, point.coordinates.y * CONFIG.pixelSize, CONFIG.pixelSize, CONFIG.pixelSize);
+                // draw a cross on unused points
+                ctx.beginPath();
+                ctx.moveTo(point.coordinates.x * CONFIG.pixelSize, point.coordinates.y * CONFIG.pixelSize);
+                ctx.lineTo((point.coordinates.x + 1) * CONFIG.pixelSize, (point.coordinates.y + 1) * CONFIG.pixelSize);
+                ctx.moveTo((point.coordinates.x + 1) * CONFIG.pixelSize, point.coordinates.y * CONFIG.pixelSize);
+                ctx.lineTo(point.coordinates.x * CONFIG.pixelSize, (point.coordinates.y + 1) * CONFIG.pixelSize);
+                ctx.strokeStyle = 'rgba(0, 0, 0, 0.2)';
+                ctx.stroke();
             }
         }
     })
+
+    if (debugMode) {
+        const bounds = Bounds.getBounds();
+        for (let x = bounds.left; x <= bounds.right; x++) {
+            for (let y = bounds.top; y <= bounds.bottom; y++) {
+                const temperature = TemperatureGrid.getTemperatureOnPoint(x, y);
+                const temperatureWithLimit = Math.min(100, Math.max(-100, temperature));
+                const temperatureColor = temperatureWithLimit > 0
+                    ? `rgba(${Math.round(255 * temperatureWithLimit / 100)}, 0, 0, 0.3)`
+                    : `rgba(0, 0, ${Math.round(255 * -temperatureWithLimit / 100)}, 0.3)`;
+                ctx.fillStyle = temperatureColor;
+                ctx.fillRect(x * CONFIG.pixelSize, y * CONFIG.pixelSize, CONFIG.pixelSize, CONFIG.pixelSize);
+            }
+        }
+    }
 
     // draw a rectangle around the drawing area (drawingX and drawingY variables)
     ctx.strokeStyle = 'rgba(0, 0, 0, 0.5)';
@@ -182,7 +183,8 @@ const drawPoints = () => {
             hoveredPoint && `${hoveredPoint.type}`,
             hoveredPoint?.wasDeleted && 'Deleted',
             hoveredPoint && hoveredPoint.data?.lifetime && `Lifetime: ${hoveredPoint.data.lifetime}`,
-            hoveredPoint ? Math.abs(hoveredPoint?.data.temperature) > 1 && `${Math.round(hoveredPoint.data.temperature)} °C` : null,
+            hoveredCoordinates && `Coordinates: ${hoveredCoordinates.x}:${hoveredCoordinates.y}`,
+            hoveredCoordinates && `Temperature: ${Math.round(TemperatureGrid.getTemperatureOnPoint(hoveredCoordinates.x, hoveredCoordinates.y))} °C`,
         ]
             .filter(Boolean)
             .join('<br>');

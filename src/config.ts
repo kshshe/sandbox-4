@@ -70,6 +70,21 @@ export const CANT_BE_UNSED: {
     [EPointType.Dynamite]: true,
 }
 
+export const POINTS_HEAT_CAPACITY: {
+    [key in EPointType]?: number
+} = {
+    water: 1,
+    sand: 1,
+
+    stone: 2,
+    staticStone: 2,
+    lava: 2,
+    wood: 2,
+
+    steam: 0.1,
+    gas: 0.1,
+}
+
 export const POINTS_WEIGHTS: Record<EPointType, number> = {
     [EPointType.Stone]: 1,
     [EPointType.Sand]: 1,

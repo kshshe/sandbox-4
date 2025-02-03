@@ -8,6 +8,7 @@ import { Controls } from './classes/controls'
 import { Storage } from './classes/storage'
 import { CANT_BE_UNSED } from './config'
 import { Bounds } from './classes/bounds'
+import { TemperatureGrid } from './classes/temperatureGrid'
 
 const TEMPERATURE_PART_TO_SHARE_WITH_NEIGHBOUR = 1 / 20
 const TEMPERATURE_PART_TO_SHARE_WITH_AIR = 1 / 300
@@ -122,6 +123,10 @@ const processFrame = () => {
     Points.save()
     Points.shufflePoints()
     Storage.set('iteration', iteration)
+
+    TemperatureGrid.updateGridFromPoints()
+    TemperatureGrid.processTemperatureFrame()
+    TemperatureGrid.updatePointsFromGrid()
 }
 
 let framesTimes = [] as number[]
