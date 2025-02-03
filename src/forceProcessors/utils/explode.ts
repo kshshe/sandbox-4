@@ -26,6 +26,7 @@ export const explode = (point: TPoint, processedPoints: Set<TPoint>, rest = 3) =
             const directionToNeighborY = neighbor.coordinates.y - point.coordinates.y
             neighbor.speed.x = directionToNeighborX * force * (random() + 0.5)
             neighbor.speed.y = directionToNeighborY * force * (random() + 0.5)
+            neighbor.data.temperature = (neighbor.data.temperature ?? 0) + 100
             if (CONVERTION_MAP[neighbor.type]) {
                 neighbor.type = CONVERTION_MAP[neighbor.type]!
             }
