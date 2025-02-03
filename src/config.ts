@@ -58,6 +58,7 @@ export const POINS_COLORS: Record<EPointType, string> = {
     [EPointType.LiquidGas]: '#00ccff',
     [EPointType.Foam]: '#f0e68c',
     [EPointType.Metal]: '#c0c0c0',
+    [EPointType.MoltenMetal]: '#ff3333',
     [EPointType.Electricity_Ground]: '#a0a0a0',
     [EPointType.Electricity_Spark]: '#ffff00',
 
@@ -102,6 +103,7 @@ export const POINTS_HEAT_CAPACITY: {
 
     [EPointType.Electricity_Ground]: 1,
     [EPointType.Metal]: 0.5,
+    [EPointType.MoltenMetal]: 0.5,
     [EPointType.Dynamite]: 4,
 
     constantCold: 100,
@@ -124,6 +126,7 @@ export const POINTS_WEIGHTS: Record<EPointType, number> = {
     [EPointType.Bomb]: 1,
     [EPointType.Gas]: 0,
     [EPointType.Electricity_Spark]: 1,
+    [EPointType.MoltenMetal]: 2,
 
     [EPointType.Electricity_Ground]: Infinity,
     [EPointType.Metal]: Infinity,

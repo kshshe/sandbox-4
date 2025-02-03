@@ -35,6 +35,13 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
         staticForce,
         throttle(directionToGround, 10),
         sendCharge,
+        convertOnTemperature('more', 550, EPointType.MoltenMetal),
+    ],
+    [EPointType.MoltenMetal]: [
+        ...BASIC_FORCES,
+        directionToGround,
+        sendCharge,
+        convertOnTemperature('less', 450, EPointType.Metal),
     ],
     [EPointType.Electricity_Spark]: [
         ...BASIC_FORCES,
