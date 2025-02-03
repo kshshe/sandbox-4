@@ -17,7 +17,6 @@ const TemperatureMap: React.FC = () => {
     if (!ctx) {
       return;
     }
-    let frameId: number | null = null;
     const onFrame = () => {
       let maxTemp = 500;
       let minTemp = -500;
@@ -36,7 +35,6 @@ const TemperatureMap: React.FC = () => {
       ctx.fillRect(0, 0, width, height);
 
       if (maxTemp === minTemp) {
-        frameId = window.requestAnimationFrame(onFrame);
         return;
       }
 
@@ -50,11 +48,11 @@ const TemperatureMap: React.FC = () => {
           ctx.fillRect(x, y, 1, 1);
         }
       }
-
-      frameId = window.requestAnimationFrame(onFrame);
     };
-    frameId = window.requestAnimationFrame(onFrame);
-    return () => window.cancelAnimationFrame(frameId as number);
+    const intervalId = setInterval(onFrame, 1000 / 60);
+    return () => {
+      clearInterval(intervalId);
+    };
   }, [canvasRef.current, width, height]);
 
   return (
