@@ -106,14 +106,14 @@ export class Points {
     static addPoint(point: Omit<TPoint, 'data'> & {
         data?: TPoint['data']
     }) {
+        if (this.getPointByCoordinates(point.coordinates)) {
+            return
+        }
         const pointWithData: TPoint = {
             data: {
                 temperature: INITIAL_TEMPERATURE[point.type] ?? 15
             },
             ...point
-        }
-        if (this.getPointByCoordinates(point.coordinates)) {
-            return
         }
         this.setPointInIndex(point.coordinates, pointWithData)
         this._points.push(pointWithData)

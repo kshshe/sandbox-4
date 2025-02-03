@@ -83,7 +83,7 @@ export class Bounds {
         }
 
         // left
-        for (let y = bounds.top - 1; y < bounds.bottom + 1; y++) {
+        for (let y = bounds.top; y < bounds.bottom + 1; y++) {
             Points.addPoint({
                 type: EPointType.Border,
                 coordinates: { x: bounds.left, y },
