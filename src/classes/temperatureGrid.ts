@@ -6,23 +6,19 @@ import { Storage } from "./storage";
 export class TemperatureGrid {
     private static AIR_TARGET_TEMPERATURE = 20;
     private static temperatureGrid: number[][] = Storage.get("TemperatureGrid.temperatureGrid", []);
-    private static lastHeight: number = Storage.get("TemperatureGrid.lastHeight", 0);
-    private static lastWidth: number = Storage.get("TemperatureGrid.lastWidth", 0);
 
     private static save() {
         Storage.set("TemperatureGrid.temperatureGrid", this.temperatureGrid);
-        Storage.set("TemperatureGrid.lastHeight", this.lastHeight);
-        Storage.set("TemperatureGrid.lastWidth", this.lastWidth);
     }
 
-    private static resetIfBoundsChanged() {
+    public static initGrid() {
         const bounds = Bounds.getBounds();
-        if (bounds.bottom - bounds.top !== this.lastHeight || bounds.right - bounds.left !== this.lastWidth) {
-            this.lastHeight = bounds.bottom - bounds.top;
-            this.lastWidth = bounds.right - bounds.left;
-            this.temperatureGrid = [];
+        this.temperatureGrid = [];
+        for (let x = bounds.left; x <= bounds.right; x++) {
+            for (let y = bounds.top; y <= bounds.bottom; y++) {
+                this.setTemperatureOnPoint(x, y, this.AIR_TARGET_TEMPERATURE);
+            }
         }
-        this.save();
     }
 
     private static setTemperatureOnPoint(x: number, y: number, temperature: number) {
@@ -33,9 +29,7 @@ export class TemperatureGrid {
     }
 
     public static updateGridFromPoints() {
-        this.resetIfBoundsChanged();
-
-        const points = Points.getPoints();
+        const points = [...Points.getPoints()]
 
         for (const point of points) {
             const x = point.coordinates.x;
@@ -62,8 +56,6 @@ export class TemperatureGrid {
     }
 
     public static processTemperatureFrame() {
-        this.resetIfBoundsChanged();
-
         for (const rowIndex in this.temperatureGrid) {
             const row = this.temperatureGrid[rowIndex];
             for (const colIndex in row) {
@@ -98,7 +90,6 @@ export class TemperatureGrid {
                 this.setTemperatureOnPoint(x, y, temperature + temperatureToShare);
 
                 if (!hasPointHere) {
-                    // move temperature to the air
                     const airTemperature = this.AIR_TARGET_TEMPERATURE;
                     const newTemperature = this.getTemperatureOnPoint(x, y);
                     const temperatureDiff = newTemperature - airTemperature;
@@ -107,16 +98,16 @@ export class TemperatureGrid {
                 }
             }
         }
+        this.save();
     }
 
     public static updatePointsFromGrid() {
-        this.resetIfBoundsChanged();
-
         const points = Points.getPoints();
 
         for (const point of points) {
             const temperatureForPoint = this.getTemperatureOnPoint(point.coordinates.x, point.coordinates.y);
             point.data.temperature = temperatureForPoint;
         }
+        this.save();
     }
 }

@@ -1,6 +1,7 @@
 import { EPointType } from "../types"
 import { Points } from "./points"
 import { Storage } from "./storage"
+import { TemperatureGrid } from "./temperatureGrid"
 
 export class Bounds {
     private static _bounds = Storage.get('bounds', {
@@ -33,13 +34,17 @@ export class Bounds {
 
     static setBounds(bounds: typeof Bounds.bounds) {
         const areBoundsNew = Bounds.bounds.top === 0 && Bounds.bounds.right === 0 && Bounds.bounds.bottom === 0 && Bounds.bounds.left === 0
-        const areBountsEqual = Bounds.bounds.top === bounds.top && Bounds.bounds.right === bounds.right && Bounds.bounds.bottom === bounds.bottom && Bounds.bounds.left === bounds.left
-
-        if (!areBoundsNew && !areBountsEqual) {
-            Points.deleteAllPoints()
-        }
+        const areBoundsEqual = Bounds.bounds.top === bounds.top && Bounds.bounds.right === bounds.right && Bounds.bounds.bottom === bounds.bottom && Bounds.bounds.left === bounds.left
 
         Bounds.bounds = bounds
+
+        if (!areBoundsNew && !areBoundsEqual) {
+            Points.deleteAllPoints()
+        }
+        if (areBoundsNew || !areBoundsEqual) {
+            TemperatureGrid.initGrid()
+        }
+
         const points = Points.getPoints()
         for (const point of points) {
             if (point.type === EPointType.Border && point.data?.isFromBounds) {

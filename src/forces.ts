@@ -59,22 +59,6 @@ const processFrame = () => {
             const prevX = point.coordinates.x
             const prevY = point.coordinates.y
 
-            const neighbours = Points.getNeighbours(point)
-            const pointTemperature = point.data.temperature ?? 15
-            const airNeighbours = 8 - neighbours.length
-            for (const neighbour of neighbours) {
-                const neighbourTemperature = neighbour.data.temperature ?? 15
-                const temperatureDiff = pointTemperature - neighbourTemperature
-                const temperatureToShare = temperatureDiff * TEMPERATURE_PART_TO_SHARE_WITH_NEIGHBOUR
-                point.data.temperature = pointTemperature - temperatureToShare
-                neighbour.data.temperature = neighbourTemperature + temperatureToShare
-            }
-            const airTemperature = 15
-            for (let i = 0; i < airNeighbours; i++) {
-                const temperatureDiff = pointTemperature - airTemperature
-                const temperatureToShare = temperatureDiff * TEMPERATURE_PART_TO_SHARE_WITH_AIR
-                point.data.temperature = pointTemperature - temperatureToShare
-            }
             if (!isUnused) {
                 const roundedSpeed = Speed.getRoundedSpeed(point, true)
                 const pointBySpeed = Points.getPointBySpeed(point, roundedSpeed)
@@ -120,13 +104,13 @@ const processFrame = () => {
         }
     }
 
-    Points.save()
-    Points.shufflePoints()
-    Storage.set('iteration', iteration)
-
     TemperatureGrid.updateGridFromPoints()
     TemperatureGrid.processTemperatureFrame()
     TemperatureGrid.updatePointsFromGrid()
+
+    Points.save()
+    Points.shufflePoints()
+    Storage.set('iteration', iteration)
 }
 
 let framesTimes = [] as number[]

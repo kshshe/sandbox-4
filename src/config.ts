@@ -83,6 +83,11 @@ export const POINTS_HEAT_CAPACITY: {
 
     steam: 0.1,
     gas: 0.1,
+
+    constantCold: 100,
+    constantHot: 100,
+    fire: 100,
+    iceFire: 100,
 }
 
 export const POINTS_WEIGHTS: Record<EPointType, number> = {
