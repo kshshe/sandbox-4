@@ -49,7 +49,7 @@ const TemperatureMap: React.FC = () => {
         }
       }
     };
-    const intervalId = setInterval(onFrame, 1000 / 60);
+    const intervalId = setInterval(onFrame, 1000 / 30);
     return () => {
       clearInterval(intervalId);
     };
