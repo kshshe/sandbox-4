@@ -19,6 +19,7 @@ import { directionToGround } from "./directionToGround";
 import { throttle } from "./utils/throttle";
 import { spark } from "./spark";
 import { sendCharge } from "./sendCharge";
+import { electricitySource } from "./electricitySource";
 
 export type TForceProcessor = (point: TPoint) => void
 
@@ -47,6 +48,11 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
         ...BASIC_FORCES,
         chaos(1),
         spark,
+    ],
+    [EPointType.Electricity_Source]: [
+        staticForce,
+        sendCharge,
+        electricitySource,
     ],
     [EPointType.Electricity_Ground]: [
         staticForce,

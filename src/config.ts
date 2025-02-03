@@ -61,6 +61,7 @@ export const POINS_COLORS: Record<EPointType, string> = {
     [EPointType.MoltenMetal]: '#ff3333',
     [EPointType.Electricity_Ground]: '#a0a0a0',
     [EPointType.Electricity_Spark]: '#ffff00',
+    [EPointType.Electricity_Source]: '#ffff00',
 
     [EPointType.ConstantCold]: 'blue',
     [EPointType.ConstantHot]: 'red',
@@ -84,6 +85,7 @@ export const CANT_BE_UNSED: {
     [EPointType.Dynamite]: true,
     [EPointType.Electricity_Ground]: true,
     [EPointType.Electricity_Spark]: true,
+    [EPointType.Electricity_Source]: true,
 }
 
 export const POINTS_HEAT_CAPACITY: {
@@ -102,6 +104,7 @@ export const POINTS_HEAT_CAPACITY: {
     gas: 0.1,
 
     [EPointType.Electricity_Ground]: 1,
+    [EPointType.Electricity_Source]: 1,
     [EPointType.Metal]: 0.5,
     [EPointType.MoltenMetal]: 0.5,
     [EPointType.Dynamite]: 4,
@@ -128,6 +131,7 @@ export const POINTS_WEIGHTS: Record<EPointType, number> = {
     [EPointType.Electricity_Spark]: 1,
     [EPointType.MoltenMetal]: 2,
 
+    [EPointType.Electricity_Source]: Infinity,
     [EPointType.Electricity_Ground]: Infinity,
     [EPointType.Metal]: Infinity,
     [EPointType.Foam]: Infinity,
@@ -173,6 +177,7 @@ export const POINT_TYPE_ICON: {
     [EPointType.Metal]: '🔩',
     [EPointType.Electricity_Ground]: '⚡🪨',
     [EPointType.Electricity_Spark]: '⚡',
+    [EPointType.Electricity_Source]: '⚡⚡',
     [EPointType.Wood]: '🌳',
     [EPointType.Border]: '🚧',
     [EPointType.Fire]: '🔥',

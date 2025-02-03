@@ -28,6 +28,7 @@ export enum EPointType {
     MoltenMetal = 'moltenMetal',
     Electricity_Ground = 'electricityGround',
     Electricity_Spark = 'electricitySpark',
+    Electricity_Source = 'electricitySource',
 
     ConstantCold = 'constantCold',
     ConstantHot = 'constantHot',
