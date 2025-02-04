@@ -32,9 +32,11 @@ export const sendCharge: TForceProcessor = (point) => {
         }
     }
 
-    if (point.data.charge > 50) {
+    if (point.data.charge >= 2) {
         while (emit(point, EPointType.Electricity_Spark, 0.5) && point.data.charge) {
             point.data.charge -= 2
         }
     }
+
+    point.data.charge *= 0.9
 }
