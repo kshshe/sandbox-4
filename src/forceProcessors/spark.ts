@@ -4,6 +4,10 @@ import { POINTS_CAN_ACCEPT_ELECTRICITY } from "../config";
 import { EPointType } from "../types";
 
 export const spark: TForceProcessor = (point) => {
+    if (!point.data.lifetime || point.data.lifetime < 2) {
+        point.data.lifetime = (point.data.lifetime ?? 0) + 1
+        return
+    }
     const neighbours = Points.getNeighbours(point)
     if (neighbours.length === 0) {
         return
