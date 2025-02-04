@@ -144,7 +144,7 @@ const drawPoints = () => {
             }
         }
 
-        if (point.data.directionToGround) {
+        if (debugMode && point.data.directionToGround) {
             const centerX = point.coordinates.x * CONFIG.pixelSize + CONFIG.pixelSize / 2;
             const centerY = point.coordinates.y * CONFIG.pixelSize + CONFIG.pixelSize / 2;
             const arrowSize = 5;
