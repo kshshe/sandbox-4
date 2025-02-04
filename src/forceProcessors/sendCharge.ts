@@ -38,5 +38,7 @@ export const sendCharge: TForceProcessor = (point) => {
         }
     }
 
-    point.data.charge *= 0.9
+    if (point.data.charge < 100) {
+        point.data.charge *= 0.99
+    }
 }

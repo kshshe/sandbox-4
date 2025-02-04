@@ -164,7 +164,7 @@ const drawPoints = () => {
 
         if (point.type === EPointType.Metal && point.data.temperature > 0) {
             // add a red overlay depending on temperature
-            const temperatureColor = `rgba(255, 0, 0, ${Math.min(1, Math.max(0, point.data.temperature / 300))})`;
+            const temperatureColor = `rgba(255, 0, 0, ${Math.min(1, Math.max(0, (point.data.temperature - 20) / 300))})`;
             ctx.fillStyle = temperatureColor;
             ctx.fillRect(point.coordinates.x * CONFIG.pixelSize, point.coordinates.y * CONFIG.pixelSize, CONFIG.pixelSize, CONFIG.pixelSize);
         }
