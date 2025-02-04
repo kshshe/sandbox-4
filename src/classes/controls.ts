@@ -11,10 +11,12 @@ export class Controls {
         debugMode: boolean
         drawingType: EPointType | 'eraser'
         baseTemperature: number
+        brushSize: number
     } = {
         debugMode: Storage.get('Controls.debugMode', false),
         drawingType: Storage.get('Controls.drawingType', EPointType.Water),
-        baseTemperature: Storage.get('Controls.baseTemperature', 20)
+        baseTemperature: Storage.get('Controls.baseTemperature', 20),
+        brushSize: Storage.get('Controls.brushSize', 2)
     }
 
     private static subscribers: TSubscriber[] = []
@@ -43,6 +45,14 @@ export class Controls {
         Storage.set(`Controls.${key}`, value)
         this.state[key] = value
         this.callSubscribers(key)
+    }
+
+    public static getBrushSize() {
+        return this.state.brushSize
+    }
+
+    public static setBrushSize(value: number) {
+        this.setState('brushSize', value)
     }
 
     public static getDrawingType() {

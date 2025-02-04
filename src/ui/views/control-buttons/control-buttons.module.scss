@@ -1,8 +1,14 @@
-.floatingButton {
+.controlButtons {
     position: fixed;
     bottom: 90px;
     left: 20px;
     z-index: 1000;
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 10px;
+}
+
+.floatingButton {
     cursor: pointer;
 
     border: none;

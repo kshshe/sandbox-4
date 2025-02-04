@@ -37,10 +37,22 @@ const addListeners = (element: HTMLElement, events: string[], callback: (e: Even
     })
 }
 
-let isDrawing = false;
 let drawingInterval: NodeJS.Timeout | null = null;
 let drawingX = 0;
 let drawingY = 0;
+
+const getArea = (x: number, y: number) => {
+    const brushSize = Controls.getBrushSize() - 1;
+    const area: { x: number, y: number }[] = [];
+    for (let i = -brushSize; i <= brushSize; i++) {
+        for (let j = -brushSize; j <= brushSize; j++) {
+            area.push({ x: x + i, y: y + j });
+        }
+    }
+
+    return area;
+}
+
 addListeners(canvas, ['mousedown', 'touchstart'], (e) => {
     const drawingType = Controls.getDrawingType();
     e.preventDefault();
@@ -53,7 +65,7 @@ addListeners(canvas, ['mousedown', 'touchstart'], (e) => {
     drawingY = y;
     drawingInterval = setInterval(() => {
         const points = Points.getPoints();
-        const neighboursAndSelf = [...Speed.possibleNeighbours, { x: 0, y: 0 }];
+        const neighboursAndSelf = getArea(0, 0);
         if (drawingType === 'eraser') {
             neighboursAndSelf.forEach(({ x, y }) => {
                 const pointOnThisPlace = Points.getPointByCoordinates({
@@ -201,7 +213,8 @@ const drawPoints = () => {
     // draw a rectangle around the drawing area (drawingX and drawingY variables)
     ctx.strokeStyle = 'rgba(0, 0, 0, 0.5)';
     ctx.lineWidth = 1;
-    ctx.strokeRect((drawingX - 1) * CONFIG.pixelSize, (drawingY - 1) * CONFIG.pixelSize, CONFIG.pixelSize * 3, CONFIG.pixelSize * 3);
+    const brushSize = Controls.getBrushSize();
+    ctx.strokeRect((drawingX + 1) * CONFIG.pixelSize - brushSize * CONFIG.pixelSize, (drawingY + 1) * CONFIG.pixelSize - brushSize * CONFIG.pixelSize, (brushSize * 2 - 1) * CONFIG.pixelSize, (brushSize * 2 - 1) * CONFIG.pixelSize);
 
     if (frame++ % 20 === 0) {
         stats.innerHTML = [
