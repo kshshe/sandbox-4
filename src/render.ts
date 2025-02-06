@@ -37,6 +37,7 @@ const addListeners = (element: HTMLElement, events: string[], callback: (e: Even
     })
 }
 
+let isDrawing = false;
 let drawingInterval: NodeJS.Timeout | null = null;
 let drawingX = 0;
 let drawingY = 0;

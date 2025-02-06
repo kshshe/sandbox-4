@@ -1,5 +1,5 @@
 import { POINTS_PROBABILITY_TO_CHANGE_DIRECTION_MODIFIERS } from "../config"
-import { EPointType, TCoordinate } from "../types"
+import { TCoordinate } from "../types"
 import { random } from "../utils/random"
 import { shake } from "../utils/shake"
 import { Points, TPoint } from "./points"
