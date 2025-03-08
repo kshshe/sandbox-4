@@ -10,8 +10,6 @@ import { CANT_BE_UNSED } from './config'
 import { Bounds } from './classes/bounds'
 import { TemperatureGrid } from './classes/temperatureGrid'
 
-const TEMPERATURE_PART_TO_SHARE_WITH_NEIGHBOUR = 1 / 20
-const TEMPERATURE_PART_TO_SHARE_WITH_AIR = 1 / 300
 const MAX_SPEED = 6
 const MAX_UNUSED_ITERATIONS = 50
 const USE_POINT_EVERY_N_ITERATION = MAX_UNUSED_ITERATIONS
@@ -124,6 +122,7 @@ export const startProcessing = async () => {
         const nowAfterProcess = performance.now()
         const elapsedTime = nowAfterProcess - now
         const remainingTime = Controls.getDebugMode() ? 0 : availableTime - elapsedTime
+        Stats.setElapsedTime(elapsedTime)
         const timeElapsedPercent = elapsedTime / availableTime
         Stats.setLoad(timeElapsedPercent)
         await wait(Math.max(0, remainingTime))

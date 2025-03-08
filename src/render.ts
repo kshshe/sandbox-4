@@ -6,6 +6,7 @@ import { EPointType } from "./types";
 import { Controls } from "./classes/controls";
 import { Speed } from "./classes/speed";
 import { TemperatureGrid } from "./classes/temperatureGrid";
+import { Stats } from "./classes/stats";
 
 const canvas = document.getElementById('canvas') as HTMLCanvasElement;
 const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
@@ -219,6 +220,7 @@ const drawPoints = () => {
 
     if (frame++ % 20 === 0) {
         stats.innerHTML = [
+            `Frame: ${(Math.round(Stats.data.elapsedTime * 10) / 10).toFixed(1)} ms`,
             hoveredPoint && `${hoveredPoint.type}`,
             hoveredPoint?.wasDeleted && 'Deleted',
             hoveredPoint && hoveredPoint.data?.lifetime && `Lifetime: ${hoveredPoint.data.lifetime}`,

@@ -3,6 +3,7 @@ export class Stats {
         fps: 0,
         averageSpeed: 0,
         load: 0,
+        elapsedTime: 0,
     }
 
     static setLoad(load: number) {
@@ -15,5 +16,9 @@ export class Stats {
 
     static setAverageSpeed(speed: number) {
         Stats.data.averageSpeed = speed
+    }
+
+    static setElapsedTime(elapsedTime: number) {
+        Stats.data.elapsedTime = elapsedTime
     }
 }

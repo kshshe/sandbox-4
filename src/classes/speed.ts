@@ -10,7 +10,7 @@ export type TRoundedSpeed = {
 }
 
 const distance = (a: TCoordinate, b: TRoundedSpeed) => {
-    return Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2)
+    return (a.x - b.x) ** 2 + (a.y - b.y) ** 2
 }
 
 export class Speed {
@@ -60,54 +60,91 @@ export class Speed {
     ]
 
     static getRoundedSpeed(point: TPoint, exceptNeighbours = false, possibleNeighbours = Speed.possibleNeighbours): TRoundedSpeed {
-        const neighbours = exceptNeighbours ? Points.getNeighbours(point) : []
         const { speed, type } = point
         const vectorLength = Math.sqrt(speed.x ** 2 + speed.y ** 2)
+        
         if (vectorLength < 0.01) {
             return { x: 0, y: 0 }
         }
+        
         const normalizedSpeed = {
             x: speed.x / vectorLength,
             y: speed.y / vectorLength
         }
-
+        
+        const neighbours = exceptNeighbours ? Points.getNeighbours(point) : []
+        
         let maxDistance = -Infinity
-        const distances = possibleNeighbours.map(possibleSpeed => {
-            const d = distance(normalizedSpeed, possibleSpeed)
+        const distances = new Array(possibleNeighbours.length)
+        
+        for (let i = 0; i < possibleNeighbours.length; i++) {
+            const d = distance(normalizedSpeed, possibleNeighbours[i])
+            distances[i] = d
             if (d > maxDistance) {
                 maxDistance = d
             }
-            return d
-        })
-        const probabilities = distances.map(d => maxDistance - d)
-
-        const sum = probabilities.reduce((acc, val) => acc + val, 0);
-        const normalizedProbabilities = probabilities.map(p => p / sum)
-        const averageProbability = normalizedProbabilities.reduce((acc, val) => acc + val, 0) / normalizedProbabilities.length
-        const normalizedProbabilitiesWithoutLow = normalizedProbabilities.map(p => p > averageProbability ? p : 0)
-        const probabilitiesWithIndex = normalizedProbabilitiesWithoutLow.map((p, i) => ({ probability: p, speed: Speed.possibleNeighbours[i] }))
-        const shuffledProbabilitiesWithIndex = probabilitiesWithIndex.filter(prob => {
-            const isNeighbour = neighbours.some(neighbour => neighbour.coordinates.x === point.coordinates.x + prob.speed.x && neighbour.coordinates.y === point.coordinates.y + prob.speed.y && neighbour !== point)
-            return !isNeighbour
-        })
-
-        const randomValue = random()
-
-        for (let i = 0; i < shuffledProbabilitiesWithIndex.length; i++) {
-            if (randomValue < shuffledProbabilitiesWithIndex[i].probability * (POINTS_PROBABILITY_TO_CHANGE_DIRECTION_MODIFIERS[type] ?? 0.8)) {
-                return shuffledProbabilitiesWithIndex[i].speed
+        }
+        
+        const probabilities = new Array(distances.length)
+        let sum = 0
+        
+        for (let i = 0; i < distances.length; i++) {
+            probabilities[i] = maxDistance - distances[i]
+            sum += probabilities[i]
+        }
+        
+        const probabilityModifier = POINTS_PROBABILITY_TO_CHANGE_DIRECTION_MODIFIERS[type] ?? 0.8
+        const averageProbability = sum / (distances.length * sum)
+        
+        const validSpeeds: { probability: number, index: number }[] = []
+        
+        for (let i = 0; i < probabilities.length; i++) {
+            const normalizedProb = probabilities[i] / sum
+            
+            if (normalizedProb <= averageProbability) {
+                continue
+            }
+            
+            if (exceptNeighbours) {
+                const speed = possibleNeighbours[i]
+                const isNeighbour = neighbours.some(
+                    neighbour => 
+                        neighbour.coordinates.x === point.coordinates.x + speed.x && 
+                        neighbour.coordinates.y === point.coordinates.y + speed.y && 
+                        neighbour !== point
+                )
+                
+                if (isNeighbour) {
+                    continue
+                }
+            }
+            
+            validSpeeds.push({
+                probability: normalizedProb * probabilityModifier,
+                index: i
+            })
+        }
+        
+        if (validSpeeds.length > 0) {
+            const randomValue = random()
+            
+            for (let i = 0; i < validSpeeds.length; i++) {
+                if (randomValue < validSpeeds[i].probability) {
+                    return possibleNeighbours[validSpeeds[i].index]
+                }
             }
         }
-
+        
         let maxProbability = 0
         let maxProbabilityIndex = 0
+        
         for (let i = 0; i < probabilities.length; i++) {
             if (probabilities[i] > maxProbability) {
                 maxProbability = probabilities[i]
                 maxProbabilityIndex = i
             }
         }
-
-        return Speed.possibleNeighbours[maxProbabilityIndex]
+        
+        return possibleNeighbours[maxProbabilityIndex]
     }
 }
