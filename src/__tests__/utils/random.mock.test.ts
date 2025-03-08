@@ -1,6 +1,8 @@
 import { random, __resetMock, __getMockState } from '../../__mocks__/utils/random';
 
-jest.mock('../../utils/random');
+jest.mock('../../utils/random', () => ({
+  random: jest.fn(() => random()),
+}));
 
 describe('random utility mock', () => {
   beforeEach(() => {
