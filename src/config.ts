@@ -14,6 +14,7 @@ export const CONFIG = {
     pixelSize: savedPixelSize,
 } as const
 
+// Only for those that are not sand-like
 export const POINTS_PROBABILITY_TO_CHANGE_DIRECTION_MODIFIERS: {
     [key in EPointType]?: number
 } = {
@@ -67,6 +68,8 @@ export const POINS_COLORS: Record<EPointType, string> = {
     [EPointType.ConstantHot]: 'red',
 
     [EPointType.Void]: 'black',
+    [EPointType.Virus]: 'purple',
+    [EPointType.Heal]: 'lime',
 }
 
 export const CANT_BE_UNSED: {
@@ -93,6 +96,7 @@ export const POINTS_HEAT_CAPACITY: {
 } = {
     water: 1,
     sand: 1,
+    virus: 1,
     
     liquidGas: 2,
     stone: 2,
@@ -130,6 +134,8 @@ export const POINTS_WEIGHTS: Record<EPointType, number> = {
     [EPointType.Gas]: 0,
     [EPointType.Electricity_Spark]: 1,
     [EPointType.MoltenMetal]: 2,
+    [EPointType.Virus]: 1,
+    [EPointType.Heal]: 1,
 
     [EPointType.Electricity_Source]: Infinity,
     [EPointType.Electricity_Ground]: Infinity,
@@ -157,6 +163,7 @@ export const INITIAL_TEMPERATURE: {
     [EPointType.Fire]: 700,
     [EPointType.IceFire]: -700,
     [EPointType.LiquidGas]: -350,
+    [EPointType.Virus]: 20,
 
     [EPointType.ConstantCold]: -500,
     [EPointType.ConstantHot]: 500,
@@ -192,6 +199,8 @@ export const POINT_TYPE_ICON: {
     [EPointType.ConstantHot]: '🔥♾️',
     [EPointType.LiquidGas]: '💧💨',
     [EPointType.Foam]: '🛁',
+    [EPointType.Virus]: '🦠',
+    [EPointType.Heal]: '💊',
     eraser: '🧽',
 }
 

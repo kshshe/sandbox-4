@@ -20,6 +20,8 @@ import { throttle } from "./utils/throttle";
 import { spark } from "./spark";
 import { sendCharge } from "./sendCharge";
 import { electricitySource } from "./electricitySource";
+import { virus } from "./virus";
+import { heal } from "./heal";
 
 export type TForceProcessor = (point: TPoint) => void
 
@@ -148,5 +150,13 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
     [EPointType.Void]: [
         voidProcessor,
         staticForce,
+    ],
+    [EPointType.Virus]: [
+        ...BASIC_FORCES,
+        virus,
+    ],
+    [EPointType.Heal]: [
+        ...BASIC_FORCES,
+        heal,
     ],
 }
