@@ -116,18 +116,22 @@ let frames = 0
 const availableTime = 1000 / 60
 let lastStatsUpdate = performance.now()
 export const startProcessing = async () => {
+    let shouldWaitFor60FPS = true
     while (true) {
         const now = performance.now()
         processFrame()
         const nowAfterProcess = performance.now()
         const elapsedTime = nowAfterProcess - now
-        const remainingTime = Controls.getDebugMode() ? 0 : availableTime - elapsedTime
+        const remainingTime = !shouldWaitFor60FPS ? 0 : availableTime - elapsedTime
         Stats.setElapsedTime(elapsedTime)
         const timeElapsedPercent = elapsedTime / availableTime
         Stats.setLoad(timeElapsedPercent)
         await wait(Math.max(0, remainingTime))
         frames++
         framesTimes.push(performance.now() - now)
+        if (frames % 60 === 0) {
+            shouldWaitFor60FPS = !Controls.getDebugMode() && !Controls.getMaxSpeedMode()
+        }
         if (now - lastStatsUpdate >= 1000) {
             framesTimes = framesTimes.slice(-100)
             const averageFrameTime = framesTimes.reduce((acc, time) => acc + time, 0) / framesTimes.length

@@ -211,7 +211,6 @@ export const POINTS_SHORTCUTS: {
     c: EPointType.Clone,
     g: EPointType.Gas,
     v: EPointType.Void,
-    m: EPointType.Metal,
     e: 'eraser',
 }
 

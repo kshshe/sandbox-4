@@ -5,6 +5,7 @@ import classNames from "classnames";
 import { Points } from "../../../classes/points";
 import { Bounds } from "../../../classes/bounds";
 import { TemperatureGrid } from "../../../classes/temperatureGrid";
+import { Controls } from "../../../classes/controls";
 
 const TemperatureMap: React.FC = () => {
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
@@ -228,7 +229,9 @@ export const Metrics: React.FC = () => {
       <TemperatureMap />
       <ProcessedPointsMeter />
       <div className={styles.hint}>
-        <strong>d</strong> - debug mode
+        <strong>d</strong> - debug mode {Controls.getDebugMode() && "(✔️)"}
+        <br />
+        <strong>m</strong> - ∞ FPS mode {Controls.getMaxSpeedMode() && "(✔️)"}
         <br />
         <a href="https://t.me/kshshe" target="_blank" rel="noreferrer">
           developer

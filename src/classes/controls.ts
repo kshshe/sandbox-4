@@ -9,10 +9,12 @@ type TSubscriber = {
 export class Controls {
     static state: {
         debugMode: boolean
+        maxSpeedMode: boolean
         drawingType: EPointType | 'eraser'
         baseTemperature: number
         brushSize: number
     } = {
+        maxSpeedMode: Storage.get('Controls.maxSpeedMode', false),
         debugMode: Storage.get('Controls.debugMode', false),
         drawingType: Storage.get('Controls.drawingType', EPointType.Water),
         baseTemperature: Storage.get('Controls.baseTemperature', 20),
@@ -69,6 +71,14 @@ export class Controls {
 
     public static setDebugMode(value: boolean) {
         this.setState('debugMode', value)
+    }
+
+    public static getMaxSpeedMode() {
+        return this.state.maxSpeedMode
+    }
+
+    public static setMaxSpeedMode(value: boolean) {
+        this.setState('maxSpeedMode', value)
     }
 
     public static getBaseTemperature() {

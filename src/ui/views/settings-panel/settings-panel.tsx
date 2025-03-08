@@ -5,6 +5,7 @@ import { useControls } from "../../hooks/useControls";
 export const SettingsPanel: React.FC = () => {
   const [isOpened, setIsOpened] = React.useState(false);
   const [isDebugMode, setIsDebugMode] = useControls("debugMode");
+  const [maxSpeedMode, setMaxSpeedMode] = useControls("maxSpeedMode");
   const [baseTemperature, setBaseTemperature] = useControls("baseTemperature");
 
   React.useEffect(() => {
@@ -20,14 +21,16 @@ export const SettingsPanel: React.FC = () => {
 
   React.useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
-      if (e.key !== "d") {
-        return;
+      if (e.key === "d") {
+        setIsDebugMode(!isDebugMode);
       }
-      setIsDebugMode(!isDebugMode);
+      if (e.key === "m") {
+        setMaxSpeedMode(!maxSpeedMode);
+      }
     };
     window.addEventListener("keyup", handleKey);
     return () => window.removeEventListener("keyup", handleKey);
-  }, [isDebugMode]);
+  }, [isDebugMode, maxSpeedMode]);
 
   const button = (
     <button
