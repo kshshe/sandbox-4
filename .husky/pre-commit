@@ -1,0 +1,16 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "Running tests before commit..."
+npm test
+
+# Store the exit code of the test command
+EXIT_CODE=$?
+
+# If tests fail, prevent the commit
+if [ $EXIT_CODE -ne 0 ]; then
+  echo "Tests failed. Commit aborted."
+  exit 1
+fi
+
+echo "Tests passed. Proceeding with commit."
