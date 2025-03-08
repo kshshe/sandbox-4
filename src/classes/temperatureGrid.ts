@@ -63,50 +63,122 @@ export class TemperatureGrid {
     }
 
     public static processTemperatureFrame() {
-        for (const rowIndex in this.temperatureGrid) {
-            const row = this.temperatureGrid[rowIndex];
-            for (const colIndex in row) {
-                const temperature = this.temperatureGrid[rowIndex][colIndex];
-                const x = +rowIndex;
-                const y = +colIndex;
-                const hasPointHere = Points.getPointByCoordinates({ x, y });
-                const heatCapacity = hasPointHere ? POINTS_HEAT_CAPACITY[hasPointHere.type] ?? 1 : 1;
-                const neighbours = [
-                    // left
-                    this.getNeighbourConfig(x - 1, y, false),
-                    // right
-                    this.getNeighbourConfig(x + 1, y, false),
-                    // top
-                    this.getNeighbourConfig(x, y - 1, false),
-                    // bottom
-                    this.getNeighbourConfig(x, y + 1, false),
-                    // top left
-                    this.getNeighbourConfig(x - 1, y - 1, true),
-                    // top right
-                    this.getNeighbourConfig(x + 1, y - 1, true),
-                    // bottom left
-                    this.getNeighbourConfig(x - 1, y + 1, true),
-                    // bottom right
-                    this.getNeighbourConfig(x + 1, y + 1, true),
-                ];
-                const temperatureSum = neighbours.reduce((acc, neighbour) => acc + neighbour.temp * neighbour.coefficent, 0);
-                const coefficentSum = neighbours.reduce((acc, neighbour) => acc + neighbour.coefficent, 0);
-                const averageTemperature = temperatureSum / coefficentSum;
-                const diff = averageTemperature - temperature;
-                const temperatureToShare = diff * 0.05 / heatCapacity;
-                this.setTemperatureOnPoint(x, y, temperature + temperatureToShare);
-
-                if (!hasPointHere) {
-                    const baseTemperature = Controls.getBaseTemperature();
-                    const airTemperature = baseTemperature;
-                    const newTemperature = this.getTemperatureOnPoint(x, y);
-                    const temperatureDiff = newTemperature - airTemperature;
-                    const temperatureToShareWithAir = temperatureDiff * 0.01;
-                    this.setTemperatureOnPoint(x, y, newTemperature - temperatureToShareWithAir);
-                }
+        const baseTemperature = Controls.getBaseTemperature();
+        const bounds = Bounds.getBounds();
+        
+        // Pre-calculate diagonal coefficient
+        const diagonalCoefficient = 0.75;
+        const normalCoefficient = 1;
+        const boundaryCoefficient = 0.01;
+        const temperatureShareFactor = 0.05;
+        const airShareFactor = 0.01;
+        
+        // Use typed arrays for better performance
+        const width = this.temperatureGrid.length;
+        if (width === 0) return;
+        
+        // Find the maximum column length to determine grid height
+        let height = 0;
+        for (let i = 0; i < width; i++) {
+            if (this.temperatureGrid[i]) {
+                height = Math.max(height, this.temperatureGrid[i].length);
             }
         }
+        if (height === 0) return;
+        
+        // Create a new grid with the same dimensions
+        const newTemperatureGrid: number[][] = new Array(width);
+        for (let i = 0; i < width; i++) {
+            newTemperatureGrid[i] = new Array(height);
+        }
+        
+        // Process the grid using numerical indices for better performance
+        for (let x = 0; x < width; x++) {
+            const row = this.temperatureGrid[x];
+            if (!row) continue;
+            
+            for (let y = 0; y < row.length; y++) {
+                const currentTemperature = row[y];
+                if (currentTemperature === undefined) continue;
+                
+                const hasPointHere = Points.getPointByCoordinates({ x, y });
+                const heatCapacity = hasPointHere ? POINTS_HEAT_CAPACITY[hasPointHere.type] ?? 1 : 1;
+                
+                // Calculate temperature from neighbors
+                let temperatureSum = 0;
+                let coefficientSum = 0;
+                
+                // Process all neighbors
+                const neighborData = this.processNeighbors(x, y, bounds);
+                temperatureSum = neighborData.temperatureSum;
+                coefficientSum = neighborData.coefficientSum;
+                
+                const averageTemperature = temperatureSum / coefficientSum;
+                const diff = averageTemperature - currentTemperature;
+                const temperatureToShare = diff * temperatureShareFactor / heatCapacity;
+                let newTemperature = currentTemperature + temperatureToShare;
+                
+                // Apply air temperature adjustment for non-point cells
+                if (!hasPointHere) {
+                    const temperatureDiff = newTemperature - baseTemperature;
+                    const temperatureToShareWithAir = temperatureDiff * airShareFactor;
+                    newTemperature -= temperatureToShareWithAir;
+                }
+                
+                newTemperatureGrid[x][y] = newTemperature;
+            }
+        }
+        
+        // Update the temperature grid with new values
+        this.temperatureGrid = newTemperatureGrid;
         this.save();
+    }
+    
+    private static processNeighbors(
+        x: number, 
+        y: number, 
+        bounds: { left: number, right: number, top: number, bottom: number }
+    ): { temperatureSum: number, coefficientSum: number } {
+        const diagonalCoefficient = 0.75;
+        const normalCoefficient = 1;
+        const boundaryCoefficient = 0.01;
+        
+        let temperatureSum = 0;
+        let coefficientSum = 0;
+        
+        // Process all 8 neighbors
+        const neighbors = [
+            { nx: x - 1, ny: y, coef: normalCoefficient },     // Left
+            { nx: x + 1, ny: y, coef: normalCoefficient },     // Right
+            { nx: x, ny: y - 1, coef: normalCoefficient },     // Top
+            { nx: x, ny: y + 1, coef: normalCoefficient },     // Bottom
+            { nx: x - 1, ny: y - 1, coef: diagonalCoefficient }, // Top-left
+            { nx: x + 1, ny: y - 1, coef: diagonalCoefficient }, // Top-right
+            { nx: x - 1, ny: y + 1, coef: diagonalCoefficient }, // Bottom-left
+            { nx: x + 1, ny: y + 1, coef: diagonalCoefficient }  // Bottom-right
+        ];
+        
+        for (const neighbor of neighbors) {
+            const { nx, ny, coef } = neighbor;
+            let coefficient = coef;
+            
+            // Apply boundary conditions
+            if (nx < bounds.left || nx > bounds.right || ny < bounds.top || ny > bounds.bottom) {
+                coefficient = boundaryCoefficient;
+            }
+            
+            // Apply point heat capacity
+            const neighborPoint = Points.getPointByCoordinates({ x: nx, y: ny });
+            if (neighborPoint) {
+                coefficient *= POINTS_HEAT_CAPACITY[neighborPoint.type] ?? 1;
+            }
+            
+            const temp = this.getTemperatureOnPoint(nx, ny);
+            temperatureSum += temp * coefficient;
+            coefficientSum += coefficient;
+        }
+        
+        return { temperatureSum, coefficientSum };
     }
 
     public static updatePointsFromGrid() {
