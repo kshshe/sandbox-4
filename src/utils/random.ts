@@ -21,7 +21,7 @@ export function random() {
     fromBufferCount++;
     return fromBuffer;
 }
-
+ 
 // For testing purposes only
 export const __fromRandomCount = () => fromRandomCount;
 export const __fromBufferCount = () => fromBufferCount;
