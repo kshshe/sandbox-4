@@ -1,0 +1,1 @@
+__tests__ and __mocks__ file structure should match the file structure of the project.
