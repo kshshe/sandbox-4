@@ -70,6 +70,7 @@ export const POINS_COLORS: Record<EPointType, string> = {
     [EPointType.Void]: 'black',
     [EPointType.Virus]: 'purple',
     [EPointType.Heal]: 'lime',
+    [EPointType.Acid]: '#00ff00',
 }
 
 export const CANT_BE_UNSED: {
@@ -97,6 +98,7 @@ export const POINTS_HEAT_CAPACITY: {
     water: 1,
     sand: 1,
     virus: 1,
+    acid: 1,
     
     liquidGas: 2,
     stone: 2,
@@ -136,6 +138,7 @@ export const POINTS_WEIGHTS: Record<EPointType, number> = {
     [EPointType.MoltenMetal]: 2,
     [EPointType.Virus]: 1,
     [EPointType.Heal]: 1,
+    [EPointType.Acid]: 1.2,
 
     [EPointType.Electricity_Source]: Infinity,
     [EPointType.Electricity_Ground]: Infinity,
@@ -164,6 +167,7 @@ export const INITIAL_TEMPERATURE: {
     [EPointType.IceFire]: -700,
     [EPointType.LiquidGas]: -350,
     [EPointType.Virus]: 20,
+    [EPointType.Acid]: 20,
 
     [EPointType.ConstantCold]: -500,
     [EPointType.ConstantHot]: 500,
@@ -201,6 +205,7 @@ export const POINT_TYPE_ICON: {
     [EPointType.Foam]: '🛁',
     [EPointType.Virus]: '🦠',
     [EPointType.Heal]: '💊',
+    [EPointType.Acid]: '🧪',
     eraser: '🧽',
 }
 
@@ -221,8 +226,9 @@ export const POINTS_SHORTCUTS: {
     g: EPointType.Gas,
     v: EPointType.Void,
     e: 'eraser',
+    a: EPointType.Acid,
 }
 
 export const REVERSED_POINTS_SHORTCUTS: {
     [key in EPointType | 'eraser']?: string
-} = Object.fromEntries(Object.entries(POINTS_SHORTCUTS).map(([key, value]) => [value, key]))
+} = Object.fromEntries(Object.entries(POINTS_SHORTCUTS).map(([key, value]) => [value, key])) 

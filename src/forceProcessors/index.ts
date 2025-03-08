@@ -22,6 +22,7 @@ import { sendCharge } from "./sendCharge";
 import { electricitySource } from "./electricitySource";
 import { virus } from "./virus";
 import { heal } from "./heal";
+import { acid } from "./acid";
 
 export type TForceProcessor = (point: TPoint) => void
 
@@ -158,5 +159,10 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
     [EPointType.Heal]: [
         ...BASIC_FORCES,
         heal,
+    ],
+    [EPointType.Acid]: [
+        ...BASIC_FORCES,
+        liquid,
+        acid,
     ],
 }

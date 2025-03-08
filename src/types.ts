@@ -31,6 +31,7 @@ export enum EPointType {
     Electricity_Source = 'electricitySource',
     Virus = 'virus',
     Heal = 'heal',
+    Acid = 'acid',
 
     ConstantCold = 'constantCold',
     ConstantHot = 'constantHot',
