@@ -6,7 +6,8 @@
     "build": "parcel build index.html",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage --coverageDirectory=coverage",
+    "test:coverage:view": "npm run test:coverage && open coverage/lcov-report/index.html"
   },
   "keywords": [],
   "author": "",
