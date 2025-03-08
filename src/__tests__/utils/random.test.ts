@@ -1,4 +1,4 @@
-import { random } from '../../utils/random';
+import { random, __fromBufferCount, __fromRandomCount, __bufferSize } from '../../utils/random';
 
 describe('random utility', () => {
   test('should return a number between 0 and 1', () => {
@@ -16,27 +16,34 @@ describe('random utility', () => {
     expect(results.size).toBeGreaterThan(1);
   });
 
-  test('should use buffer when available', () => {
-    // This test relies on the implementation details
-    // We know the buffer is populated in the background
-    // So after waiting a bit, the buffer should have values
-    jest.useFakeTimers();
+  test('should increment fromRandomCount when buffer is empty', () => {
+    // Get initial counter value
+    const initialFromRandom = __fromRandomCount();
     
-    // Force buffer to be populated
-    jest.advanceTimersByTime(100);
+    // Call random (should use Math.random directly if buffer is empty)
+    random();
     
-    // Call random multiple times to ensure we're using the buffer
-    for (let i = 0; i < 100; i++) {
-      random();
-    }
+    // Check that fromRandomCount increased
+    expect(__fromRandomCount()).toBeGreaterThan(initialFromRandom);
+  });
+
+  test('should increment fromBufferCount when using buffer', () => {
+    // Mock the buffer with a non-empty array
+    jest.spyOn(Array.prototype, 'pop').mockImplementationOnce(() => 0.5);
     
-    // Reset timers
-    jest.useRealTimers();
+    // Get initial counter value
+    const initialFromBuffer = __fromBufferCount();
     
-    // The function should still work after using the buffer
+    // Call random (should use the buffer)
     const result = random();
-    expect(typeof result).toBe('number');
-    expect(result).toBeGreaterThanOrEqual(0);
-    expect(result).toBeLessThan(1);
+    
+    // Check that fromBufferCount increased
+    expect(__fromBufferCount()).toBeGreaterThan(initialFromBuffer);
+    
+    // Verify the result is from the buffer
+    expect(result).toBe(0.5);
+    
+    // Restore the original implementation
+    jest.restoreAllMocks();
   });
 }); 
