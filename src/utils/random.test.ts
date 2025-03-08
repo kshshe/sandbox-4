@@ -1,4 +1,4 @@
-import { random, __fromBufferCount, __fromRandomCount, __bufferSize } from '../../utils/random';
+import { random, __fromBufferCount, __fromRandomCount, __bufferSize } from './random';
 
 describe('random utility', () => {
   test('should return a number between 0 and 1', () => {

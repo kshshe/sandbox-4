@@ -1,7 +1,7 @@
-import { Storage } from '../../__mocks__/classes/storage';
+import { Storage } from './storage';
 
 // Mock the Storage module
-jest.mock('../../classes/storage', () => ({
+jest.mock('../storage', () => ({
   Storage: jest.fn(() => Storage),
 }));
 

@@ -1,4 +1,4 @@
-import { Storage } from '../../classes/storage';
+import { Storage } from './storage';
 
 // Mock localStorage
 const localStorageMock = (() => {

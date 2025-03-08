@@ -1,4 +1,4 @@
-import { Stats } from '../../classes/stats';
+import { Stats } from './stats';
 
 describe('Stats', () => {
   beforeEach(() => {

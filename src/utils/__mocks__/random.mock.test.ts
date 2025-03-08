@@ -1,6 +1,6 @@
-import { random, __resetMock, __getMockState } from '../../__mocks__/utils/random';
+import { random, __resetMock, __getMockState } from './random';
 
-jest.mock('../../utils/random', () => ({
+jest.mock('../random', () => ({
   random: jest.fn(() => random()),
 }));
 

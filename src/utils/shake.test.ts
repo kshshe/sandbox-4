@@ -1,5 +1,5 @@
 import { shake } from './shake';
-import { random, __resetMock, __getMockState } from '../__mocks__/utils/random';
+import { random, __resetMock, __getMockState } from './__mocks__/random';
 
 // Mock the random module
 jest.mock('./random', () => ({
