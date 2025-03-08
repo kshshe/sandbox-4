@@ -52,17 +52,22 @@ export const SettingsPanel: React.FC = () => {
       }}
     >
       <div>
-        <p>
-          <label>Debug mode</label>
-          <label>
-            <input
-              type="checkbox"
-              checked={isDebugMode}
-              onChange={(e) => setIsDebugMode(e.target.checked)}
-            />{" "}
-            Enabled
-          </label>
-        </p>
+        <label>
+          <input
+            type="checkbox"
+            checked={isDebugMode}
+            onChange={(e) => setIsDebugMode(e.target.checked)}
+          />{" "}
+          Debug mode
+        </label>
+        <label>
+          <input
+            type="checkbox"
+            checked={maxSpeedMode}
+            onChange={(e) => setMaxSpeedMode(e.target.checked)}
+          />{" "}
+          Max speed mode
+        </label>
         <p>
           <label>Air temperature: {baseTemperature}°C</label>
           <input
