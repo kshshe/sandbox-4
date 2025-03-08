@@ -93,7 +93,7 @@ export class Speed {
             sum += probabilities[i]
         }
         
-        const probabilityModifier = POINTS_PROBABILITY_TO_CHANGE_DIRECTION_MODIFIERS[type] ?? 0.8
+        const probabilityModifier = POINTS_PROBABILITY_TO_CHANGE_DIRECTION_MODIFIERS[type] ?? 0.2
         const averageProbability = sum / (distances.length * sum)
         
         const validSpeeds: { probability: number, index: number }[] = []
