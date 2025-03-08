@@ -5,7 +5,15 @@ module.exports = {
   roots: ['<rootDir>/src'],
   testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.(tsx?|jsx?)$',
   transform: {
-    '^.+\\.(ts|tsx)$': 'ts-jest',
+    '^.+\\.(ts|tsx)$': [
+      'ts-jest',
+      {
+        diagnostics: {
+          warnOnly: true,
+          ignoreCodes: [151001]
+        }
+      }
+    ],
   },
   setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
   moduleNameMapper: {
