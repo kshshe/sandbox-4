@@ -42,6 +42,12 @@ const processFrame = () => {
         if (point.wasDeleted) {
             continue
         }
+
+        // Ensure visual coordinates are initialized
+        if (!point.visualCoordinates) {
+            point.visualCoordinates = { ...point.coordinates }
+        }
+
         if (!isUnused || iteration % USE_POINT_EVERY_N_ITERATION === 0 && +index % 10 === 0) {
             const forcesList = forcesByType[point.type] || []
             for (const force of forcesList) {

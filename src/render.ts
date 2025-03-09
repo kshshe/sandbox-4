@@ -120,47 +120,67 @@ addListeners(canvas, ['mousemove', 'touchmove'], (e) => {
     drawingX = x;
     drawingY = y;
     hoveredCoordinates = { x, y };
-    hoveredPoint = Points.getPoints().find(point => point.coordinates.x === x && point.coordinates.y === y) || null;
+    hoveredPoint = Points.getPointByCoordinates({ x, y }) || null;
 })
 
 const previouslyUsedPixels: Set<string> = new Set();
 let frame = 0;
+let lastFrameTime = 0;
+
 const drawPoints = () => {
     const debugMode = Controls.getDebugMode();
     const points = Points.getPoints();
     ctx.fillStyle = 'white';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+    // Calculate time since last frame for smooth interpolation
+    const currentTime = performance.now();
+    const deltaTime = Math.min(1, (currentTime - lastFrameTime) / 16.67); // Cap at 60fps equivalent
+    lastFrameTime = currentTime;
+    
+    // Update visual coordinates with interpolation factor
+    Points.updateVisualCoordinates(CONFIG.movementSmoothness * deltaTime);
+
     previouslyUsedPixels.clear()
     points.forEach(point => {
-        const key = `${point.coordinates.x}:${point.coordinates.y}`;
+        if (!point.visualCoordinates) {
+            point.visualCoordinates = { ...point.coordinates };
+        }
+        
+        const key = `${Math.round(point.visualCoordinates.x)}:${Math.round(point.visualCoordinates.y)}`;
         const thereIsPointAlready = previouslyUsedPixels.has(key);
         ctx.fillStyle = POINS_COLORS[point.type];
         if (debugMode && thereIsPointAlready) {
             ctx.fillStyle = 'red';
             previouslyUsedPixels.add(key);
         }
-        ctx.fillRect(point.coordinates.x * CONFIG.pixelSize, point.coordinates.y * CONFIG.pixelSize, CONFIG.pixelSize, CONFIG.pixelSize);
+        
+        // Use visual coordinates for rendering
+        ctx.fillRect(
+            point.visualCoordinates.x * CONFIG.pixelSize, 
+            point.visualCoordinates.y * CONFIG.pixelSize, 
+            CONFIG.pixelSize, 
+            CONFIG.pixelSize
+        );
 
         if (debugMode) {
             const speedLength = Math.sqrt(point.speed.x ** 2 + point.speed.y ** 2);
             if (speedLength > 1) {
-                const centerX = point.coordinates.x * CONFIG.pixelSize + CONFIG.pixelSize / 2;
-                const centerY = point.coordinates.y * CONFIG.pixelSize + CONFIG.pixelSize / 2;
+                const centerX = point.visualCoordinates.x * CONFIG.pixelSize + CONFIG.pixelSize / 2;
+                const centerY = point.visualCoordinates.y * CONFIG.pixelSize + CONFIG.pixelSize / 2;
                 const speedX = point.speed.x * 10;
                 const speedY = point.speed.y * 10;
-
+                ctx.strokeStyle = 'red';
                 ctx.beginPath();
                 ctx.moveTo(centerX, centerY);
-                ctx.lineTo(centerX + speedX * 10, centerY + speedY * 10);
-                ctx.strokeStyle = 'black';
+                ctx.lineTo(centerX + speedX, centerY + speedY);
                 ctx.stroke();
             }
         }
 
         if (debugMode && point.data.directionToGround) {
-            const centerX = point.coordinates.x * CONFIG.pixelSize + CONFIG.pixelSize / 2;
-            const centerY = point.coordinates.y * CONFIG.pixelSize + CONFIG.pixelSize / 2;
+            const centerX = point.visualCoordinates.x * CONFIG.pixelSize + CONFIG.pixelSize / 2;
+            const centerY = point.visualCoordinates.y * CONFIG.pixelSize + CONFIG.pixelSize / 2;
             const arrowSize = 5;
             ctx.beginPath();
             ctx.moveTo(centerX, centerY);
@@ -173,24 +193,24 @@ const drawPoints = () => {
             // yellowish color depending on charge value
             const chargeColor = `rgba(255, 255, 0, ${Math.min(1, Math.max(0, point.data.charge / 10))})`;
             ctx.fillStyle = chargeColor;
-            ctx.fillRect(point.coordinates.x * CONFIG.pixelSize, point.coordinates.y * CONFIG.pixelSize, CONFIG.pixelSize, CONFIG.pixelSize);
+            ctx.fillRect(point.visualCoordinates.x * CONFIG.pixelSize, point.visualCoordinates.y * CONFIG.pixelSize, CONFIG.pixelSize, CONFIG.pixelSize);
         }
 
         if (point.type === EPointType.Metal && point.data.temperature > 0) {
             // add a red overlay depending on temperature
             const temperatureColor = `rgba(255, 0, 0, ${Math.min(1, Math.max(0, (point.data.temperature - 20) / 300))})`;
             ctx.fillStyle = temperatureColor;
-            ctx.fillRect(point.coordinates.x * CONFIG.pixelSize, point.coordinates.y * CONFIG.pixelSize, CONFIG.pixelSize, CONFIG.pixelSize);
+            ctx.fillRect(point.visualCoordinates.x * CONFIG.pixelSize, point.visualCoordinates.y * CONFIG.pixelSize, CONFIG.pixelSize, CONFIG.pixelSize);
         }
 
         if (debugMode) {
             if (Points.isUnused(point)) {
                 // draw a cross on unused points
                 ctx.beginPath();
-                ctx.moveTo(point.coordinates.x * CONFIG.pixelSize, point.coordinates.y * CONFIG.pixelSize);
-                ctx.lineTo((point.coordinates.x + 1) * CONFIG.pixelSize, (point.coordinates.y + 1) * CONFIG.pixelSize);
-                ctx.moveTo((point.coordinates.x + 1) * CONFIG.pixelSize, point.coordinates.y * CONFIG.pixelSize);
-                ctx.lineTo(point.coordinates.x * CONFIG.pixelSize, (point.coordinates.y + 1) * CONFIG.pixelSize);
+                ctx.moveTo(point.visualCoordinates.x * CONFIG.pixelSize, point.visualCoordinates.y * CONFIG.pixelSize);
+                ctx.lineTo((point.visualCoordinates.x + 1) * CONFIG.pixelSize, (point.visualCoordinates.y + 1) * CONFIG.pixelSize);
+                ctx.moveTo((point.visualCoordinates.x + 1) * CONFIG.pixelSize, point.visualCoordinates.y * CONFIG.pixelSize);
+                ctx.lineTo(point.visualCoordinates.x * CONFIG.pixelSize, (point.visualCoordinates.y + 1) * CONFIG.pixelSize);
                 ctx.strokeStyle = 'rgba(0, 0, 0, 0.2)';
                 ctx.stroke();
             }

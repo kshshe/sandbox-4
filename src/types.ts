@@ -36,3 +36,13 @@ export enum EPointType {
     ConstantCold = 'constantCold',
     ConstantHot = 'constantHot',
 }
+
+export type TPoint = {
+    coordinates: TCoordinate
+    type: EPointType,
+    speed: TCoordinate,
+    data: Record<string, any>,
+    wasDeleted?: boolean
+    lastMoveOnIteration?: number
+    visualCoordinates?: TCoordinate
+}

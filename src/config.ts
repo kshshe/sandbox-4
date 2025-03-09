@@ -12,6 +12,7 @@ if (savedPixelSize === null) {
 
 export const CONFIG = {
     pixelSize: savedPixelSize,
+    movementSmoothness: 0.2, // Lower values = smoother but slower transitions
 } as const
 
 // Only for those that are not sand-like

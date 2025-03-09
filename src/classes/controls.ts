@@ -25,7 +25,8 @@ export class Controls {
         baseTemperature: Storage.get('Controls.baseTemperature', 20),
         brushSize: Storage.get('Controls.brushSize', 2),
         simulationSpeed: Storage.get('Controls.simulationSpeed', 1),
-        isPaused: Storage.get('Controls.isPaused', false)
+        isPaused: Storage.get('Controls.isPaused', false),
+        // don't forget to update initial state in controls.test.ts
     }
 
     private static subscribers: TSubscriber[] = []
