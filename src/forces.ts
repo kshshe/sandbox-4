@@ -102,12 +102,6 @@ const processFrame = () => {
         }
     }
 
-    if (Controls.getIsTemperatureEnabled()) {
-        TemperatureGrid.updateGridFromPoints()
-        TemperatureGrid.processTemperatureFrame()
-        TemperatureGrid.updatePointsFromGrid()
-    }
-
     Points.save()
     Points.shufflePoints()
     Storage.set('iteration', iteration)
@@ -117,11 +111,18 @@ let framesTimes = [] as number[]
 let frames = 0
 const availableTime = 1000 / 60
 let lastStatsUpdate = performance.now()
+let lastTemperatureUpdate = performance.now()
 export const startProcessing = async () => {
     let shouldWaitFor60FPS = true
     while (true) {
         const now = performance.now()
         processFrame()
+        if (now - lastTemperatureUpdate >= availableTime) {
+            TemperatureGrid.updateGridFromPoints()
+            TemperatureGrid.processTemperatureFrame()
+            TemperatureGrid.updatePointsFromGrid()
+            lastTemperatureUpdate = now
+        }
         const nowAfterProcess = performance.now()
         const elapsedTime = nowAfterProcess - now
         const remainingTime = !shouldWaitFor60FPS ? 0 : availableTime - elapsedTime
