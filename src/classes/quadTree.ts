@@ -5,9 +5,19 @@ import { Storage } from "./storage";
 import { POINTS_HEAT_CAPACITY } from "../config";
 import { TCoordinate } from "../types";
 
-// Threshold for when to subdivide or merge nodes
-const TEMPERATURE_DIFFERENCE_THRESHOLD = 5;
+// Temperature processing constants
 const MIN_SIZE = 4; // Minimum size of a quadtree node
+const TEMPERATURE_SHARE_FACTOR = 0.05;
+const AIR_SHARE_FACTOR = 0.08;
+const AIR_SHARE_MULTIPLIER = 1;
+
+// Neighbor coefficient constants
+const DIAGONAL_COEFFICIENT = 0.75;
+const NORMAL_COEFFICIENT = 1;
+const BOUNDARY_COEFFICIENT = 0.01;
+
+// Heat capacity constants
+const DEFAULT_HEAT_CAPACITY = 1;
 
 export class QuadTreeNode {
   x: number;
@@ -195,8 +205,6 @@ export class TemperatureQuadTree {
     if (!this.root) this.init();
     
     const baseTemperature = Controls.getBaseTemperature();
-    const temperatureShareFactor = 0.05;
-    const airShareFactor = 0.08;
     
     // Create a new tree for the updated temperatures
     // In a real implementation, we'd use a more efficient approach
@@ -204,7 +212,7 @@ export class TemperatureQuadTree {
     
     // Process all leaf nodes
     if (this.root) {
-      this.processNode(this.root, newTemperatures, baseTemperature, temperatureShareFactor, airShareFactor);
+      this.processNode(this.root, newTemperatures, baseTemperature, TEMPERATURE_SHARE_FACTOR, AIR_SHARE_FACTOR);
     }
     
     // Update the tree with new temperatures
@@ -285,7 +293,7 @@ export class TemperatureQuadTree {
       
       // Apply a stronger effect to move air temperature toward base temperature more quickly
       // Using a higher airShareFactor for faster convergence to base temperature
-      const temperatureToShareWithAir = temperatureDiff * airShareFactor * 2;
+      const temperatureToShareWithAir = temperatureDiff * airShareFactor * AIR_SHARE_MULTIPLIER;
       
       // Apply the adjustment
       newTemperature -= temperatureToShareWithAir;
@@ -332,7 +340,7 @@ export class TemperatureQuadTree {
       (neighbor.x !== node.x && neighbor.y !== node.y);
     
     // Base coefficient
-    let coefficient = isDiagonal ? 0.75 : 1;
+    let coefficient = isDiagonal ? DIAGONAL_COEFFICIENT : NORMAL_COEFFICIENT;
     
     // Check if the neighbor is outside bounds
     const bounds = Bounds.getBounds();
@@ -342,7 +350,7 @@ export class TemperatureQuadTree {
       neighbor.y < bounds.top || 
       neighbor.y + neighbor.size > bounds.bottom + 1
     ) {
-      coefficient = 0.01;
+      coefficient = BOUNDARY_COEFFICIENT;
     }
     
     // Apply heat capacity if there's a point
@@ -356,9 +364,9 @@ export class TemperatureQuadTree {
   // Get the heat capacity at a specific location
   private static getHeatCapacityAt(x: number, y: number): number {
     const point = Points.getPointByCoordinates({ x, y });
-    if (!point) return 1;
+    if (!point) return DEFAULT_HEAT_CAPACITY;
     
-    return POINTS_HEAT_CAPACITY[point.type] ?? 1;
+    return POINTS_HEAT_CAPACITY[point.type] ?? DEFAULT_HEAT_CAPACITY;
   }
 
   // Update all points with temperatures from the tree
