@@ -138,13 +138,22 @@ const drawPoints = () => {
     const deltaTime = Math.min(1, (currentTime - lastFrameTime) / 16.67); // Cap at 60fps equivalent
     lastFrameTime = currentTime;
     
-    // Update visual coordinates with interpolation factor
-    Points.updateVisualCoordinates(CONFIG.movementSmoothness * deltaTime);
+    // Update visual coordinates with interpolation factor if smooth movement is enabled
+    const isSmoothMovementEnabled = Controls.getIsSmoothMovementEnabled();
+    if (isSmoothMovementEnabled) {
+        Points.updateVisualCoordinates(CONFIG.movementSmoothness * deltaTime);
+    }
 
     previouslyUsedPixels.clear()
     points.forEach(point => {
         if (!point.visualCoordinates) {
             point.visualCoordinates = { ...point.coordinates };
+        }
+        
+        // If smooth movement is disabled, set visual coordinates to match actual coordinates
+        if (!isSmoothMovementEnabled) {
+            point.visualCoordinates.x = point.coordinates.x;
+            point.visualCoordinates.y = point.coordinates.y;
         }
         
         const key = `${Math.round(point.visualCoordinates.x)}:${Math.round(point.visualCoordinates.y)}`;

@@ -17,6 +17,7 @@ export class Controls {
         brushSize: number
         simulationSpeed: number
         isPaused: boolean
+        isSmoothMovementEnabled: boolean
     } = {
         maxSpeedMode: Storage.get('Controls.maxSpeedMode', isDev),
         debugMode: Storage.get('Controls.debugMode', false),
@@ -26,6 +27,7 @@ export class Controls {
         brushSize: Storage.get('Controls.brushSize', 2),
         simulationSpeed: Storage.get('Controls.simulationSpeed', 1),
         isPaused: Storage.get('Controls.isPaused', false),
+        isSmoothMovementEnabled: Storage.get('Controls.isSmoothMovementEnabled', true),
         // don't forget to update initial state in controls.test.ts
     }
 
@@ -119,5 +121,13 @@ export class Controls {
 
     public static setIsPaused(value: boolean) {
         this.setState('isPaused', value)
+    }
+
+    public static getIsSmoothMovementEnabled() {
+        return this.state.isSmoothMovementEnabled
+    }
+
+    public static setIsSmoothMovementEnabled(value: boolean) {
+        this.setState('isSmoothMovementEnabled', value)
     }
 }

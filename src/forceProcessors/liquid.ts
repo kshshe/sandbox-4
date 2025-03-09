@@ -12,19 +12,19 @@ type TSlot = {
 let SLOTS: TSlot[] = [
     {
         slot: Speed.rounded.left,
-        coefficient: 2,
+        coefficient: 2.4,
     },
     {
         slot: Speed.rounded.right,
-        coefficient: 2,
+        coefficient: 2.4,
     },
     {
         slot: Speed.rounded.bottomLeft,
-        coefficient: 1,
+        coefficient: 2,
     },
     {
         slot: Speed.rounded.bottomRight,
-        coefficient: 1,
+        coefficient: 2,
     },
     {
         slot: Speed.rounded.down,

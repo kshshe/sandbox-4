@@ -8,6 +8,7 @@ export const SettingsPanel: React.FC = () => {
   const [maxSpeedMode, setMaxSpeedMode] = useControls("maxSpeedMode");
   const [isTemperatureEnabled, setIsTemperatureEnabled] = useControls("isTemperatureEnabled");
   const [baseTemperature, setBaseTemperature] = useControls("baseTemperature");
+  const [isSmoothMovementEnabled, setIsSmoothMovementEnabled] = useControls("isSmoothMovementEnabled");
 
   React.useEffect(() => {
     if (!isOpened) {
@@ -31,10 +32,13 @@ export const SettingsPanel: React.FC = () => {
       if (e.key === "t") {
         setIsTemperatureEnabled(!isTemperatureEnabled);
       }
+      if (e.key === "s") {
+        setIsSmoothMovementEnabled(!isSmoothMovementEnabled);
+      }
     };
     window.addEventListener("keyup", handleKey);
     return () => window.removeEventListener("keyup", handleKey);
-  }, [isDebugMode, maxSpeedMode, isTemperatureEnabled]);
+  }, [isDebugMode, maxSpeedMode, isTemperatureEnabled, isSmoothMovementEnabled]);
 
   const button = (
     <button
@@ -80,6 +84,14 @@ export const SettingsPanel: React.FC = () => {
           />{" "}
           Temperature processing
         </label>
+        <label>
+          <input
+            type="checkbox"
+            checked={isSmoothMovementEnabled}
+            onChange={(e) => setIsSmoothMovementEnabled(e.target.checked)}
+          />{" "}
+          Smooth movement
+        </label>
         {isTemperatureEnabled && (
           <p>
             <label>Air temperature: {baseTemperature}°C</label>
@@ -99,6 +111,7 @@ export const SettingsPanel: React.FC = () => {
               setMaxSpeedMode(false);
               setIsTemperatureEnabled(false);
               setBaseTemperature(20);
+              setIsSmoothMovementEnabled(true);
               setIsOpened(false);
             }}
           >

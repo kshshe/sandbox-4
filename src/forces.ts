@@ -48,6 +48,12 @@ const processFrame = () => {
             point.visualCoordinates = { ...point.coordinates }
         }
 
+        // If smooth movement is disabled, update visual coordinates immediately
+        if (!Controls.getIsSmoothMovementEnabled()) {
+            point.visualCoordinates.x = point.coordinates.x
+            point.visualCoordinates.y = point.coordinates.y
+        }
+
         if (!isUnused || iteration % USE_POINT_EVERY_N_ITERATION === 0 && +index % 10 === 0) {
             const forcesList = forcesByType[point.type] || []
             for (const force of forcesList) {

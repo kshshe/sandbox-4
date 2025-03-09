@@ -100,8 +100,12 @@ export class Points {
         point.lastMoveOnIteration = Storage.get('iteration', 0)
         
         // Update visual coordinates to smoothly transition to new position
-        if (point.visualCoordinates && (point.coordinates.x !== coordinates.x || point.coordinates.y !== coordinates.y)) {
+        if (point.visualCoordinates && Controls.getIsSmoothMovementEnabled() && 
+            (point.coordinates.x !== coordinates.x || point.coordinates.y !== coordinates.y)) {
             point.visualCoordinates = { ...point.visualCoordinates }
+        } else {
+            // If smooth movement is disabled, update visual coordinates immediately
+            point.visualCoordinates = { ...coordinates }
         }
         
         point.coordinates = { ...coordinates }
@@ -200,6 +204,19 @@ export class Points {
     }
 
     static updateVisualCoordinates(interpolationFactor: number) {
+        // If smooth movement is disabled, snap all points to their actual positions
+        if (!Controls.getIsSmoothMovementEnabled()) {
+            for (const point of this._points) {
+                if (point.visualCoordinates) {
+                    point.visualCoordinates.x = point.coordinates.x
+                    point.visualCoordinates.y = point.coordinates.y
+                } else {
+                    point.visualCoordinates = { ...point.coordinates }
+                }
+            }
+            return
+        }
+        
         for (const point of this._points) {
             if (!point.visualCoordinates) {
                 point.visualCoordinates = { ...point.coordinates }
