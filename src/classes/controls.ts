@@ -15,13 +15,17 @@ export class Controls {
         drawingType: EPointType | 'eraser'
         baseTemperature: number
         brushSize: number
+        simulationSpeed: number
+        isPaused: boolean
     } = {
         maxSpeedMode: Storage.get('Controls.maxSpeedMode', isDev),
         debugMode: Storage.get('Controls.debugMode', false),
         isTemperatureEnabled: Storage.get('Controls.isTemperatureEnabled', true),
         drawingType: Storage.get('Controls.drawingType', EPointType.Water),
         baseTemperature: Storage.get('Controls.baseTemperature', 20),
-        brushSize: Storage.get('Controls.brushSize', 2)
+        brushSize: Storage.get('Controls.brushSize', 2),
+        simulationSpeed: Storage.get('Controls.simulationSpeed', 1),
+        isPaused: Storage.get('Controls.isPaused', false)
     }
 
     private static subscribers: TSubscriber[] = []
@@ -98,5 +102,21 @@ export class Controls {
 
     public static setIsTemperatureEnabled(value: boolean) {
         this.setState('isTemperatureEnabled', value)
+    }
+
+    public static getSimulationSpeed() {
+        return this.state.simulationSpeed
+    }
+
+    public static setSimulationSpeed(value: number) {
+        this.setState('simulationSpeed', value)
+    }
+
+    public static getIsPaused() {
+        return this.state.isPaused
+    }
+
+    public static setIsPaused(value: boolean) {
+        this.setState('isPaused', value)
     }
 }

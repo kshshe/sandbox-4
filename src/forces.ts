@@ -17,6 +17,14 @@ const MAX_UNUSED_SPEED = 0.3
 
 let iteration = Storage.get('iteration', 0)
 
+// Add a flag to track if we should process a single step
+let shouldProcessStep = false
+
+// Function to process a single step when paused
+export const processStep = () => {
+    shouldProcessStep = true;
+}
+
 const processFrame = () => {
     const points = Points.getActivePoints()
 
@@ -116,13 +124,41 @@ export const startProcessing = async () => {
     let shouldWaitFor60FPS = true
     while (true) {
         const now = performance.now()
-        processFrame()
-        if (now - lastTemperatureUpdate >= availableTime) {
-            TemperatureGrid.updateGridFromPoints()
-            TemperatureGrid.processTemperatureFrame()
-            TemperatureGrid.updatePointsFromGrid()
-            lastTemperatureUpdate = now
+        
+        // Check if simulation is paused or if we should process a step
+        if (!Controls.getIsPaused() || shouldProcessStep) {
+            // Reset step flag
+            shouldProcessStep = false;
+            
+            // Get simulation speed (use 1 for step mode)
+            const simulationSpeed = Controls.getIsPaused() ? 1 : Controls.getSimulationSpeed();
+            
+            // Run the simulation based on speed setting
+            // For speeds < 1, we process frames less frequently
+            // For speeds > 1, we process multiple frames per cycle
+            if (simulationSpeed >= 1) {
+                // Process multiple frames for higher speeds
+                const framesToProcess = Controls.getIsPaused() ? 1 : Math.floor(simulationSpeed);
+                for (let i = 0; i < framesToProcess; i++) {
+                    processFrame();
+                }
+            } else {
+                // For slow motion, only process frames occasionally
+                // e.g., at speed 0.5, process every other frame
+                const shouldProcessThisFrame = Math.random() < simulationSpeed;
+                if (shouldProcessThisFrame) {
+                    processFrame();
+                }
+            }
+            
+            if (now - lastTemperatureUpdate >= availableTime) {
+                TemperatureGrid.updateGridFromPoints()
+                TemperatureGrid.processTemperatureFrame()
+                TemperatureGrid.updatePointsFromGrid()
+                lastTemperatureUpdate = now
+            }
         }
+        
         const nowAfterProcess = performance.now()
         const elapsedTime = nowAfterProcess - now
         const remainingTime = !shouldWaitFor60FPS ? 0 : availableTime - elapsedTime
@@ -141,6 +177,7 @@ export const startProcessing = async () => {
             const fps = 1000 / averageFrameTime
             Stats.setFps(fps)
             Stats.setAverageSpeed(Points.getActivePoints().reduce((acc, point) => acc + Math.abs(point.speed.x) + Math.abs(point.speed.y), 0) / Points.getActivePoints().length)
+            lastStatsUpdate = now
         }
     }
 }

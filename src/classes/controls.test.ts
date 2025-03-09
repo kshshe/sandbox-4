@@ -25,6 +25,8 @@ describe('Controls', () => {
       brushSize: 2,
       maxSpeedMode: false,
       isTemperatureEnabled: false,
+      simulationSpeed: 1,
+      isPaused: false,
     };
     Controls['subscribers'] = [];
   });
