@@ -1,7 +1,7 @@
 import { EPointType } from "../types";
 import { TForceProcessor } from ".";
 import { Points } from "../classes/points";
-
+import { Controls } from "../classes/controls";
 export const staticTemperature = (temperature: number): TForceProcessor => (point) => {
     point.data.temperature = temperature
 }
@@ -11,6 +11,10 @@ export const convertOnTemperature = (
     temperature: number,
     typeToConvert: EPointType
 ): TForceProcessor => (point) => {
+    if (!Controls.getIsTemperatureEnabled()) {
+        return
+    }
+
     if (!point.data.temperature) {
         point.data.temperature = 15
     }
