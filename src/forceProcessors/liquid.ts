@@ -13,13 +13,11 @@ let SLOTS = [
 ]
 
 const SLOTS_LENGTH = SLOTS.length
-const POSSIBLE_NEIGHBOURS_LENGTH = Speed.possibleNeighbours.length
 
 setInterval(() => {
     SLOTS = shake(SLOTS)
 }, 100)
 
-const SURFACE_TENSION_POWER = 0.0001
 const MOVEMENT_POWER = 0.02
 
 export const liquid: TForceProcessor = (point) => {
@@ -35,19 +33,6 @@ export const liquid: TForceProcessor = (point) => {
         const pointThere = Points.getPointByCoordinates(direction)
         if (!pointThere) {
             return
-        }
-    }
-
-    for (let i = 0; i < POSSIBLE_NEIGHBOURS_LENGTH; i++) {
-        const neighbourCoordinates = Speed.possibleNeighbours[i]
-        const neighbour = Points.getPointByCoordinates({
-            x: point.coordinates.x + neighbourCoordinates.x,
-            y: point.coordinates.y + neighbourCoordinates.y,
-        })
-        
-        if (!neighbour) {
-            point.speed.x -= neighbourCoordinates.x * SURFACE_TENSION_POWER
-            point.speed.y -= neighbourCoordinates.y * SURFACE_TENSION_POWER
         }
     }
 
