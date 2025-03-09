@@ -1,8 +1,7 @@
 import { EPointType } from "./types"
 import { Storage } from "./classes/storage";
-import { isDev } from "./utils/isDev";
 
-const TARGET_PIXELS = isDev ? 60_000 : 10_000
+const TARGET_PIXELS = 10_000
 let savedPixelSize = Storage.get('pixelSize', null as number | null)
 
 if (savedPixelSize === null) {

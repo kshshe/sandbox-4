@@ -16,9 +16,9 @@ export class Controls {
         baseTemperature: number
         brushSize: number
     } = {
-        maxSpeedMode: Storage.get('Controls.maxSpeedMode', !isDev),
+        maxSpeedMode: Storage.get('Controls.maxSpeedMode', isDev),
         debugMode: Storage.get('Controls.debugMode', false),
-        isTemperatureEnabled: Storage.get('Controls.isTemperatureEnabled', false),
+        isTemperatureEnabled: Storage.get('Controls.isTemperatureEnabled', true),
         drawingType: Storage.get('Controls.drawingType', EPointType.Water),
         baseTemperature: Storage.get('Controls.baseTemperature', 20),
         brushSize: Storage.get('Controls.brushSize', 2)
