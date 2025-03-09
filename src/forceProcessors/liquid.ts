@@ -25,7 +25,19 @@ const MOVEMENT_POWER = 0.02
 export const liquid: TForceProcessor = (point) => {
     const roundedSpeed = Speed.getRoundedSpeed(point, true, SLOTS)
     const pointBySpeed = Points.getPointBySpeed(point, roundedSpeed)
-    
+
+    if (point.speed.x > 0 && point.speed.y > 0) {
+        const direction = {
+            x: point.coordinates.x + roundedSpeed.x,
+            y: point.coordinates.y + roundedSpeed.y,
+        }
+
+        const pointThere = Points.getPointByCoordinates(direction)
+        if (!pointThere) {
+            return
+        }
+    }
+
     for (let i = 0; i < POSSIBLE_NEIGHBOURS_LENGTH; i++) {
         const neighbourCoordinates = Speed.possibleNeighbours[i]
         const neighbour = Points.getPointByCoordinates({

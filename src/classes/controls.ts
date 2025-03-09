@@ -1,4 +1,5 @@
 import { EPointType } from "../types"
+import { isDev } from "../utils/isDev"
 import { Storage } from "./storage"
 
 type TSubscriber = {
@@ -15,7 +16,7 @@ export class Controls {
         baseTemperature: number
         brushSize: number
     } = {
-        maxSpeedMode: Storage.get('Controls.maxSpeedMode', false),
+        maxSpeedMode: Storage.get('Controls.maxSpeedMode', !isDev),
         debugMode: Storage.get('Controls.debugMode', false),
         isTemperatureEnabled: Storage.get('Controls.isTemperatureEnabled', false),
         drawingType: Storage.get('Controls.drawingType', EPointType.Water),
