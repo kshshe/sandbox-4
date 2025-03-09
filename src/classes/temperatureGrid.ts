@@ -3,6 +3,7 @@ import { Bounds } from "./bounds";
 import { Controls } from "./controls";
 import { Points } from "./points";
 import { Storage } from "./storage";
+import { TemperatureQuadTree } from "./quadTree";
 
 export class TemperatureGrid {
     private static temperatureGrid: number[][] = Storage.get("TemperatureGrid.temperatureGrid", []);
@@ -12,6 +13,7 @@ export class TemperatureGrid {
     }
 
     public static initGrid() {
+        // Initialize both the traditional grid and the quadtree
         const baseTemperature = Controls.getBaseTemperature();
         const bounds = Bounds.getBounds();
         this.temperatureGrid = [];
@@ -20,6 +22,9 @@ export class TemperatureGrid {
                 this.setTemperatureOnPoint(x, y, baseTemperature);
             }
         }
+        
+        // Initialize the quadtree
+        TemperatureQuadTree.init();
     }
 
     private static setTemperatureOnPoint(x: number, y: number, temperature: number) {
@@ -31,19 +36,23 @@ export class TemperatureGrid {
 
     public static updateGridFromPoints() {
         const baseTemperature = Controls.getBaseTemperature();
-        const points = [...Points.getPoints()]
+        const points = [...Points.getPoints()];
 
         for (const point of points) {
             const x = point.coordinates.x;
             const y = point.coordinates.y;
             this.setTemperatureOnPoint(x, y, point.data.temperature ?? baseTemperature);
         }
+        
+        // Update the quadtree from points
+        TemperatureQuadTree.updateFromPoints();
+        
         this.save();
     }
 
     public static getTemperatureOnPoint(x: number, y: number): number {
-        const baseTemperature = Controls.getBaseTemperature();
-        return this.temperatureGrid[x]?.[y] ?? baseTemperature;
+        // Use the quadtree for temperature lookup
+        return TemperatureQuadTree.getTemperatureAt(x, y);
     }
 
     private static getNeighbourConfig(x, y, isDiagonal) {
@@ -63,71 +72,24 @@ export class TemperatureGrid {
     }
 
     public static processTemperatureFrame() {
-        const baseTemperature = Controls.getBaseTemperature();
+        // Use the quadtree for temperature processing
+        TemperatureQuadTree.processTemperatureFrame();
+        
+        // For backward compatibility, we'll also update our traditional grid
+        // from the quadtree results
+        this.updateTraditionalGridFromQuadTree();
+    }
+    
+    private static updateTraditionalGridFromQuadTree() {
         const bounds = Bounds.getBounds();
         
-        // Pre-calculate diagonal coefficient
-        const temperatureShareFactor = 0.05;
-        const airShareFactor = 0.01;
-        
-        // Use typed arrays for better performance
-        const width = this.temperatureGrid.length;
-        if (width === 0) return;
-        
-        // Find the maximum column length to determine grid height
-        let height = 0;
-        for (let i = 0; i < width; i++) {
-            if (this.temperatureGrid[i]) {
-                height = Math.max(height, this.temperatureGrid[i].length);
-            }
-        }
-        if (height === 0) return;
-        
-        // Create a new grid with the same dimensions
-        const newTemperatureGrid: number[][] = new Array(width);
-        for (let i = 0; i < width; i++) {
-            newTemperatureGrid[i] = new Array(height);
-        }
-        
-        // Process the grid using numerical indices for better performance
-        for (let x = 0; x < width; x++) {
-            const row = this.temperatureGrid[x];
-            if (!row) continue;
-            
-            for (let y = 0; y < row.length; y++) {
-                const currentTemperature = row[y];
-                if (currentTemperature === undefined) continue;
-                
-                const hasPointHere = Points.getPointByCoordinates({ x, y });
-                const heatCapacity = hasPointHere ? POINTS_HEAT_CAPACITY[hasPointHere.type] ?? 1 : 1;
-                
-                // Calculate temperature from neighbors
-                let temperatureSum = 0;
-                let coefficientSum = 0;
-                
-                // Process all neighbors
-                const neighborData = this.processNeighbors(x, y, bounds);
-                temperatureSum = neighborData.temperatureSum;
-                coefficientSum = neighborData.coefficientSum;
-                
-                const averageTemperature = temperatureSum / coefficientSum;
-                const diff = averageTemperature - currentTemperature;
-                const temperatureToShare = diff * temperatureShareFactor / heatCapacity;
-                let newTemperature = currentTemperature + temperatureToShare;
-                
-                // Apply air temperature adjustment for non-point cells
-                if (!hasPointHere) {
-                    const temperatureDiff = newTemperature - baseTemperature;
-                    const temperatureToShareWithAir = temperatureDiff * airShareFactor;
-                    newTemperature -= temperatureToShareWithAir;
-                }
-                
-                newTemperatureGrid[x][y] = newTemperature;
+        for (let x = bounds.left; x <= bounds.right; x++) {
+            for (let y = bounds.top; y <= bounds.bottom; y++) {
+                const temperature = TemperatureQuadTree.getTemperatureAt(x, y);
+                this.setTemperatureOnPoint(x, y, temperature);
             }
         }
         
-        // Update the temperature grid with new values
-        this.temperatureGrid = newTemperatureGrid;
         this.save();
     }
     
@@ -179,6 +141,10 @@ export class TemperatureGrid {
     }
 
     public static updatePointsFromGrid() {
+        // Use the quadtree to update points
+        TemperatureQuadTree.updatePointsFromTree();
+        
+        // For backward compatibility, also update from our traditional grid
         const points = Points.getPoints();
 
         for (const point of points) {
