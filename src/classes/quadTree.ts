@@ -196,14 +196,16 @@ export class TemperatureQuadTree {
     
     const baseTemperature = Controls.getBaseTemperature();
     const temperatureShareFactor = 0.05;
-    const airShareFactor = 0.01;
+    const airShareFactor = 0.08;
     
     // Create a new tree for the updated temperatures
     // In a real implementation, we'd use a more efficient approach
     const newTemperatures = new Map<QuadTreeNode, number>();
     
     // Process all leaf nodes
-    this.processNode(this.root, newTemperatures, baseTemperature, temperatureShareFactor, airShareFactor);
+    if (this.root) {
+      this.processNode(this.root, newTemperatures, baseTemperature, temperatureShareFactor, airShareFactor);
+    }
     
     // Update the tree with new temperatures
     for (const [node, temp] of newTemperatures.entries()) {
@@ -278,8 +280,14 @@ export class TemperatureQuadTree {
     
     // Apply air temperature adjustment for non-point cells
     if (!hasPoint) {
+      // Calculate the difference from base temperature
       const temperatureDiff = newTemperature - baseTemperature;
-      const temperatureToShareWithAir = temperatureDiff * airShareFactor;
+      
+      // Apply a stronger effect to move air temperature toward base temperature more quickly
+      // Using a higher airShareFactor for faster convergence to base temperature
+      const temperatureToShareWithAir = temperatureDiff * airShareFactor * 2;
+      
+      // Apply the adjustment
       newTemperature -= temperatureToShareWithAir;
     }
     
