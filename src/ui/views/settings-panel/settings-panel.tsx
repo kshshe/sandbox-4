@@ -6,6 +6,7 @@ export const SettingsPanel: React.FC = () => {
   const [isOpened, setIsOpened] = React.useState(false);
   const [isDebugMode, setIsDebugMode] = useControls("debugMode");
   const [maxSpeedMode, setMaxSpeedMode] = useControls("maxSpeedMode");
+  const [isTemperatureEnabled, setIsTemperatureEnabled] = useControls("isTemperatureEnabled");
   const [baseTemperature, setBaseTemperature] = useControls("baseTemperature");
 
   React.useEffect(() => {
@@ -27,10 +28,13 @@ export const SettingsPanel: React.FC = () => {
       if (e.key === "m") {
         setMaxSpeedMode(!maxSpeedMode);
       }
+      if (e.key === "t") {
+        setIsTemperatureEnabled(!isTemperatureEnabled);
+      }
     };
     window.addEventListener("keyup", handleKey);
     return () => window.removeEventListener("keyup", handleKey);
-  }, [isDebugMode, maxSpeedMode]);
+  }, [isDebugMode, maxSpeedMode, isTemperatureEnabled]);
 
   const button = (
     <button
@@ -68,20 +72,32 @@ export const SettingsPanel: React.FC = () => {
           />{" "}
           Max speed mode
         </label>
-        <p>
-          <label>Air temperature: {baseTemperature}°C</label>
+        <label>
           <input
-            type="range"
-            min={-200}
-            max={200}
-            value={baseTemperature}
-            onChange={(e) => setBaseTemperature(+e.target.value)}
-          />
-        </p>
+            type="checkbox"
+            checked={isTemperatureEnabled}
+            onChange={(e) => setIsTemperatureEnabled(e.target.checked)}
+          />{" "}
+          Temperature processing
+        </label>
+        {isTemperatureEnabled && (
+          <p>
+            <label>Air temperature: {baseTemperature}°C</label>
+            <input
+              type="range"
+              min={-200}
+              max={200}
+              value={baseTemperature}
+              onChange={(e) => setBaseTemperature(+e.target.value)}
+            />
+          </p>
+        )}
         <p>
           <button
             onClick={() => {
               setIsDebugMode(false);
+              setMaxSpeedMode(false);
+              setIsTemperatureEnabled(false);
               setBaseTemperature(20);
               setIsOpened(false);
             }}

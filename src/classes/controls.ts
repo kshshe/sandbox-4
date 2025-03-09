@@ -10,12 +10,14 @@ export class Controls {
     static state: {
         debugMode: boolean
         maxSpeedMode: boolean
+        isTemperatureEnabled: boolean
         drawingType: EPointType | 'eraser'
         baseTemperature: number
         brushSize: number
     } = {
         maxSpeedMode: Storage.get('Controls.maxSpeedMode', false),
         debugMode: Storage.get('Controls.debugMode', false),
+        isTemperatureEnabled: Storage.get('Controls.isTemperatureEnabled', false),
         drawingType: Storage.get('Controls.drawingType', EPointType.Water),
         baseTemperature: Storage.get('Controls.baseTemperature', 20),
         brushSize: Storage.get('Controls.brushSize', 2)
@@ -87,5 +89,13 @@ export class Controls {
 
     public static setBaseTemperature(value: number) {
         this.setState('baseTemperature', value)
+    }
+
+    public static getIsTemperatureEnabled() {
+        return this.state.isTemperatureEnabled
+    }
+
+    public static setIsTemperatureEnabled(value: boolean) {
+        this.setState('isTemperatureEnabled', value)
     }
 }

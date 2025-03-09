@@ -226,12 +226,14 @@ export const Metrics: React.FC = () => {
         })}
       </div>
       <LoadMeter />
-      <TemperatureMap />
+      {Controls.getIsTemperatureEnabled() && <TemperatureMap />}
       <ProcessedPointsMeter />
       <div className={styles.hint}>
         <strong>d</strong> - debug mode {Controls.getDebugMode() && "(✔️)"}
         <br />
         <strong>m</strong> - ∞ FPS mode {Controls.getMaxSpeedMode() && "(✔️)"}
+        <br />
+        <strong>t</strong> - temp {Controls.getIsTemperatureEnabled() && "(✔️)"}
         <br />
         <a href="https://t.me/kshshe" target="_blank" rel="noreferrer">
           developer

@@ -67,9 +67,6 @@ export class TemperatureGrid {
         const bounds = Bounds.getBounds();
         
         // Pre-calculate diagonal coefficient
-        const diagonalCoefficient = 0.75;
-        const normalCoefficient = 1;
-        const boundaryCoefficient = 0.01;
         const temperatureShareFactor = 0.05;
         const airShareFactor = 0.01;
         

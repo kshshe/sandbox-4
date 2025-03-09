@@ -102,9 +102,11 @@ const processFrame = () => {
         }
     }
 
-    TemperatureGrid.updateGridFromPoints()
-    TemperatureGrid.processTemperatureFrame()
-    TemperatureGrid.updatePointsFromGrid()
+    if (Controls.getIsTemperatureEnabled()) {
+        TemperatureGrid.updateGridFromPoints()
+        TemperatureGrid.processTemperatureFrame()
+        TemperatureGrid.updatePointsFromGrid()
+    }
 
     Points.save()
     Points.shufflePoints()
