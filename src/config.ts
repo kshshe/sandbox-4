@@ -12,7 +12,7 @@ if (savedPixelSize === null) {
 
 export const CONFIG = {
     pixelSize: savedPixelSize,
-    movementSmoothness: 0.02
+    movementSmoothness: 1 / 60
 } as const
 
 // Only for those that are not sand-like
