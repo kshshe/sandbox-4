@@ -13,7 +13,7 @@ import { incrementVirusSteps } from './forceProcessors/virus'
 
 const MAX_SPEED = 6
 const MAX_UNUSED_ITERATIONS = 50
-const USE_POINT_EVERY_N_ITERATION = MAX_UNUSED_ITERATIONS
+const USE_POINT_EVERY_N_ITERATION = MAX_UNUSED_ITERATIONS * 2
 const MAX_UNUSED_SPEED = 0.3
 
 let iteration = Storage.get('iteration', 0)
