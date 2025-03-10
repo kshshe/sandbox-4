@@ -20,7 +20,7 @@ export const drawPoints = () => {
 
     // Calculate time since last frame for smooth interpolation
     const currentTime = performance.now();
-    const timeElapsed = currentTime - lastFrameTime;
+    const timeElapsed = (currentTime - lastFrameTime) * Controls.getSimulationSpeed();
     lastFrameTime = currentTime;
     
     // Update visual coordinates with interpolation factor if smooth movement is enabled
