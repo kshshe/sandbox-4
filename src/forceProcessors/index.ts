@@ -153,7 +153,6 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
         staticForce,
     ],
     [EPointType.Virus]: [
-        ...BASIC_FORCES,
         virus,
     ],
     [EPointType.Heal]: [

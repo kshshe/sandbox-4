@@ -13,12 +13,14 @@ export const heal: TForceProcessor = (point) => {
             neighbor.type = EPointType.Heal;
             point.data.lastHealType = point.data.lastHealType ?? neighbor.data.originalType;
             Points.markNeighboursAsUsed(neighbor);
+            Points.markPointAsUsed(point);
         }
     }
     
     if (!hasVirusNearby) {
+        Points.markPointAsUsed(point);
         point.data.stepsSinceLastHeal = (point.data.stepsSinceLastHeal ?? 0) + 1;
-        if (point.data.stepsSinceLastHeal > 100) {
+        if (point.data.stepsSinceLastHeal > 400) {
             if (point.data.lastHealType) {
                 point.type = point.data.lastHealType;
                 point.data.lastHealType = undefined;

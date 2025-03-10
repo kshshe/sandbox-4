@@ -16,34 +16,6 @@ export const TimeControls: React.FC = () => {
     { value: 4, label: "4x" }
   ];
 
-  // Handle keyboard shortcuts
-  React.useEffect(() => {
-    const onKeyUp = (e: KeyboardEvent) => {
-      // Space to toggle pause
-      if (e.key === "p" && !e.ctrlKey && !e.altKey && !e.metaKey) {
-        setIsPaused(!isPaused);
-      }
-      
-      // Number keys 1-5 for speed presets
-      if (e.key >= "1" && e.key <= "5" && !e.ctrlKey && !e.altKey && !e.metaKey) {
-        const index = parseInt(e.key) - 1;
-        if (index >= 0 && index < speedOptions.length) {
-          setSimulationSpeed(speedOptions[index].value);
-        }
-      }
-      
-      // Right arrow key for step when paused
-      if (e.key === "ArrowRight" && isPaused) {
-        processStep();
-      }
-    };
-    
-    window.addEventListener("keyup", onKeyUp);
-    return () => {
-      window.removeEventListener("keyup", onKeyUp);
-    };
-  }, [isPaused, setIsPaused, setSimulationSpeed, speedOptions]);
-
   return (
     <div className={styles.timeControls}>
       <div className={styles.controlsRow}>

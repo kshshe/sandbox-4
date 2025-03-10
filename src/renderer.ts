@@ -153,6 +153,10 @@ export const drawPoints = () => {
 const updateStats = () => {
     const stats = document.querySelector('.stats') as HTMLDivElement;
     if (frame++ % 20 === 0) {
+        const pointsGroupedByType = Points.getPoints().reduce((acc, point) => {
+            acc[point.type] = (acc[point.type] || 0) + 1;
+            return acc;
+        }, {} as Record<EPointType, number>)
         stats.innerHTML = [
             `Frame: ${(Math.round(Stats.data.elapsedTime * 10) / 10).toFixed(1)} ms`,
             hoveredPoint && `${hoveredPoint.type}`,
@@ -161,6 +165,10 @@ const updateStats = () => {
             hoveredPoint && hoveredPoint.data?.charge && `Charge: ${Math.round(hoveredPoint.data.charge * 10) / 10}`,
             hoveredCoordinates && `Coordinates: ${hoveredCoordinates.x}:${hoveredCoordinates.y}`,
             hoveredCoordinates && `Temperature: ${Math.round(TemperatureGrid.getTemperatureOnPoint(hoveredCoordinates.x, hoveredCoordinates.y))} °C`,
+            Object.entries(pointsGroupedByType)
+                .sort((a, b) => b[1] - a[1])
+                .map(([type, count]) => `${type}: ${count}`)
+                .join('<br>')
         ]
             .filter(Boolean)
             .join('<br>');

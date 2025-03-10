@@ -17,5 +17,4 @@ export const CANT_BE_UNSED: {
     [EPointType.Electricity_Ground]: true,
     [EPointType.Electricity_Spark]: true,
     [EPointType.Electricity_Source]: true,
-    [EPointType.Virus]: true,
 } 

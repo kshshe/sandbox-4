@@ -8,6 +8,7 @@ const POINTS_TO_IGNORE = {
     [EPointType.Clone]: true,
     [EPointType.Virus]: true,
     [EPointType.Border]: true,
+    [EPointType.Heal]: true,
 }
 
 export const virus: TForceProcessor = (point) => {
@@ -18,8 +19,10 @@ export const virus: TForceProcessor = (point) => {
         if (POINTS_TO_IGNORE[neighbor.type]) {
             continue;
         }
+
+        Points.markPointAsUsed(point);
         
-        if (random() < 0.003) {
+        if (random() < 0.01) {
             neighbor.data.originalType = neighbor.type;
             neighbor.type = EPointType.Virus;
             Points.markNeighboursAsUsed(neighbor);
