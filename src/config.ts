@@ -12,7 +12,8 @@ if (savedPixelSize === null) {
 
 export const CONFIG = {
     pixelSize: savedPixelSize,
-    movementSmoothness: 1 / 60
+    movementSmoothness: 1 / 60,
+    colorVariation: 0.4
 } as const
 
 // Only for those that are not sand-like
@@ -39,39 +40,37 @@ export const POINTS_CAN_ACCEPT_ELECTRICITY: {
     [EPointType.Electricity_Ground]: true,
 }
 
-export const POINS_COLORS: Record<EPointType, string> = {
-    [EPointType.Water]: 'blue',
-    [EPointType.Sand]: '#ffcc00',
-    [EPointType.Border]: '#d3d3d3',
-    [EPointType.Stone]: 'gray',
-    [EPointType.StaticStone]: 'gray',
-    [EPointType.Fire]: 'red',
-    [EPointType.FireEmitter]: 'red',
-    [EPointType.IceFire]: 'lightblue',
-    [EPointType.Bomb]: 'black',
-    [EPointType.Ice]: 'lightblue',
-    [EPointType.Steam]: 'lightgray',
-    [EPointType.Clone]: 'green',
-    [EPointType.Gas]: 'lightgray',
-    [EPointType.Lava]: 'red',
-    [EPointType.Wood]: '#8b4513',
-    [EPointType.BurningWood]: 'red',
-    [EPointType.Dynamite]: '#ff4444',
-    [EPointType.LiquidGas]: '#00ccff',
-    [EPointType.Foam]: '#f0e68c',
-    [EPointType.Metal]: '#c0c0c0',
-    [EPointType.MoltenMetal]: '#ff3333',
-    [EPointType.Electricity_Ground]: '#a0a0a0',
-    [EPointType.Electricity_Spark]: '#ffff00',
-    [EPointType.Electricity_Source]: '#ffff00',
-
-    [EPointType.ConstantCold]: 'blue',
-    [EPointType.ConstantHot]: 'red',
-
-    [EPointType.Void]: 'black',
-    [EPointType.Virus]: 'purple',
-    [EPointType.Heal]: 'lime',
-    [EPointType.Acid]: '#00ff00',
+export const POINTS_COLORS: Record<EPointType, { r: number, g: number, b: number }> = {
+    [EPointType.Water]: { r: 0, g: 0, b: 255 },             // blue
+    [EPointType.Sand]: { r: 255, g: 204, b: 0 },            // #ffcc00
+    [EPointType.Border]: { r: 211, g: 211, b: 211 },        // #d3d3d3
+    [EPointType.Stone]: { r: 128, g: 128, b: 128 },         // gray
+    [EPointType.StaticStone]: { r: 128, g: 128, b: 128 },   // gray
+    [EPointType.Fire]: { r: 255, g: 0, b: 0 },              // red
+    [EPointType.FireEmitter]: { r: 255, g: 0, b: 0 },       // red
+    [EPointType.IceFire]: { r: 173, g: 216, b: 230 },       // lightblue
+    [EPointType.Bomb]: { r: 0, g: 0, b: 0 },                // black
+    [EPointType.Ice]: { r: 173, g: 216, b: 230 },           // lightblue
+    [EPointType.Steam]: { r: 211, g: 211, b: 211 },         // lightgray
+    [EPointType.Clone]: { r: 0, g: 128, b: 0 },             // green
+    [EPointType.Gas]: { r: 211, g: 211, b: 211 },           // lightgray
+    [EPointType.Lava]: { r: 255, g: 0, b: 0 },              // red
+    [EPointType.Wood]: { r: 139, g: 69, b: 19 },            // #8b4513
+    [EPointType.BurningWood]: { r: 255, g: 0, b: 0 },       // red
+    [EPointType.Dynamite]: { r: 255, g: 68, b: 68 },        // #ff4444
+    [EPointType.LiquidGas]: { r: 0, g: 204, b: 255 },       // #00ccff
+    [EPointType.Foam]: { r: 240, g: 230, b: 140 },          // #f0e68c
+    [EPointType.Metal]: { r: 192, g: 192, b: 192 },         // #c0c0c0
+    [EPointType.MoltenMetal]: { r: 255, g: 51, b: 51 },     // #ff3333
+    [EPointType.Electricity_Ground]: { r: 160, g: 160, b: 160 }, // #a0a0a0
+    [EPointType.Electricity_Spark]: { r: 255, g: 255, b: 0 },    // #ffff00
+    [EPointType.Electricity_Source]: { r: 255, g: 255, b: 0 },   // #ffff00
+    [EPointType.ConstantCold]: { r: 0, g: 0, b: 255 },      // blue
+    [EPointType.ConstantHot]: { r: 255, g: 0, b: 0 },       // red
+    [EPointType.Void]: { r: 0, g: 0, b: 0 },                // black
+    [EPointType.Virus]: { r: 0, g: 255, b: 0 },             // green
+    [EPointType.Heal]: { r: 0, g: 255, b: 255 },            // cyan
+    [EPointType.Acid]: { r: 0, g: 255, b: 0 }               // green
 }
 
 export const CANT_BE_UNSED: {
@@ -233,4 +232,17 @@ export const POINTS_SHORTCUTS: {
 
 export const REVERSED_POINTS_SHORTCUTS: {
     [key in EPointType | 'eraser']?: string
-} = Object.fromEntries(Object.entries(POINTS_SHORTCUTS).map(([key, value]) => [value, key])) 
+} = Object.fromEntries(Object.entries(POINTS_SHORTCUTS).map(([key, value]) => [value, key]))
+
+// Apply color variation to RGB values
+export const getVariedColor = (type: EPointType, variation: number): string => {
+    const baseColor = POINTS_COLORS[type]
+    const factor = 1 + variation * 0.2 // Scale the variation to be subtle (±20%)
+    
+    // Apply the variation and clamp values between 0-255
+    const r = Math.min(255, Math.max(0, Math.round(baseColor.r * factor)))
+    const g = Math.min(255, Math.max(0, Math.round(baseColor.g * factor)))
+    const b = Math.min(255, Math.max(0, Math.round(baseColor.b * factor)))
+    
+    return `rgb(${r}, ${g}, ${b})`
+} 

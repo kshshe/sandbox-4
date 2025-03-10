@@ -1,4 +1,4 @@
-import { CONFIG, POINS_COLORS } from "./config";
+import { CONFIG, POINTS_COLORS, getVariedColor } from "./config";
 import { Points } from "./classes/points";
 import { Controls } from "./classes/controls";
 import { Bounds } from "./classes/bounds";
@@ -43,7 +43,15 @@ export const drawPoints = () => {
         
         const key = `${Math.round(point.visualCoordinates.x)}:${Math.round(point.visualCoordinates.y)}`;
         const thereIsPointAlready = previouslyUsedPixels.has(key);
-        ctx.fillStyle = POINS_COLORS[point.type];
+        
+        // Use varied color if colorVariation is set, otherwise use the default color
+        if (point.colorVariation !== undefined) {
+            ctx.fillStyle = getVariedColor(point.type, point.colorVariation * CONFIG.colorVariation);
+        } else {
+            const color = POINTS_COLORS[point.type];
+            ctx.fillStyle = `rgb(${color.r}, ${color.g}, ${color.b})`;
+        }
+        
         if (debugMode && thereIsPointAlready) {
             ctx.fillStyle = 'red';
             previouslyUsedPixels.add(key);

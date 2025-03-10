@@ -14,6 +14,7 @@ export type TPoint = {
     wasDeleted?: boolean
     lastMoveOnIteration?: number
     visualCoordinates?: TCoordinate
+    colorVariation?: number
 }
 
 export class Points {
@@ -118,7 +119,8 @@ export class Points {
                 temperature: INITIAL_TEMPERATURE[point.type] ?? Controls.getBaseTemperature()
             },
             ...point,
-            visualCoordinates: { ...point.coordinates }
+            visualCoordinates: { ...point.coordinates },
+            colorVariation: Math.random() * 2 - 1 // Random value between -1 and 1
         }
         this.setPointInIndex(point.coordinates, pointWithData)
         this._points.push(pointWithData)

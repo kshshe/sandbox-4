@@ -2,7 +2,7 @@ import React from "react";
 import { useControls } from "../../hooks/useControls";
 import styles from "./elements-panel.module.scss";
 import classNames from "classnames";
-import { POINS_COLORS, POINT_TYPE_ICON, POINTS_SHORTCUTS, REVERSED_POINTS_SHORTCUTS } from "../../../config";
+import { POINTS_COLORS, POINT_TYPE_ICON, POINTS_SHORTCUTS, REVERSED_POINTS_SHORTCUTS } from "../../../config";
 import { Tooltip } from 'react-tooltip'
 
 export const ElementsPanel: React.FC = () => {
@@ -75,26 +75,29 @@ export const ElementsPanel: React.FC = () => {
         e.stopPropagation();
       }}
     >
-      {Object.keys(POINT_TYPE_ICON).map((type) => (
-        <button
-          key={type}
-          className={styles.panelButton}
-          onClick={() => {
-            setDrawingType(type as any);
-            setIsOpened(false);
-          }}
-          style={{
-            // inset shadow by POINS_COLORS
-            boxShadow: `0 0 0 2px ${POINS_COLORS[type]}`,
-          }}
-          data-tooltip-id={`tooltip-${type}`}
-        >
-          {POINT_TYPE_ICON[type]}
-          {REVERSED_POINTS_SHORTCUTS[type] && (
-            <span className={styles.shortcut}>{REVERSED_POINTS_SHORTCUTS[type]}</span>
-          )}
-        </button>
-      ))}
+      {Object.keys(POINT_TYPE_ICON).map((type) => {
+        const color = POINTS_COLORS[type] ?? { r: 0, g: 0, b: 0 }
+        return (
+          <button
+            key={type}
+            className={styles.panelButton}
+            onClick={() => {
+              setDrawingType(type as any);
+              setIsOpened(false);
+            }}
+            style={{
+              // inset shadow by POINTS_COLORS
+              boxShadow: `0 0 0 2px rgb(${color.r}, ${color.g}, ${color.b})`,
+            }}
+            data-tooltip-id={`tooltip-${type}`}
+          >
+            {POINT_TYPE_ICON[type]}
+            {REVERSED_POINTS_SHORTCUTS[type] && (
+              <span className={styles.shortcut}>{REVERSED_POINTS_SHORTCUTS[type]}</span>
+            )}
+          </button>
+        )
+      })}
       {Object.keys(POINT_TYPE_ICON).map((type) => (
         <Tooltip
           key={type}
