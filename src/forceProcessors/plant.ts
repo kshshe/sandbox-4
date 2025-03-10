@@ -52,6 +52,7 @@ export const plant: TForceProcessor = (point: TPoint) => {
         return;
     }
 
+    Points.markPointAsUsed(point);
     if (Math.random() < 0.1) {
         const availablePoints = possibleGrowthPoints.filter(coordinates => 
             !Points.getPointByCoordinates(coordinates)
