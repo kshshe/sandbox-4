@@ -14,6 +14,7 @@ export const heal: TForceProcessor = (point) => {
             point.data.lastHealType = point.data.lastHealType ?? neighbor.data.originalType;
             Points.markNeighboursAsUsed(neighbor);
             Points.markPointAsUsed(point);
+            point.data.stepsSinceLastHeal = 0;
         }
     }
     
