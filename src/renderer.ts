@@ -20,13 +20,13 @@ export const drawPoints = () => {
 
     // Calculate time since last frame for smooth interpolation
     const currentTime = performance.now();
-    const deltaTime = Math.min(1, (currentTime - lastFrameTime) / 16.67); // Cap at 60fps equivalent
+    const timeElapsed = currentTime - lastFrameTime;
     lastFrameTime = currentTime;
     
     // Update visual coordinates with interpolation factor if smooth movement is enabled
     const isSmoothMovementEnabled = Controls.getIsSmoothMovementEnabled();
     if (isSmoothMovementEnabled) {
-        Points.updateVisualCoordinates(CONFIG.movementSmoothness * deltaTime);
+        Points.updateVisualCoordinates(CONFIG.movementSmoothness * timeElapsed);
     }
 
     previouslyUsedPixels.clear();
@@ -48,7 +48,7 @@ export const drawPoints = () => {
             ctx.fillStyle = 'red';
             previouslyUsedPixels.add(key);
         }
-        
+
         // Use visual coordinates for rendering
         ctx.fillRect(
             point.visualCoordinates.x * CONFIG.pixelSize, 

@@ -99,15 +99,6 @@ export class Points {
         this.unusedPoints.delete(point)
         point.lastMoveOnIteration = Storage.get('iteration', 0)
         
-        // Update visual coordinates to smoothly transition to new position
-        if (point.visualCoordinates && Controls.getIsSmoothMovementEnabled() && 
-            (point.coordinates.x !== coordinates.x || point.coordinates.y !== coordinates.y)) {
-            point.visualCoordinates = { ...point.visualCoordinates }
-        } else {
-            // If smooth movement is disabled, update visual coordinates immediately
-            point.visualCoordinates = { ...coordinates }
-        }
-        
         point.coordinates = { ...coordinates }
         this.coordinatesIndex[this.getIndexIndex(coordinates)] = point
     }
@@ -204,6 +195,8 @@ export class Points {
     }
 
     static updateVisualCoordinates(interpolationFactor: number) {
+        // @ts-ignore
+        window.lastUpdateVisualCoordinatesInterpolationFactor = interpolationFactor
         // If smooth movement is disabled, snap all points to their actual positions
         if (!Controls.getIsSmoothMovementEnabled()) {
             for (const point of this._points) {
@@ -226,9 +219,9 @@ export class Points {
             // Calculate distance between visual and actual coordinates
             const dx = point.coordinates.x - point.visualCoordinates.x
             const dy = point.coordinates.y - point.visualCoordinates.y
-            
+
             // If the distance is very small, snap to the actual position
-            if (Math.abs(dx) < 0.01 && Math.abs(dy) < 0.01) {
+            if (Math.abs(dx) < 0.0001 && Math.abs(dy) < 0.0001) {
                 point.visualCoordinates.x = point.coordinates.x
                 point.visualCoordinates.y = point.coordinates.y
                 continue

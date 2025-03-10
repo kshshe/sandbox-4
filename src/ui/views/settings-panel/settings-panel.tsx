@@ -32,9 +32,6 @@ export const SettingsPanel: React.FC = () => {
       if (e.key === "t") {
         setIsTemperatureEnabled(!isTemperatureEnabled);
       }
-      if (e.key === "s") {
-        setIsSmoothMovementEnabled(!isSmoothMovementEnabled);
-      }
     };
     window.addEventListener("keyup", handleKey);
     return () => window.removeEventListener("keyup", handleKey);
