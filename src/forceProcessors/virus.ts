@@ -37,8 +37,11 @@ export const virus: TForceProcessor = (point) => {
         }
     }
 
-    if (stepsSinceLastActivity > 20) {
+    if (neighbors.length < 8) {
         Points.markPointAsUsed(point);
+    }
+
+    if (stepsSinceLastActivity > 20) {
         const possibleDirections = Speed.possibleNeighbours;
         const randomDirection = possibleDirections[Math.floor(random() * possibleDirections.length)];
         const pointThere = Points.getPointByCoordinates({
