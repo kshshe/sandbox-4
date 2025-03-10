@@ -27,6 +27,7 @@ describe('Controls', () => {
       isTemperatureEnabled: false,
       simulationSpeed: 1,
       isPaused: false,
+      isSmoothMovementEnabled: true,
     };
     Controls['subscribers'] = [];
   });
