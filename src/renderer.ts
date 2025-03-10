@@ -166,6 +166,7 @@ const updateStats = () => {
             hoveredCoordinates && `Coordinates: ${hoveredCoordinates.x}:${hoveredCoordinates.y}`,
             hoveredCoordinates && `Temperature: ${Math.round(TemperatureGrid.getTemperatureOnPoint(hoveredCoordinates.x, hoveredCoordinates.y))} °C`,
             Object.entries(pointsGroupedByType)
+                .sort((a, b) => a[0].localeCompare(b[0]))
                 .sort((a, b) => b[1] - a[1])
                 .map(([type, count]) => `${type}: ${count}`)
                 .join('<br>')
