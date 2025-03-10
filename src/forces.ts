@@ -9,6 +9,7 @@ import { Storage } from './classes/storage'
 import { CANT_BE_UNSED } from './config'
 import { Bounds } from './classes/bounds'
 import { TemperatureGrid } from './classes/temperatureGrid'
+import { incrementVirusSteps } from './forceProcessors/virus'
 
 const MAX_SPEED = 6
 const MAX_UNUSED_ITERATIONS = 50
@@ -36,6 +37,7 @@ const processFrame = () => {
     } = Bounds.getBounds()
 
     iteration++
+    incrementVirusSteps()
     for (const index in points) {
         const point = points[index]
         const isUnused = Points.isUnused(point)

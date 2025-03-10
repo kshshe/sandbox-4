@@ -23,6 +23,7 @@ import { electricitySource } from "./electricitySource";
 import { virus } from "./virus";
 import { heal } from "./heal";
 import { acid } from "./acid";
+import { plant } from "./plant";
 
 export type TForceProcessor = (point: TPoint) => void
 
@@ -154,6 +155,7 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
     ],
     [EPointType.Virus]: [
         virus,
+        staticForce,
     ],
     [EPointType.Heal]: [
         ...BASIC_FORCES,
@@ -163,5 +165,16 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
         ...BASIC_FORCES,
         liquid,
         acid,
+    ],
+    [EPointType.Plant]: [
+        ...BASIC_FORCES,
+        staticForce,
+        plant,
+        convertOnTemperature('more', 400, EPointType.BurningWood),
+    ],
+    [EPointType.PlantSeed]: [
+        ...BASIC_FORCES,
+        plant,
+        convertOnTemperature('more', 400, EPointType.BurningWood),
     ],
 }

@@ -32,7 +32,8 @@ export enum EPointType {
     Virus = 'virus',
     Heal = 'heal',
     Acid = 'acid',
-
+    Plant = 'plant',
+    PlantSeed = 'plantSeed',
     ConstantCold = 'constantCold',
     ConstantHot = 'constantHot',
 }

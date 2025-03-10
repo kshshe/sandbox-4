@@ -30,5 +30,6 @@ export const POINT_TYPE_ICON: {
     [EPointType.Virus]: '🦠',
     [EPointType.Heal]: '💊',
     [EPointType.Acid]: '🧪',
+    [EPointType.PlantSeed]: '🌱',
     eraser: '🧽',
 } 

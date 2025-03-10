@@ -16,6 +16,8 @@ export const POINTS_WEIGHTS: Record<EPointType, number> = {
     [EPointType.Virus]: 1,
     [EPointType.Heal]: 1,
     [EPointType.Acid]: 1.2,
+    [EPointType.PlantSeed]: 1,
+    [EPointType.Plant]: 0,
 
     [EPointType.Electricity_Source]: Infinity,
     [EPointType.Electricity_Ground]: Infinity,

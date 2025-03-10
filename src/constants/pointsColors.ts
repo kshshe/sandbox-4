@@ -30,5 +30,7 @@ export const POINTS_COLORS: Record<EPointType, { r: number, g: number, b: number
     [EPointType.Void]: { r: 0, g: 0, b: 0 },                // black
     [EPointType.Virus]: { r: 128, g: 0, b: 128 },             // purple
     [EPointType.Heal]: { r: 0, g: 255, b: 255 },            // cyan
-    [EPointType.Acid]: { r: 0, g: 255, b: 0 }               // green
+    [EPointType.Acid]: { r: 0, g: 255, b: 0 },               // green
+    [EPointType.Plant]: { r: 0, g: 255, b: 0 },               // green
+    [EPointType.PlantSeed]: { r: 0, g: 255, b: 0 },               // green
 } 
