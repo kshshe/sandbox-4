@@ -19,7 +19,7 @@ export class Controls {
         isPaused: boolean
         isSmoothMovementEnabled: boolean
     } = {
-        maxSpeedMode: Storage.get('Controls.maxSpeedMode', isDev),
+        maxSpeedMode: Storage.get('Controls.maxSpeedMode', false),
         debugMode: Storage.get('Controls.debugMode', false),
         isTemperatureEnabled: Storage.get('Controls.isTemperatureEnabled', true),
         drawingType: Storage.get('Controls.drawingType', EPointType.Water),

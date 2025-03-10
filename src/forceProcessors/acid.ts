@@ -12,7 +12,7 @@ const POINTS_TO_IGNORE = {
 
 export const acid: TForceProcessor = (point) => {
     const neighbors = Points.getNeighbours(point);
-    let hasDissolvedSomething = false;
+    point.data.dissolvedCount = point.data.dissolvedCount || 0
     
     for (const neighbor of neighbors) {
         // Skip points that should be ignored
@@ -23,13 +23,13 @@ export const acid: TForceProcessor = (point) => {
         // Acid dissolves the neighbor and itself
         if (random() < 0.1) {
             Points.deletePoint(neighbor);
-            hasDissolvedSomething = true;
+            point.data.dissolvedCount++;
             break;
         }
     }
     
     // If acid dissolved something, it also gets consumed
-    if (hasDissolvedSomething) {
+    if (point.data.dissolvedCount > 4) {
         Points.deletePoint(point);
     }
 } 
