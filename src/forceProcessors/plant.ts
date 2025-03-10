@@ -22,15 +22,10 @@ export const plant: TForceProcessor = (point: TPoint) => {
         point.data.energy = Math.floor(Math.random() * (ENERGY_INITIAL.to - ENERGY_INITIAL.from)) + ENERGY_INITIAL.from;
     }
 
-    if (point.data.energy <= 0) {
+    if (point.data.energy <= -20) {
+        Points.deletePoint(point);
         return;
     }
-
-    const possibleGrowthPoints = [
-        { x: point.coordinates.x, y: point.coordinates.y - 1 },
-        { x: point.coordinates.x - 1, y: point.coordinates.y - 1 },
-        { x: point.coordinates.x + 1, y: point.coordinates.y - 1 }
-    ];
 
     const belowPoints = [
         { x: point.coordinates.x, y: point.coordinates.y + 1 },
@@ -41,8 +36,20 @@ export const plant: TForceProcessor = (point: TPoint) => {
     const pointBelow = belowPoints.map(coordinates => Points.getPointByCoordinates(coordinates)).filter(Boolean)[0];
 
     if (!pointBelow || !CAN_GROW_ON[pointBelow.type]) {
+        Points.markPointAsUsed(point)
+        point.data.energy -= 1;
         return;
     }
+
+    if (point.data.energy <= 0) {
+        return;
+    }
+
+    const possibleGrowthPoints = [
+        { x: point.coordinates.x, y: point.coordinates.y - 1 },
+        { x: point.coordinates.x - 1, y: point.coordinates.y - 1 },
+        { x: point.coordinates.x + 1, y: point.coordinates.y - 1 }
+    ];
 
     const isGrowthBlocked = possibleGrowthPoints.some(coordinates => 
         Points.getPointByCoordinates(coordinates)
