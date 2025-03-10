@@ -8,7 +8,7 @@ export const heal: TForceProcessor = (point) => {
     let hasVirusNearby = false;
     
     for (const neighbor of neighbors) {
-        if (neighbor.type === EPointType.Virus && random() < 0.1) {
+        if (neighbor.type === EPointType.Virus && random() < 0.25) {
             hasVirusNearby = true;
             neighbor.type = EPointType.Heal;
             point.data.lastHealType = point.data.lastHealType ?? neighbor.data.originalType;
