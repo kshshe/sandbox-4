@@ -95,22 +95,6 @@ const processFrame = () => {
                     })
                     Points.setPointInIndex(point.coordinates, point)
                 }
-
-                if (speedLength > 5) {
-                    for (const neighbourDirection of Speed.possibleNeighbours) {
-                        const neighbour = Points.getPointByCoordinates({
-                            x: point.coordinates.x + neighbourDirection.x,
-                            y: point.coordinates.y + neighbourDirection.y,
-                        })
-                        if (neighbour && neighbour.type !== EPointType.Border) {
-                            const diffX = point.coordinates.x - neighbour.coordinates.x
-                            const diffY = point.coordinates.y - neighbour.coordinates.y
-
-                            neighbour.speed.x -= diffX * 0.05
-                            neighbour.speed.y -= diffY * 0.05
-                        }
-                    }
-                }
             }
         }
 
