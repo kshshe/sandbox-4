@@ -37,7 +37,7 @@ export const virus: TForceProcessor = (point) => {
         }
     }
 
-    if (neighbors.length < 8) {
+    if (neighbors.length < 4) {
         Points.markPointAsUsed(point);
     }
 
