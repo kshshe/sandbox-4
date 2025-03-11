@@ -113,7 +113,7 @@ export const drawPoints = () => {
                 ctx.lineTo((point.visualCoordinates.x + 1) * CONFIG.pixelSize, (point.visualCoordinates.y + 1) * CONFIG.pixelSize);
                 ctx.moveTo((point.visualCoordinates.x + 1) * CONFIG.pixelSize, point.visualCoordinates.y * CONFIG.pixelSize);
                 ctx.lineTo(point.visualCoordinates.x * CONFIG.pixelSize, (point.visualCoordinates.y + 1) * CONFIG.pixelSize);
-                ctx.strokeStyle = 'rgba(0, 0, 0, 0.2)';
+                ctx.strokeStyle = 'rgba(0, 0, 0, 0.6)';
                 ctx.stroke();
             }
         }
