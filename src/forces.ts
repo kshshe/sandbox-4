@@ -87,9 +87,9 @@ const processFrame = () => {
                 const nearbyPoints = Points.getNeighbours(point)
                 const speedMagnitude = Math.sqrt(point.speed.x ** 2 + point.speed.y ** 2)
                 
-                if (speedMagnitude > 0.1 && nearbyPoints.length > 0) {
+                if (speedMagnitude > 0.3 && nearbyPoints.length > 0) {
                     // Calculate how much speed to share with neighbors
-                    const shareRatio = 0.15 // 15% of speed is shared with neighbors
+                    const shareRatio = 0.25
                     const speedToShare = {
                         x: point.speed.x * shareRatio,
                         y: point.speed.y * shareRatio
