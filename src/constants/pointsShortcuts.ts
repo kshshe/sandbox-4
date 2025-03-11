@@ -1,7 +1,7 @@
 import { EPointType } from "../types"
 
 export const POINTS_SHORTCUTS: {
-    [key: string]: EPointType | 'eraser'
+    [key: string]: EPointType | 'eraser' | 'heatTool' | 'coolTool'
 } = {
     w: EPointType.Water,
     s: EPointType.Sand,
@@ -14,8 +14,10 @@ export const POINTS_SHORTCUTS: {
     v: EPointType.Void,
     e: 'eraser',
     a: EPointType.Acid,
+    h: 'heatTool',
+    l: 'coolTool',
 }
 
 export const REVERSED_POINTS_SHORTCUTS: {
-    [key in EPointType | 'eraser']?: string
+    [key in EPointType | 'eraser' | 'heatTool' | 'coolTool']?: string
 } = Object.fromEntries(Object.entries(POINTS_SHORTCUTS).map(([key, value]) => [value, key])) 

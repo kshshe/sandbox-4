@@ -12,6 +12,10 @@ export let drawingX = 0;
 export let drawingY = 0;
 let drawingInterval: NodeJS.Timeout | null = null;
 
+// Temperature change amount per application
+const HEAT_AMOUNT = 20;
+const COOL_AMOUNT = -20;
+
 export const addListeners = (element: HTMLElement, events: string[], callback: (e: Event) => void) => {
     events.forEach(event => {
         element.addEventListener(event, callback);
@@ -56,6 +60,28 @@ export const initInteractions = () => {
                 });
                 return;
             }
+            
+            if (drawingType === 'heatTool' || drawingType === 'coolTool') {
+                const temperatureChange = drawingType === 'heatTool' ? HEAT_AMOUNT : COOL_AMOUNT;
+                neighboursAndSelf.forEach(({ x, y }) => {
+                    const pointOnThisPlace = Points.getPointByCoordinates({
+                        x: drawingX + x,
+                        y: drawingY + y
+                    });
+                    if (pointOnThisPlace) {
+                        // Initialize temperature data if it doesn't exist
+                        if (!pointOnThisPlace.data.temperature) {
+                            pointOnThisPlace.data.temperature = Controls.getBaseTemperature();
+                        }
+                        // Apply temperature change
+                        pointOnThisPlace.data.temperature += temperatureChange;
+                        // Mark the point as used so it gets processed in the simulation
+                        Points.markPointAsUsed(pointOnThisPlace);
+                    }
+                });
+                return;
+            }
+            
             neighboursAndSelf.forEach(({ x, y }) => {
                 const pointThere = points.find(point => point.coordinates.x === drawingX + x && point.coordinates.y === drawingY + y);
                 if (pointThere) {

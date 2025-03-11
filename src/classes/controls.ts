@@ -12,7 +12,7 @@ export class Controls {
         debugMode: boolean
         maxSpeedMode: boolean
         isTemperatureEnabled: boolean
-        drawingType: EPointType | 'eraser'
+        drawingType: EPointType | 'eraser' | 'heatTool' | 'coolTool'
         baseTemperature: number
         brushSize: number
         simulationSpeed: number
@@ -71,7 +71,7 @@ export class Controls {
         return this.state.drawingType
     }
 
-    public static setDrawingType(value: EPointType | 'eraser') {
+    public static setDrawingType(value: EPointType | 'eraser' | 'heatTool' | 'coolTool') {
         this.setState('drawingType', value)
     }
 

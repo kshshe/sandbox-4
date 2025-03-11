@@ -4,6 +4,8 @@ export const POINT_TYPE_ICON: {
     [key in EPointType]?: string
 } & {
     eraser?: string
+    heatTool?: string
+    coolTool?: string
 } = {
     [EPointType.Water]: '💧',
     [EPointType.Sand]: '🏖️',
@@ -32,4 +34,6 @@ export const POINT_TYPE_ICON: {
     [EPointType.Acid]: '🧪',
     [EPointType.PlantSeed]: '🌱',
     eraser: '🧽',
+    heatTool: '🔥🔧',
+    coolTool: '❄️🔧',
 } 

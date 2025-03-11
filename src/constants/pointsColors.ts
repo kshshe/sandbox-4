@@ -1,6 +1,10 @@
 import { EPointType } from "../types"
 
-export const POINTS_COLORS: Record<EPointType, { r: number, g: number, b: number }> = {
+export const POINTS_COLORS: Record<EPointType, { r: number, g: number, b: number }> & {
+    eraser: { r: number, g: number, b: number },
+    heatTool: { r: number, g: number, b: number },
+    coolTool: { r: number, g: number, b: number },
+} = {
     [EPointType.Water]: { r: 0, g: 0, b: 255 },             // blue
     [EPointType.Sand]: { r: 255, g: 204, b: 0 },            // #ffcc00
     [EPointType.Border]: { r: 211, g: 211, b: 211 },        // #d3d3d3
@@ -33,4 +37,7 @@ export const POINTS_COLORS: Record<EPointType, { r: number, g: number, b: number
     [EPointType.Acid]: { r: 0, g: 255, b: 0 },               // green
     [EPointType.Plant]: { r: 0, g: 255, b: 0 },               // green
     [EPointType.PlantSeed]: { r: 0, g: 255, b: 0 },               // green
+    eraser: { r: 255, g: 255, b: 255 },                     // white
+    heatTool: { r: 255, g: 69, b: 0 },                      // orangered
+    coolTool: { r: 135, g: 206, b: 250 },                   // lightskyblue
 } 
