@@ -59,7 +59,7 @@ const processFrame = () => {
         if (!isUnused || iteration % USE_POINT_EVERY_N_ITERATION === 0 && +index % 10 === 0) {
             const forcesList = forcesByType[point.type] || []
             for (const force of forcesList) {
-                force(point)
+                force(point, iteration)
             }
         }
 

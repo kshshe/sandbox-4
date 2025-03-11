@@ -4,7 +4,7 @@ import { Speed } from "../classes/speed";
 import { EPointType } from "../types";
 import { random } from "../utils/random";
 
-export const clone: TForceProcessor = (point) => {
+export const clone: TForceProcessor = (point, step) => {
     if (!point.data.cloneType) {
         const neighbors = Points.getNeighbours(point).filter(neighbor => neighbor.type !== EPointType.Clone && neighbor.type !== EPointType.Border);
         const randomNeighbor = neighbors[Math.floor(random() * neighbors.length)];
@@ -24,6 +24,7 @@ export const clone: TForceProcessor = (point) => {
             y: point.coordinates.y + direction.y
         })
         if (!neighbor) {
+            point.data.lastCloneStep = step;
             Points.addPoint({
                 coordinates: {
                     x: point.coordinates.x + direction.x,

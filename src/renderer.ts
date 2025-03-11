@@ -7,6 +7,7 @@ import { Stats } from "./classes/stats";
 import { ctx } from "./canvas";
 import { drawingX, drawingY, hoveredCoordinates, hoveredPoint } from "./interactions";
 import { EPointType } from "./types";
+import { Storage } from "./classes/storage";
 
 const previouslyUsedPixels: Set<string> = new Set();
 let frame = 0;
@@ -89,6 +90,14 @@ export const drawPoints = () => {
             ctx.lineTo(centerX + point.data.directionToGround.x * arrowSize, centerY + point.data.directionToGround.y * arrowSize);
             ctx.strokeStyle = 'rgba(0, 0, 0, 0.5)';
             ctx.stroke();
+        }
+
+        if (point.data.lastCloneStep) {
+            const stepsSinceClone = Storage.get('iteration', 0) - point.data.lastCloneStep;
+            if (stepsSinceClone < 10) {
+                ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(1, stepsSinceClone / 10)})`;
+                ctx.fillRect(point.visualCoordinates.x * CONFIG.pixelSize, point.visualCoordinates.y * CONFIG.pixelSize, CONFIG.pixelSize, CONFIG.pixelSize);
+            }
         }
 
         if (point.data.charge) {

@@ -25,7 +25,7 @@ import { heal } from "./heal";
 import { acid } from "./acid";
 import { plant } from "./plant";
 
-export type TForceProcessor = (point: TPoint) => void
+export type TForceProcessor = (point: TPoint, step: number) => void
 
 const BASIC_FORCES: TForceProcessor[] = [
     gravity,
