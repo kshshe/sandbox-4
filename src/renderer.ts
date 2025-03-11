@@ -67,11 +67,11 @@ export const drawPoints = () => {
 
         if (debugMode) {
             const speedLength = Math.sqrt(point.speed.x ** 2 + point.speed.y ** 2);
-            if (speedLength > 1) {
+            if (speedLength > 0.1) {
                 const centerX = point.visualCoordinates.x * CONFIG.pixelSize + CONFIG.pixelSize / 2;
                 const centerY = point.visualCoordinates.y * CONFIG.pixelSize + CONFIG.pixelSize / 2;
-                const speedX = point.speed.x * 10;
-                const speedY = point.speed.y * 10;
+                const speedX = point.speed.x * 50;
+                const speedY = point.speed.y * 50;
                 ctx.strokeStyle = 'red';
                 ctx.beginPath();
                 ctx.moveTo(centerX, centerY);

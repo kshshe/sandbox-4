@@ -6,7 +6,7 @@ import { EPointType } from './types'
 import { wait } from './utils/wait'
 import { Controls } from './classes/controls'
 import { Storage } from './classes/storage'
-import { CANT_BE_UNSED } from './config'
+import { CANT_BE_UNSED, POINTS_WEIGHTS } from './config'
 import { Bounds } from './classes/bounds'
 import { TemperatureGrid } from './classes/temperatureGrid'
 import { incrementVirusSteps } from './forceProcessors/virus'
@@ -82,6 +82,54 @@ const processFrame = () => {
             if (!isUnused) {
                 const roundedSpeed = Speed.getRoundedSpeed(point, true)
                 const pointBySpeed = Points.getPointBySpeed(point, roundedSpeed)
+                
+                // Share speed with nearby points (tension effect)
+                const nearbyPoints = Points.getNeighbours(point)
+                const speedMagnitude = Math.sqrt(point.speed.x ** 2 + point.speed.y ** 2)
+                
+                if (speedMagnitude > 0.1 && nearbyPoints.length > 0) {
+                    // Calculate how much speed to share with neighbors
+                    const shareRatio = 0.15 // 15% of speed is shared with neighbors
+                    const speedToShare = {
+                        x: point.speed.x * shareRatio,
+                        y: point.speed.y * shareRatio
+                    }
+                    
+                    // Reduce the current point's speed
+                    point.speed.x -= speedToShare.x
+                    point.speed.y -= speedToShare.y
+                    
+                    // Calculate total weight for distribution
+                    let totalWeight = 0
+                    const validNeighbors: typeof nearbyPoints = []
+                    
+                    for (const neighbor of nearbyPoints) {
+                        if (neighbor !== point && !neighbor.wasDeleted) {
+                            // Skip neighbors with infinite weight (they shouldn't move)
+                            const neighborWeight = POINTS_WEIGHTS[neighbor.type]
+                            if (neighborWeight !== Infinity) {
+                                totalWeight += neighborWeight
+                                validNeighbors.push(neighbor)
+                            }
+                        }
+                    }
+                    
+                    // Distribute speed to neighbors based on their weights
+                    if (totalWeight > 0 && validNeighbors.length > 0) {
+                        for (const neighbor of validNeighbors) {
+                            const neighborWeight = POINTS_WEIGHTS[neighbor.type]
+                            const weightRatio = neighborWeight / totalWeight
+                            
+                            // Heavier points receive less speed, lighter points receive more
+                            // Use inverse weight for distribution (1/weight)
+                            neighbor.speed.x += speedToShare.x * weightRatio
+                            neighbor.speed.y += speedToShare.y * weightRatio
+                            neighbor.lastMoveOnIteration = iteration
+                            Points.markPointAsUsed(neighbor)
+                        }
+                    }
+                }
+                
                 point.speed.x *= 0.95
                 point.speed.y *= 0.95
                 if (!pointBySpeed) {
