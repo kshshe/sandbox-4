@@ -82,3 +82,10 @@
     transform-origin: left top;
     transform: scale(0.5);
 }
+
+/* Ensure links in metrics are clickable on mobile */
+@media (max-width: 768px) {
+    .hint a {
+        pointer-events: auto;
+    }
+}

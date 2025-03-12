@@ -24,3 +24,27 @@ canvas {
     font-size: 1em;
     pointer-events: none;
 }
+
+/* Media query for mobile devices */
+@media (max-width: 768px) {
+    .stats {
+        display: none;
+    }
+    
+    #react {
+        transform: scale(0.75);
+        transform-origin: top left;
+        width: 133.33%; /* 100% / 0.75 to ensure full width coverage */
+        height: 133.33%; /* 100% / 0.75 to ensure full height coverage */
+        position: absolute;
+        top: 0;
+        left: 0;
+        pointer-events: none; /* Allow touch events to pass through to the canvas */
+    }
+    
+    /* Re-enable pointer events for interactive elements inside #react */
+    #react > div,
+    #react > button {
+        pointer-events: auto;
+    }
+}
