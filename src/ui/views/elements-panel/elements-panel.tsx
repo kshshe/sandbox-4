@@ -4,6 +4,8 @@ import styles from "./elements-panel.module.scss";
 import classNames from "classnames";
 import { POINTS_COLORS, POINT_TYPE_ICON, POINTS_SHORTCUTS, REVERSED_POINTS_SHORTCUTS } from "../../../config";
 import { Tooltip } from 'react-tooltip'
+import { POINT_TYPE_HINT } from "../../../constants/pointTypeHint";
+import { POINT_ORDER } from "../../../constants/pointTypeIcon";
 
 export const ElementsPanel: React.FC = () => {
   const [isClosing, setIsClosing] = React.useState(false);
@@ -75,7 +77,10 @@ export const ElementsPanel: React.FC = () => {
         e.stopPropagation();
       }}
     >
-      {Object.keys(POINT_TYPE_ICON).map((type) => {
+      {POINT_ORDER.map((type) => {
+        if (type === 'divider') {
+          return <div key={type} className={styles.divider} />
+        }
         const color = POINTS_COLORS[type] ?? { r: 0, g: 0, b: 0 }
         return (
           <button
@@ -102,7 +107,8 @@ export const ElementsPanel: React.FC = () => {
         <Tooltip
           key={type}
           id={`tooltip-${type}`}
-          content={type}
+          content={POINT_TYPE_HINT[type] ?? type}
+          place="top"
         />
       ))}
     </div>
