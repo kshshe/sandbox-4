@@ -33,9 +33,6 @@ const BASIC_FORCES: TForceProcessor[] = [
 ]
 
 export const forcesByType: Record<EPointType, TForceProcessor[]> = {
-    [EPointType.Foam]: [
-        staticForce,
-    ],
     [EPointType.Metal]: [
         staticForce,
         throttle(directionToGround, 10),

@@ -23,7 +23,6 @@ export const POINTS_COLORS: Record<EPointType, { r: number, g: number, b: number
     [EPointType.BurningWood]: { r: 255, g: 0, b: 0 },       // red
     [EPointType.Dynamite]: { r: 255, g: 68, b: 68 },        // #ff4444
     [EPointType.LiquidGas]: { r: 0, g: 204, b: 255 },       // #00ccff
-    [EPointType.Foam]: { r: 240, g: 230, b: 140 },          // #f0e68c
     [EPointType.Metal]: { r: 192, g: 192, b: 192 },         // #c0c0c0
     [EPointType.MoltenMetal]: { r: 255, g: 51, b: 51 },     // #ff3333
     [EPointType.Electricity_Ground]: { r: 160, g: 160, b: 160 }, // #a0a0a0

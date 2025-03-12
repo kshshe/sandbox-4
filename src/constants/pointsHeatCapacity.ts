@@ -27,6 +27,4 @@ export const POINTS_HEAT_CAPACITY: {
     constantHot: 100,
     fire: 100,
     iceFire: 100,
-
-    [EPointType.Foam]: 200,
 } 

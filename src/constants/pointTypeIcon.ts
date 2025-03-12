@@ -28,7 +28,6 @@ export const POINT_TYPE_ICON: {
     [EPointType.ConstantCold]: '❄️♾️',
     [EPointType.ConstantHot]: '🔥♾️',
     [EPointType.LiquidGas]: '💧💨',
-    [EPointType.Foam]: '🛁',
     [EPointType.Virus]: '🦠',
     [EPointType.Heal]: '💊',
     [EPointType.Acid]: '🧪',

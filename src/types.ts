@@ -23,7 +23,6 @@ export enum EPointType {
     BurningWood = 'burningWood',
     Dynamite = 'dynamite',
     LiquidGas = 'liquidGas',
-    Foam = 'foam',
     Metal = 'metal',
     MoltenMetal = 'moltenMetal',
     Electricity_Ground = 'electricityGround',

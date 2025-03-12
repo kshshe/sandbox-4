@@ -22,7 +22,6 @@ export const POINTS_WEIGHTS: Record<EPointType, number> = {
     [EPointType.Electricity_Source]: Infinity,
     [EPointType.Electricity_Ground]: Infinity,
     [EPointType.Metal]: Infinity,
-    [EPointType.Foam]: Infinity,
     [EPointType.Dynamite]: Infinity,
     [EPointType.Wood]: Infinity,
     [EPointType.BurningWood]: Infinity,
