@@ -8,8 +8,7 @@ import { TCoordinate } from "../types";
 // Temperature processing constants
 const MIN_SIZE = 4; // Minimum size of a quadtree node
 const TEMPERATURE_SHARE_FACTOR = 0.05;
-const AIR_SHARE_FACTOR = 0.08;
-const AIR_SHARE_MULTIPLIER = 1;
+const BASE_PULL_FACTOR = 0.1
 
 // Neighbor coefficient constants
 const DIAGONAL_COEFFICIENT = 0.75;
@@ -212,12 +211,16 @@ export class TemperatureQuadTree {
     
     // Process all leaf nodes
     if (this.root) {
-      this.processNode(this.root, newTemperatures, baseTemperature, TEMPERATURE_SHARE_FACTOR, AIR_SHARE_FACTOR);
+      this.processNode(this.root, newTemperatures, TEMPERATURE_SHARE_FACTOR);
     }
     
     // Update the tree with new temperatures
     for (const [node, temp] of newTemperatures.entries()) {
       node.temperature = temp;
+    }
+    
+    if (this.root) {
+      this.applyGlobalBasePull(this.root, baseTemperature);
     }
     
     // Update points from the tree
@@ -231,17 +234,15 @@ export class TemperatureQuadTree {
   private static processNode(
     node: QuadTreeNode,
     newTemperatures: Map<QuadTreeNode, number>,
-    baseTemperature: number,
     temperatureShareFactor: number,
-    airShareFactor: number
   ): void {
     if (node.isLeaf) {
       // For leaf nodes, calculate the new temperature
-      this.processLeafNode(node, newTemperatures, baseTemperature, temperatureShareFactor, airShareFactor);
+      this.processLeafNode(node, newTemperatures, temperatureShareFactor);
     } else {
       // For non-leaf nodes, process all children
       for (const child of node.children!) {
-        this.processNode(child, newTemperatures, baseTemperature, temperatureShareFactor, airShareFactor);
+        this.processNode(child, newTemperatures, temperatureShareFactor);
       }
     }
   }
@@ -250,9 +251,7 @@ export class TemperatureQuadTree {
   private static processLeafNode(
     node: QuadTreeNode,
     newTemperatures: Map<QuadTreeNode, number>,
-    baseTemperature: number,
     temperatureShareFactor: number,
-    airShareFactor: number
   ): void {
     // Get the current temperature
     const currentTemperature = node.temperature;
@@ -285,19 +284,6 @@ export class TemperatureQuadTree {
     
     const temperatureToShare = diff * temperatureShareFactor / heatCapacity;
     let newTemperature = currentTemperature + temperatureToShare;
-    
-    // Apply air temperature adjustment for non-point cells
-    if (!hasPoint) {
-      // Calculate the difference from base temperature
-      const temperatureDiff = newTemperature - baseTemperature;
-      
-      // Apply a stronger effect to move air temperature toward base temperature more quickly
-      // Using a higher airShareFactor for faster convergence to base temperature
-      const temperatureToShareWithAir = temperatureDiff * airShareFactor * AIR_SHARE_MULTIPLIER;
-      
-      // Apply the adjustment
-      newTemperature -= temperatureToShareWithAir;
-    }
     
     newTemperatures.set(node, newTemperature);
   }
@@ -382,5 +368,22 @@ export class TemperatureQuadTree {
     
     const node = this.root.getLeafAt(x, y);
     return node ? node.temperature : Controls.getBaseTemperature();
+  }
+
+  // Apply a global pull toward base temperature for all air cells
+  private static applyGlobalBasePull(node: QuadTreeNode, baseTemperature: number): void {
+    if (node.isLeaf) {
+      // Only apply to air cells (no points)
+      if (!node.hasPoints) {
+        const diff = baseTemperature - node.temperature;
+        // Apply a strong pull toward base temperature (20% per frame)
+        node.temperature += diff * BASE_PULL_FACTOR;
+      }
+    } else if (node.children) {
+      // Recursively process all children
+      for (const child of node.children) {
+        this.applyGlobalBasePull(child, baseTemperature);
+      }
+    }
   }
 } 
