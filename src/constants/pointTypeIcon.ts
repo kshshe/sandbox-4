@@ -49,6 +49,7 @@ export const POINT_ORDER: Array<keyof typeof POINT_TYPE_ICON | 'divider'> = [
     'eraser',
     'heatTool',
     'coolTool',
+    'divider',
     
     // Liquids
     EPointType.Water,
