@@ -25,6 +25,8 @@ export const POINTS_COLORS: Record<EPointType, { r: number, g: number, b: number
     [EPointType.LiquidGas]: { r: 0, g: 204, b: 255 },       // #00ccff
     [EPointType.Metal]: { r: 192, g: 192, b: 192 },         // #c0c0c0
     [EPointType.MoltenMetal]: { r: 255, g: 51, b: 51 },     // #ff3333
+    [EPointType.Glass]: { r: 230, g: 230, b: 250 },         // translucent white
+    [EPointType.LiquidGlass]: { r: 255, g: 50, b: 0 },     // much more red
     [EPointType.Electricity_Ground]: { r: 160, g: 160, b: 160 }, // #a0a0a0
     [EPointType.Electricity_Spark]: { r: 255, g: 255, b: 0 },    // #ffff00
     [EPointType.Electricity_Source]: { r: 255, g: 255, b: 0 },   // #ffff00

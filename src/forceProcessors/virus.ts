@@ -1,16 +1,9 @@
 import { TForceProcessor } from ".";
 import { Points } from "../classes/points";
 import { Speed } from "../classes/speed";
+import { VIRUS_POINTS_TO_IGNORE } from "../constants/pointsExceptions";
 import { EPointType } from "../types";
 import { random } from "../utils/random";
-
-const POINTS_TO_IGNORE = {
-    [EPointType.Void]: true,
-    [EPointType.Clone]: true,
-    [EPointType.Virus]: true,
-    [EPointType.Border]: true,
-    [EPointType.Heal]: true,
-}
 
 let stepsSinceLastActivity = 0;
 
@@ -23,7 +16,7 @@ export const virus: TForceProcessor = (point) => {
 
     for (const neighbor of neighbors) {
         // Skip Void and Clone points as per requirements
-        if (POINTS_TO_IGNORE[neighbor.type]) {
+        if (VIRUS_POINTS_TO_IGNORE[neighbor.type]) {
             continue;
         }
 

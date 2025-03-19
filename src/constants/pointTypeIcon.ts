@@ -28,6 +28,8 @@ export const POINT_TYPE_ICON: {
     [EPointType.ConstantCold]: '❄️♾️',
     [EPointType.ConstantHot]: '🔥♾️',
     [EPointType.LiquidGas]: '💧☁️',
+    [EPointType.Glass]: '🔍',
+    [EPointType.LiquidGlass]: '🌡️🔍',
     [EPointType.Virus]: '🦠',
     [EPointType.Heal]: '💊',
     [EPointType.Acid]: '⚗️',
@@ -43,6 +45,7 @@ export const POINT_ORDER: Array<keyof typeof POINT_TYPE_ICON | 'divider'> = [
     EPointType.Stone,
     EPointType.Border,
     EPointType.Wood,
+    EPointType.Glass,
     'divider',
     
     // Tools
@@ -55,6 +58,7 @@ export const POINT_ORDER: Array<keyof typeof POINT_TYPE_ICON | 'divider'> = [
     EPointType.Water,
     EPointType.Lava,
     EPointType.LiquidGas,
+    EPointType.LiquidGlass,
     EPointType.Acid,
     'divider',
     

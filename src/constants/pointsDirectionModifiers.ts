@@ -9,6 +9,7 @@ export const POINTS_PROBABILITY_TO_CHANGE_DIRECTION_MODIFIERS: {
     [EPointType.Clone]: 0,
     [EPointType.Wood]: 0,
     [EPointType.BurningWood]: 0,
+    [EPointType.Glass]: 0,
     [EPointType.Fire]: 4,
     [EPointType.IceFire]: 4,
     [EPointType.Steam]: 10,

@@ -8,4 +8,10 @@ export { POINTS_WEIGHTS } from './pointsWeights'
 export { INITIAL_TEMPERATURE } from './initialTemperature'
 export { POINT_TYPE_ICON } from './pointTypeIcon'
 export { POINTS_SHORTCUTS, REVERSED_POINTS_SHORTCUTS } from './pointsShortcuts'
-export { getVariedColor } from './colorUtils' 
+export { getVariedColor } from './colorUtils'
+export { 
+    ACID_POINTS_TO_IGNORE,
+    VIRUS_POINTS_TO_IGNORE,
+    PLANT_CAN_GROW_ON,
+    PLANT_ENERGY_INITIAL 
+} from './pointsExceptions' 

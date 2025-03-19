@@ -13,6 +13,8 @@ export const POINTS_HEAT_CAPACITY: {
     staticStone: 2,
     lava: 2,
     wood: 2,
+    glass: 2,
+    liquidGlass: 1.5,
 
     steam: 0.1,
     gas: 0.1,

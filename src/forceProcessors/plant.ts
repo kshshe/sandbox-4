@@ -1,17 +1,7 @@
 import { TForceProcessor } from ".";
 import { Points, TPoint } from "../classes/points";
+import { PLANT_CAN_GROW_ON, PLANT_ENERGY_INITIAL } from "../constants/pointsExceptions";
 import { EPointType } from "../types";
-
-const CAN_GROW_ON = {
-    [EPointType.Sand]: true,
-    [EPointType.Plant]: true,
-    [EPointType.PlantSeed]: true,
-}
-
-const ENERGY_INITIAL = {
-    from: 5,
-    to: 15,
-}
 
 export const plant: TForceProcessor = (point: TPoint) => {
     if (point.data.temperature < 1) {
@@ -19,7 +9,7 @@ export const plant: TForceProcessor = (point: TPoint) => {
     }
 
     if (point.data.energy === undefined) {
-        point.data.energy = Math.floor(Math.random() * (ENERGY_INITIAL.to - ENERGY_INITIAL.from)) + ENERGY_INITIAL.from;
+        point.data.energy = Math.floor(Math.random() * (PLANT_ENERGY_INITIAL.to - PLANT_ENERGY_INITIAL.from)) + PLANT_ENERGY_INITIAL.from;
     }
 
     if (point.data.energy <= -20) {
@@ -35,7 +25,7 @@ export const plant: TForceProcessor = (point: TPoint) => {
 
     const pointBelow = belowPoints.map(coordinates => Points.getPointByCoordinates(coordinates)).filter(Boolean)[0];
 
-    if (!pointBelow || !CAN_GROW_ON[pointBelow.type]) {
+    if (!pointBelow || !PLANT_CAN_GROW_ON[pointBelow.type]) {
         Points.markPointAsUsed(point)
         point.data.energy -= 1;
         return;

@@ -33,6 +33,8 @@ export enum EPointType {
     Acid = 'acid',
     Plant = 'plant',
     PlantSeed = 'plantSeed',
+    Glass = 'glass',
+    LiquidGlass = 'liquidGlass',
     ConstantCold = 'constantCold',
     ConstantHot = 'constantHot',
 }

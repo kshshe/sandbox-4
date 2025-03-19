@@ -77,9 +77,9 @@ export const ElementsPanel: React.FC = () => {
         e.stopPropagation();
       }}
     >
-      {POINT_ORDER.map((type) => {
+      {POINT_ORDER.map((type, index) => {
         if (type === 'divider') {
-          return <div key={type} className={styles.divider} />
+          return <div key={type + index} className={styles.divider} />
         }
         const color = POINTS_COLORS[type] ?? { r: 0, g: 0, b: 0 }
         return (
