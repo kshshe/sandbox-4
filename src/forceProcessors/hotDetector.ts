@@ -8,8 +8,9 @@ export const hotDetector: TForceProcessor = (point) => {
     if (temperature > 40) {
         Points.markPointAsUsed(point);
         point.data.charge = 1;
-        // move temperature closer to base
         const baseTemperature = Controls.getBaseTemperature()
-        point.data.temperature = baseTemperature + (temperature - baseTemperature) * 0.9
+        if (temperature > baseTemperature) {
+            point.data.temperature = baseTemperature + (temperature - baseTemperature) * 0.9
+        }
     }
 }; 
