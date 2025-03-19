@@ -7,4 +7,6 @@ export const POINTS_CAN_ACCEPT_ELECTRICITY: {
     [EPointType.Electricity_Ground]: true,
     [EPointType.Heater]: true,
     [EPointType.Cooler]: true,
+    [EPointType.ColdDetector]: true,
+    [EPointType.HotDetector]: true,
 } 

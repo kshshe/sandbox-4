@@ -26,6 +26,8 @@ import { acid } from "./acid";
 import { plant } from "./plant";
 import { heater } from "./heater";
 import { cooler } from "./cooler";
+import { coldDetector } from "./coldDetector";
+import { hotDetector } from "./hotDetector";
 
 export type TForceProcessor = (point: TPoint, step: number) => void
 
@@ -39,7 +41,7 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
         staticForce,
         throttle(directionToGround, 10),
         sendCharge,
-        convertOnTemperature('more', 550, EPointType.MoltenMetal),
+        convertOnTemperature('more', 1200, EPointType.MoltenMetal),
     ],
     [EPointType.MoltenMetal]: [
         ...BASIC_FORCES,
@@ -197,5 +199,15 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
         ...BASIC_FORCES,
         plant,
         convertOnTemperature('more', 400, EPointType.BurningWood),
+    ],
+    [EPointType.ColdDetector]: [
+        staticForce,
+        coldDetector,
+        sendCharge,
+    ],
+    [EPointType.HotDetector]: [
+        staticForce,
+        hotDetector,
+        sendCharge,
     ],
 }

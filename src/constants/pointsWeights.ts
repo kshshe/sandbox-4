@@ -32,6 +32,8 @@ export const POINTS_WEIGHTS: Record<EPointType, number> = {
     [EPointType.Glass]: Infinity,
     [EPointType.Heater]: Infinity,
     [EPointType.Cooler]: Infinity,
+    [EPointType.ColdDetector]: Infinity,
+    [EPointType.HotDetector]: Infinity,
     [EPointType.ConstantCold]: Infinity,
     [EPointType.ConstantHot]: Infinity,
     [EPointType.Void]: Infinity,

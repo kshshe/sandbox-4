@@ -39,6 +39,8 @@ export enum EPointType {
     LiquidGlass = 'liquidGlass',
     ConstantCold = 'constantCold',
     ConstantHot = 'constantHot',
+    ColdDetector = 'coldDetector',
+    HotDetector = 'hotDetector',
 }
 
 export type TPoint = {

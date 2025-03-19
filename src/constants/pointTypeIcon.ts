@@ -17,6 +17,8 @@ export const POINT_TYPE_ICON: {
     [EPointType.Electricity_Source]: '🔋',
     [EPointType.Heater]: '🔥⚡',
     [EPointType.Cooler]: '❄️⚡',
+    [EPointType.ColdDetector]: '❄️🔋',
+    [EPointType.HotDetector]: '🔥🔋',
     [EPointType.Wood]: '🪵',
     [EPointType.Border]: '🧱',
     [EPointType.Fire]: '🔥',
@@ -83,6 +85,8 @@ export const POINT_ORDER: Array<keyof typeof POINT_TYPE_ICON | 'divider'> = [
     EPointType.Electricity_Spark,
     EPointType.Heater,
     EPointType.Cooler,
+    EPointType.ColdDetector,
+    EPointType.HotDetector,
     'divider',
     
     // Explosives

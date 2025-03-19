@@ -16,8 +16,15 @@ export const POINTS_SHORTCUTS: {
     a: EPointType.Acid,
     h: 'heatTool',
     l: 'coolTool',
+    d: EPointType.ColdDetector,
+    t: EPointType.HotDetector,
 }
 
 export const REVERSED_POINTS_SHORTCUTS: {
     [key in EPointType | 'eraser' | 'heatTool' | 'coolTool']?: string
-} = Object.fromEntries(Object.entries(POINTS_SHORTCUTS).map(([key, value]) => [value, key])) 
+} = Object.entries(POINTS_SHORTCUTS).reduce((acc, [key, value]) => {
+    acc[value] = key
+    return acc
+}, {} as {
+    [key in EPointType | 'eraser' | 'heatTool' | 'coolTool']?: string
+}) 

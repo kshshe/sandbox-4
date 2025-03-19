@@ -21,4 +21,6 @@ export const INITIAL_TEMPERATURE: {
     [EPointType.Electricity_Spark]: 100,
     [EPointType.Heater]: 20,
     [EPointType.Cooler]: 20,
+    [EPointType.ColdDetector]: 20,
+    [EPointType.HotDetector]: 20,
 } 
