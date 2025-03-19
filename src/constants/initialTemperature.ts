@@ -6,7 +6,7 @@ export const INITIAL_TEMPERATURE: {
     [EPointType.Ice]: -60,
     [EPointType.Lava]: 1000,
     [EPointType.Steam]: 60,
-    [EPointType.Fire]: 700,
+    [EPointType.Fire]: 950,
     [EPointType.IceFire]: -700,
     [EPointType.LiquidGas]: -350,
     [EPointType.Virus]: 20,
@@ -19,4 +19,6 @@ export const INITIAL_TEMPERATURE: {
     [EPointType.BurningWood]: 800,
 
     [EPointType.Electricity_Spark]: 100,
+    [EPointType.Heater]: 20,
+    [EPointType.Cooler]: 20,
 } 

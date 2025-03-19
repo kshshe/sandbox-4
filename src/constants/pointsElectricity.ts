@@ -5,4 +5,6 @@ export const POINTS_CAN_ACCEPT_ELECTRICITY: {
 } = {
     [EPointType.Metal]: true,
     [EPointType.Electricity_Ground]: true,
+    [EPointType.Heater]: true,
+    [EPointType.Cooler]: true,
 } 

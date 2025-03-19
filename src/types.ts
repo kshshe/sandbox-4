@@ -28,6 +28,8 @@ export enum EPointType {
     Electricity_Ground = 'electricityGround',
     Electricity_Spark = 'electricitySpark',
     Electricity_Source = 'electricitySource',
+    Heater = 'heater',
+    Cooler = 'cooler',
     Virus = 'virus',
     Heal = 'heal',
     Acid = 'acid',

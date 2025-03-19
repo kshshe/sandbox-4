@@ -24,6 +24,8 @@ export const POINTS_HEAT_CAPACITY: {
     [EPointType.Metal]: 0.5,
     [EPointType.MoltenMetal]: 0.5,
     [EPointType.Dynamite]: 4,
+    [EPointType.Heater]: 0.5,
+    [EPointType.Cooler]: 0.5,
 
     constantCold: 100,
     constantHot: 100,

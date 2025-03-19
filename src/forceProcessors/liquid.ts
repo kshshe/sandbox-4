@@ -14,6 +14,7 @@ type TSlot = {
 const VISCOSITY = {
     [EPointType.Water]: 1.0,
     [EPointType.Lava]: 5.0,
+    [EPointType.LiquidGlass]: 5.0,
     [EPointType.LiquidGas]: 0.3,
     [EPointType.Acid]: 1.2,
     [EPointType.MoltenMetal]: 8.0,
@@ -24,6 +25,7 @@ const VISCOSITY = {
 const DENSITY = {
     [EPointType.Water]: 1.0,
     [EPointType.Lava]: 3.0,
+    [EPointType.LiquidGlass]: 3.0,
     [EPointType.LiquidGas]: 0.5,
     [EPointType.Acid]: 1.1,
     [EPointType.MoltenMetal]: 7.0,
@@ -34,6 +36,7 @@ const DENSITY = {
 const SURFACE_TENSION = {
     [EPointType.Water]: 0.8,
     [EPointType.Lava]: 1.2,
+    [EPointType.LiquidGlass]: 1.2,
     [EPointType.LiquidGas]: 0.2,
     [EPointType.Acid]: 0.7,
     [EPointType.MoltenMetal]: 1.5,

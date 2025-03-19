@@ -8,7 +8,9 @@ const sendChargeFromTo = (from: TPoint, to: TPoint) => {
     const amoutToSend = from.data.charge ?? 0
     to.data.charge = (to.data.charge ?? 0) + amoutToSend
     from.data.charge = 0
-    to.data.temperature += amoutToSend * 0.2
+    to.data.temperature += amoutToSend * 0.002
+    Points.markNeighboursAsUsed(from)
+    Points.markNeighboursAsUsed(to)
 }
 
 export const sendCharge: TForceProcessor = (point) => {
@@ -32,13 +34,11 @@ export const sendCharge: TForceProcessor = (point) => {
         }
     }
 
-    if (point.data.charge >= 2) {
+    if (point.data.charge >= 20) {
         while (emit(point, EPointType.Electricity_Spark, 0.5) && point.data.charge) {
-            point.data.charge -= 2
+            point.data.charge -= 20
         }
     }
 
-    if (point.data.charge < 100) {
-        point.data.charge *= 0.99
-    }
+    point.data.charge *= 0.9
 }
