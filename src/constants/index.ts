@@ -6,7 +6,7 @@ export { CANT_BE_UNSED } from './cantBeUnsed'
 export { POINTS_HEAT_CAPACITY } from './pointsHeatCapacity'
 export { POINTS_WEIGHTS } from './pointsWeights'
 export { INITIAL_TEMPERATURE } from './initialTemperature'
-export { POINT_TYPE_ICON } from './pointTypeIcon'
+export { POINT_TYPE_ICON, ELEMENT_GROUPS } from './pointTypeIcon'
 export { POINTS_SHORTCUTS, REVERSED_POINTS_SHORTCUTS } from './pointsShortcuts'
 export { getVariedColor } from './colorUtils'
 export { 

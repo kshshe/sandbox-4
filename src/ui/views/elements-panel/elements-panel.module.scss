@@ -71,28 +71,57 @@
     animation: appear 0.3s ease;
     max-height: 80vh;
     overflow-y: auto;
+    overflow-x: hidden;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
-    overflow: visible;
 
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: flex-start;
-    align-items: flex-start;
+    align-items: stretch;
     gap: 12px;
     padding: 12px;
-    flex-wrap: wrap;
 
     &.isClosing {
         animation: disappear 0.3s ease;
     }
 
     .divider {
-        width: 1px;
-        height: 36px;
+        width: 100%;
+        height: 1px;
         background: #0000007e;
-        margin: 0 6px;
-        align-self: center;
+        margin: 6px 0;
+    }
+
+    .groupContainer {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        border-bottom: 1px solid #0000001a;
+        padding-bottom: 12px;
+        margin-bottom: 4px;
+
+        &.last {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+    }
+
+    .groupTitle {
+        font-size: 16px;
+        font-weight: 600;
+        margin: 0 0 8px 0;
+        padding: 0;
+        color: #333;
+    }
+
+    .elementsRow {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 12px;
+        align-items: center;
     }
 
     .panelButton {

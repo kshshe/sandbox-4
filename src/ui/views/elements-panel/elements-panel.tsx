@@ -5,7 +5,7 @@ import classNames from "classnames";
 import { POINTS_COLORS, POINT_TYPE_ICON, POINTS_SHORTCUTS, REVERSED_POINTS_SHORTCUTS } from "../../../config";
 import { Tooltip } from 'react-tooltip'
 import { POINT_TYPE_HINT } from "../../../constants/pointTypeHint";
-import { POINT_ORDER } from "../../../constants/pointTypeIcon";
+import { ELEMENT_GROUPS } from "../../../constants/pointTypeIcon";
 
 export const ElementsPanel: React.FC = () => {
   const [isClosing, setIsClosing] = React.useState(false);
@@ -68,6 +68,29 @@ export const ElementsPanel: React.FC = () => {
     </button>
   );
 
+  const renderElementButton = (type: string) => {
+    const color = POINTS_COLORS[type] ?? { r: 0, g: 0, b: 0 }
+    return (
+      <button
+        key={type}
+        className={styles.panelButton}
+        onClick={() => {
+          setDrawingType(type as any);
+          setIsOpened(false);
+        }}
+        style={{
+          boxShadow: `0 0 0 2px rgb(${color.r}, ${color.g}, ${color.b})`,
+        }}
+        data-tooltip-id={`tooltip-${type}`}
+      >
+        {POINT_TYPE_ICON[type]}
+        {REVERSED_POINTS_SHORTCUTS[type] && (
+          <span className={styles.shortcut}>{REVERSED_POINTS_SHORTCUTS[type]}</span>
+        )}
+      </button>
+    );
+  };
+
   const panel = (
     <div
       className={classNames(styles.panelContainer, {
@@ -77,40 +100,26 @@ export const ElementsPanel: React.FC = () => {
         e.stopPropagation();
       }}
     >
-      {POINT_ORDER.map((type, index) => {
-        if (type === 'divider') {
-          return <div key={type + index} className={styles.divider} />
-        }
-        const color = POINTS_COLORS[type] ?? { r: 0, g: 0, b: 0 }
-        return (
-          <button
-            key={type}
-            className={styles.panelButton}
-            onClick={() => {
-              setDrawingType(type as any);
-              setIsOpened(false);
-            }}
-            style={{
-              // inset shadow by POINTS_COLORS
-              boxShadow: `0 0 0 2px rgb(${color.r}, ${color.g}, ${color.b})`,
-            }}
-            data-tooltip-id={`tooltip-${type}`}
-          >
-            {POINT_TYPE_ICON[type]}
-            {REVERSED_POINTS_SHORTCUTS[type] && (
-              <span className={styles.shortcut}>{REVERSED_POINTS_SHORTCUTS[type]}</span>
-            )}
-          </button>
-        )
-      })}
-      {Object.keys(POINT_TYPE_ICON).map((type) => (
-        <Tooltip
-          key={type}
-          id={`tooltip-${type}`}
-          content={POINT_TYPE_HINT[type] ?? type}
-          place="top"
-        />
+      {ELEMENT_GROUPS.map((group, index) => (
+        <div key={group.name} className={classNames(styles.groupContainer, {
+          [styles.last]: index === ELEMENT_GROUPS.length - 1,
+        })}>
+          <h3 className={styles.groupTitle}>{group.name}</h3>
+          <div className={styles.elementsRow}>
+            {group.elements.map((type) => renderElementButton(type as string))}
+          </div>
+        </div>
       ))}
+      <div>
+        {Object.keys(POINT_TYPE_ICON).map((type) => (
+          <Tooltip
+            key={type}
+            id={`tooltip-${type}`}
+            content={POINT_TYPE_HINT[type] ?? type}
+            place="top"
+          />
+        ))}
+      </div>
     </div>
   );
 
