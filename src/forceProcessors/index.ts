@@ -58,10 +58,12 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
         staticForce,
         sendCharge,
         electricitySource,
+        throttle(directionToGround, 10),
     ],
     [EPointType.Electricity_Ground]: [
         staticForce,
         throttle(ground, 10),
+        throttle(directionToGround, 10),
     ],
     [EPointType.Heater]: [
         heater,
@@ -204,10 +206,12 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
         staticForce,
         coldDetector,
         sendCharge,
+        throttle(directionToGround, 10),
     ],
     [EPointType.HotDetector]: [
         staticForce,
         hotDetector,
         sendCharge,
+        throttle(directionToGround, 10),
     ],
 }
