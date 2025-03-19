@@ -1,5 +1,5 @@
 import { TForceProcessor } from ".";
 
 export const electricitySource: TForceProcessor = (point) => {
-    point.data.charge = 3;
+    point.data.charge = 1;
 }
