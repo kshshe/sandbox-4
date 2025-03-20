@@ -80,8 +80,8 @@ setInterval(updateHoveredPointDescription, 1000 / 20);
 Controls.subscribe('brushSize', updateHoveredPointDescription);
 
 // Temperature change amount per application
-const HEAT_AMOUNT = 20;
-const COOL_AMOUNT = -20;
+const HEAT_AMOUNT = 8;
+const COOL_AMOUNT = -8;
 
 export const addListeners = (element: HTMLElement, events: string[], callback: (e: Event) => void) => {
     events.forEach(event => {
