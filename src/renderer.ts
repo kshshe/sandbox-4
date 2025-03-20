@@ -194,10 +194,10 @@ export const drawConnections = () => {
     
     const iteration = Storage.get('iteration', 0)
     connections.forEach(connection => {
-        let widthMultiplier = 1;
+        let opacity = 0.5;
         if (connection.lastUsed && iteration - connection.lastUsed < 10) {
-            // bigger if used recently
-            widthMultiplier = 1 + (10 - (iteration - connection.lastUsed)) / 10;
+            // more visible if used recently
+            opacity = 1 - (iteration - connection.lastUsed) / 10;
         }
 
         const startX = connection.from.x * CONFIG.pixelSize + CONFIG.pixelSize / 2;
@@ -211,8 +211,8 @@ export const drawConnections = () => {
             ctx.moveTo(startX, startY);
             ctx.lineTo(endX, startY);
             ctx.lineTo(endX, endY);
-            ctx.strokeStyle = 'black';
-            ctx.lineWidth = 2 * widthMultiplier;
+            ctx.strokeStyle = `rgba(0, 0, 0, ${opacity})`;
+            ctx.lineWidth = 2;
             ctx.stroke();
         } else { // pipe
             // Draw pipe with thickness and rounded caps
@@ -224,8 +224,8 @@ export const drawConnections = () => {
             ctx.lineTo(midX, endY);
             ctx.lineTo(endX, endY);
             
-            ctx.strokeStyle = 'blue';
-            ctx.lineWidth = 4 * widthMultiplier;
+            ctx.strokeStyle = `rgba(0, 0, 255, ${opacity})`;
+            ctx.lineWidth = 4;
             ctx.lineCap = 'round';
             ctx.lineJoin = 'round';
             ctx.stroke();
@@ -237,8 +237,8 @@ export const drawConnections = () => {
             ctx.lineTo(midX, endY);
             ctx.lineTo(endX, endY);
             
-            ctx.strokeStyle = 'rgba(100, 180, 255, 0.6)';
-            ctx.lineWidth = 2 * widthMultiplier;
+            ctx.strokeStyle = `rgba(100, 180, 255, ${opacity})`;
+            ctx.lineWidth = 2;
             ctx.stroke();
             
             // Reset line cap and join
