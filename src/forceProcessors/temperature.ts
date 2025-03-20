@@ -36,3 +36,14 @@ export const convertOnTemperature = (
         Points.markNeighboursAsUsed(point)
     }
 }
+
+export const moveToBaseTemperature = (intencity: number = 0.1): TForceProcessor => (point) => {
+    if (!point.data.temperature) {
+        point.data.temperature = 15
+    }
+    
+    const baseTemperature = Controls.getBaseTemperature()
+    const temperature = point.data.temperature
+    const direction = temperature > baseTemperature ? -1 : 1
+    point.data.temperature += direction * intencity
+}
