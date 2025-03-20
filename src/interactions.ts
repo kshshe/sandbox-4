@@ -25,6 +25,9 @@ const renderDataPair = (key: string, value: unknown) => {
     if (IGNORED_KEYS.includes(key)) {
         return null;
     }
+    if (value === null) {
+        return `${key}: empty`;
+    }
     if (typeof value === 'number') {
         return `${key}: ${value.toFixed(2)}`;
     }
@@ -32,8 +35,9 @@ const renderDataPair = (key: string, value: unknown) => {
         return `${key}: ${value ? 'Yes' : 'No'}`;
     }
     if (typeof value === 'object') {
-        if (typeof value.x === 'number' && typeof value.y === 'number') {
-            return `${key}: ${Math.round(value.x)}:${Math.round(value.y)}`;
+        const vectorValue = value as { x: number, y: number };
+        if (typeof vectorValue.x === 'number' && typeof vectorValue.y === 'number') {
+            return `${key}: ${Math.round(vectorValue.x)}:${Math.round(vectorValue.y)}`;
         }
         return `${key}: ${JSON.stringify(value)}`;
     }
