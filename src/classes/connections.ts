@@ -30,6 +30,13 @@ export class Connections {
     this.saveConnections();
   }
 
+  static getConnectionFromOrTo(coordinates: TCoordinate): TConnection[] {
+    return this.connections.filter(
+      c => c.from.x === coordinates.x && c.from.y === coordinates.y ||
+           c.to.x === coordinates.x && c.to.y === coordinates.y
+    );
+  }
+
   static getWireFromPoint(coordinates: TCoordinate): TConnection[] {
     return this.connections.filter(
       c => c.from.x === coordinates.x && c.from.y === coordinates.y && c.type === 'wire'

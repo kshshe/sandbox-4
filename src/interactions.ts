@@ -61,6 +61,14 @@ export const initInteractions = () => {
                         to: endPoint,
                         type: drawingType === EPointType.Wire ? 'wire' : 'pipe'
                     });
+                    const pointOnStart = Points.getPointByCoordinates(startPoint);
+                    if (pointOnStart) {
+                        Points.markNeighboursAsUsed(pointOnStart);
+                    }
+                    const pointOnEnd = Points.getPointByCoordinates(endPoint);
+                    if (pointOnEnd) {
+                        Points.markNeighboursAsUsed(pointOnEnd);
+                    }
                 }
                 
                 // Reset connection mode
@@ -85,6 +93,10 @@ export const initInteractions = () => {
                     });
                     if (pointOnThisPlace) {
                         Points.deletePoint(pointOnThisPlace);
+                    }
+                    const connections = Connections.getConnectionFromOrTo({ x: drawingX + x, y: drawingY + y });
+                    for (const connection of connections) {
+                        Connections.removeConnection(connection);
                     }
                 });
                 return;
