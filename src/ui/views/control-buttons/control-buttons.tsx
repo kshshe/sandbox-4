@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./control-buttons.module.scss";
+import * as styles from "./control-buttons.module.scss";
 import { Storage } from "../../../classes/storage";
 import { useControls } from "../../hooks/useControls";
 

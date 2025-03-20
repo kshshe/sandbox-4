@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./settings-panel.module.scss";
+import * as styles from "./settings-panel.module.scss";
 import { useControls } from "../../hooks/useControls";
 
 export const SettingsPanel: React.FC = () => {

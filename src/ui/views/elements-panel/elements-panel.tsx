@@ -1,6 +1,6 @@
 import React from "react";
 import { useControls } from "../../hooks/useControls";
-import styles from "./elements-panel.module.scss";
+import * as styles from "./elements-panel.module.scss";
 import classNames from "classnames";
 import { POINTS_COLORS, POINT_TYPE_ICON, POINTS_SHORTCUTS, REVERSED_POINTS_SHORTCUTS } from "../../../config";
 import { Tooltip } from 'react-tooltip'

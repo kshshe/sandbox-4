@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./metrics.module.scss";
+import * as styles from "./metrics.module.scss";
 import { Stats } from "../../../classes/stats";
 import classNames from "classnames";
 import { Points } from "../../../classes/points";
@@ -109,7 +109,6 @@ const ProcessedPointsMeter: React.FC = () => {
     <div className={styles.processedPointsMeter}>
       <div className={styles.processedPointsMeterText}>Processing:</div>
       <svg
-        className={styles.processedPointsMeterChart}
         viewBox="0 0 40 40"
         width="40"
         height="40"

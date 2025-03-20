@@ -1,6 +1,6 @@
 import React from "react";
 import { useControls } from "../../hooks/useControls";
-import styles from "./time-controls.module.scss";
+import * as styles from "./time-controls.module.scss";
 import { processStep } from "../../../forces";
 
 export const TimeControls: React.FC = () => {
