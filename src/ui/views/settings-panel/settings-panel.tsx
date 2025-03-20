@@ -106,7 +106,7 @@ export const SettingsPanel: React.FC = () => {
             onClick={() => {
               setIsDebugMode(false);
               setMaxSpeedMode(false);
-              setIsTemperatureEnabled(false);
+              setIsTemperatureEnabled(true);
               setBaseTemperature(20);
               setIsSmoothMovementEnabled(true);
               setIsOpened(false);

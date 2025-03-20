@@ -1,11 +1,13 @@
 import { EPointType } from "../types"
 
+export type TIcon = string
+
 export const POINT_TYPE_ICON: {
-    [key in EPointType]?: string
+    [key in EPointType]?: TIcon
 } & {
-    eraser?: string
-    heatTool?: string
-    coolTool?: string
+    eraser?: TIcon
+    heatTool?: TIcon
+    coolTool?: TIcon
 } = {
     [EPointType.Water]: '💧',
     [EPointType.Sand]: '🏝️',

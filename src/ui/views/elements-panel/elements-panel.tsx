@@ -6,6 +6,27 @@ import { POINTS_COLORS, POINT_TYPE_ICON, POINTS_SHORTCUTS, REVERSED_POINTS_SHORT
 import { Tooltip } from 'react-tooltip'
 import { POINT_TYPE_HINT } from "../../../constants/pointTypeHint";
 import { ELEMENT_GROUPS } from "../../../constants/pointTypeIcon";
+import { EPointType } from "../../../types";
+
+const ICONS = {
+  [EPointType.Water]: new URL(
+    'icons/water.svg',
+    import.meta.url
+  ).href,
+} as const
+
+const Icon = ({ type }: { type: string }) => {
+  const icon = POINT_TYPE_ICON[type as keyof typeof POINT_TYPE_ICON]
+  if (!icon) {
+    return null
+  }
+  const importedSrc = ICONS[type as keyof typeof ICONS]
+  if (
+    importedSrc) {
+    return <img src={importedSrc} alt={type} className={styles.icon} />
+  }
+  return <span>{icon}</span>
+}
 
 export const ElementsPanel: React.FC = () => {
   const [isClosing, setIsClosing] = React.useState(false);
@@ -64,7 +85,7 @@ export const ElementsPanel: React.FC = () => {
         e.stopPropagation();
       }}
     >
-      {POINT_TYPE_ICON[drawingType]}
+      <Icon type={drawingType} />
     </button>
   );
 
@@ -83,7 +104,7 @@ export const ElementsPanel: React.FC = () => {
         }}
         data-tooltip-id={`tooltip-${type}`}
       >
-        {POINT_TYPE_ICON[type]}
+        <Icon type={type} />
         {REVERSED_POINTS_SHORTCUTS[type] && (
           <span className={styles.shortcut}>{REVERSED_POINTS_SHORTCUTS[type]}</span>
         )}
