@@ -37,6 +37,12 @@ const renderDataPair = (key: string, value: unknown) => {
         }
         return `${key}: ${JSON.stringify(value)}`;
     }
+    if (typeof value === 'string') {
+        return `${key}: ${value}`;
+    }
+    if (Array.isArray(value)) {
+        return value.map(item => renderDataPair(key, item)).filter(Boolean).join('<br>');
+    }
     return `${key}: ${value}`;
 }
 
