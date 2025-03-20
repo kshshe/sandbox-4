@@ -132,6 +132,7 @@ export class Points {
         this._points.push(pointWithData)
         this.markNeighboursAsUsed(pointWithData)
         this.save()
+        return pointWithData
     }
 
     private static get points() {

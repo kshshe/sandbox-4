@@ -61,15 +61,15 @@ const updateHoveredPointDescription = () => {
     const pointY = hoveredPoint?.coordinates.y
     const hoveredX = hoveredCoordinates?.x
     const hoveredY = hoveredCoordinates?.y
-    if (pointX === hoveredX && pointY === hoveredY && typeof pointX === 'number' && typeof pointY === 'number') {
+    if (hoveredPoint && pointX === hoveredX && pointY === hoveredY && typeof pointX === 'number' && typeof pointY === 'number') {
         hoveredPointDescriptionElement.classList.remove('hidden');
+        hoveredPointDescriptionElement.innerHTML = getDescription(hoveredPoint);
         hoveredPointDescriptionElement.style.transform = `translate(${pointX * CONFIG.pixelSize + 15 * brushSize}px, ${pointY * CONFIG.pixelSize - 10 * brushSize}px)`;
     } else {
         hoveredPointDescriptionElement.classList.add('hidden');
         return;
     }
 
-    hoveredPointDescriptionElement.innerHTML = getDescription(hoveredPoint);
 }
 
 setInterval(updateHoveredPointDescription, 1000 / 20);
@@ -149,9 +149,6 @@ export const initInteractions = () => {
         isDrawing = true;
         drawingX = x;
         drawingY = y;
-        hoveredCoordinates = { x, y };
-        hoveredPoint = Points.getPointByCoordinates({ x, y }) || null;
-        updateHoveredPointDescription();
         drawingInterval = setInterval(() => {
             const points = Points.getPoints();
             const neighboursAndSelf = getArea(0, 0);
@@ -200,7 +197,7 @@ export const initInteractions = () => {
                         return;
                     }
                 }
-                return Points.addPoint({
+                Points.addPoint({
                     coordinates: {
                         x: drawingX + x,
                         y: drawingY + y
