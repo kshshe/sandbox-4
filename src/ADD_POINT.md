@@ -14,8 +14,8 @@ export enum EPointType {
 ### Basic Properties
 - **Weight**: Add to `pointsWeights.ts` (use `Infinity` for static objects)
 - **Color**: Add RGB values to `pointsColors.ts`
-- **Icon**: Add emoji to `pointTypeIcon.ts`
-- **Description**: Add to `pointTypeHint.ts`
+- **Icon**: Add emoji to `pointTypeIcon.ts` (only for types that can be added manually)
+- **Description**: Add to `pointTypeHint.ts` (only for types that can be added manually)
 
 ### Special Properties (if needed)
 - **Initial Temperature**: Add to temperature constants (only in case of points which temperature is different from the base temperature)
