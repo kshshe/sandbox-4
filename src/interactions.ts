@@ -35,6 +35,33 @@ export const getArea = (x: number, y: number) => {
     return area;
 };
 
+const createConnection = (x: number, y: number, drawingType: EPointType) => {
+    const startPoint = Controls.getConnectionStartPoint();
+    const endPoint = { x, y };
+
+    if (startPoint &&
+        (startPoint.x !== endPoint.x || startPoint.y !== endPoint.y)) {
+        // Add connection
+        Connections.addConnection({
+            from: startPoint,
+            to: endPoint,
+            type: drawingType === EPointType.Wire ? 'wire' : 'pipe'
+        });
+        const pointOnStart = Points.getPointByCoordinates(startPoint);
+        if (pointOnStart) {
+            Points.markNeighboursAsUsed(pointOnStart);
+        }
+        const pointOnEnd = Points.getPointByCoordinates(endPoint);
+        if (pointOnEnd) {
+            Points.markNeighboursAsUsed(pointOnEnd);
+        }
+    }
+
+    // Reset connection mode
+    Controls.setIsConnectionMode(false);
+    Controls.setConnectionStartPoint(null);
+}
+
 export const initInteractions = () => {
     addListeners(canvas, ['mousedown', 'touchstart'], (e) => {
         const drawingType = Controls.getDrawingType();
@@ -43,41 +70,18 @@ export const initInteractions = () => {
         const offsetY = (e as MouseEvent).offsetY ?? (e as TouchEvent).touches[0].clientY ?? 0;
         const x = Math.floor(offsetX / CONFIG.pixelSize);
         const y = Math.floor(offsetY / CONFIG.pixelSize);
-        
+
         // Handle connection drawing (wire/pipe)
         if (drawingType === EPointType.Wire || drawingType === EPointType.Pipe) {
             if (!Controls.getIsConnectionMode()) {
                 Controls.setIsConnectionMode(true);
                 Controls.setConnectionStartPoint({ x, y });
             } else {
-                const startPoint = Controls.getConnectionStartPoint();
-                const endPoint = { x, y };
-                
-                if (startPoint && 
-                    (startPoint.x !== endPoint.x || startPoint.y !== endPoint.y)) {
-                    // Add connection
-                    Connections.addConnection({
-                        from: startPoint,
-                        to: endPoint,
-                        type: drawingType === EPointType.Wire ? 'wire' : 'pipe'
-                    });
-                    const pointOnStart = Points.getPointByCoordinates(startPoint);
-                    if (pointOnStart) {
-                        Points.markNeighboursAsUsed(pointOnStart);
-                    }
-                    const pointOnEnd = Points.getPointByCoordinates(endPoint);
-                    if (pointOnEnd) {
-                        Points.markNeighboursAsUsed(pointOnEnd);
-                    }
-                }
-                
-                // Reset connection mode
-                Controls.setIsConnectionMode(false);
-                Controls.setConnectionStartPoint(null);
+                createConnection(x, y, drawingType);
             }
             return;
         }
-        
+
         // Regular drawing
         isDrawing = true;
         drawingX = x;
@@ -101,7 +105,7 @@ export const initInteractions = () => {
                 });
                 return;
             }
-            
+
             if (drawingType === 'heatTool' || drawingType === 'coolTool') {
                 const temperatureChange = drawingType === 'heatTool' ? HEAT_AMOUNT : COOL_AMOUNT;
                 neighboursAndSelf.forEach(({ x, y }) => {
@@ -122,7 +126,7 @@ export const initInteractions = () => {
                 });
                 return;
             }
-            
+
             neighboursAndSelf.forEach(({ x, y }) => {
                 const pointThere = points.find(point => point.coordinates.x === drawingX + x && point.coordinates.y === drawingY + y);
                 if (pointThere) {
@@ -156,6 +160,13 @@ export const initInteractions = () => {
         'touchcancel',
         'mouseout',
     ], (e) => {
+        const drawingType = Controls.getDrawingType();
+        if (drawingType === EPointType.Wire || drawingType === EPointType.Pipe) {
+            if (Controls.getIsConnectionMode()) {
+                createConnection(drawingX, drawingY, drawingType);
+            }
+        }
+
         isDrawing = false;
         if (drawingInterval) {
             clearInterval(drawingInterval);
