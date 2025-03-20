@@ -1,6 +1,6 @@
 import { EPointType } from "../types"
 
-type TConfig = {
+export type TConfig = {
     [key in EPointType]?: true
 }
 

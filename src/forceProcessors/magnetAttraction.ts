@@ -1,15 +1,15 @@
 import { TForceProcessor } from ".";
 import { Points } from "../classes/points";
-import { MAGNET_POINTS_TO_MAGNETIZE } from "../constants/pointsExceptions";
+import { TConfig } from "../constants/pointsExceptions";
 
 const MAGNET_FORCE = 0.01;
 
-export const magnetAttraction: TForceProcessor = (point) => {
+export const magnetAttraction = (attractTo: TConfig): TForceProcessor => (point) => {
     const neighbors = Points.getNeighbours(point, true);
     
     // Find any metal neighbors
     const metalNeighbors = neighbors.filter(neighbor => 
-        MAGNET_POINTS_TO_MAGNETIZE[neighbor.type]
+        attractTo[neighbor.type]
     );
     
     // If no metal neighbors, nothing to do

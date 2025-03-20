@@ -34,6 +34,7 @@ import { LIQUID_POINT_TYPES } from "../constants/pointsLiquids";
 import { smoke } from "./smoke";
 import { electricityAmplifier } from "./electricityAmplifier";
 import { magnetAttraction } from "./magnetAttraction";
+import { MAGNET_POINTS_TO_MAGNETIZE } from "../constants/pointsExceptions";
 
 export type TForceProcessor = (point: TPoint, step: number) => void
 
@@ -254,7 +255,7 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
     ],
     [EPointType.Magnet]: [
         ...BASIC_FORCES,
-        magnetAttraction,
+        magnetAttraction(MAGNET_POINTS_TO_MAGNETIZE),
     ],
     [EPointType.Plant]: [
         ...BASIC_FORCES,
