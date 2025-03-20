@@ -183,7 +183,11 @@ const updateStats = () => {
                 .sort((a, b) => a[0].localeCompare(b[0]))
                 .sort((a, b) => b[1] - a[1])
                 .map(([type, count]) => `${type}: ${count}`)
-                .join('<br>')
+                .join('<br>'),
+            // Vercel commit message
+            process.env.VERCEL_GIT_COMMIT_MESSAGE && `Commit: ${process.env.VERCEL_GIT_COMMIT_MESSAGE.substring(0, 20)}${
+                process.env.VERCEL_GIT_COMMIT_MESSAGE.length > 20 ? '...' : ''
+            }`
         ]
             .filter(Boolean)
             .join('<br>');
