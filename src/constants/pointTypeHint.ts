@@ -12,6 +12,7 @@ export const POINT_TYPE_HINT: {
     [EPointType.Electricity_Ground]: 'Electricity Ground - Absorbs electrical charge',
     [EPointType.Electricity_Spark]: 'Electricity Spark - Moves chaotically and conducts electricity',
     [EPointType.Electricity_Source]: 'Electricity Source - Generates electrical charge',
+    [EPointType.Electricity_Amplifier]: 'Electricity Amplifier - Multiplies electrical charge',
     [EPointType.Heater]: 'Heater - Consumes electricity to generate heat',
     [EPointType.Cooler]: 'Cooler - Consumes electricity to absorb heat',
     [EPointType.ColdDetector]: 'Cold Detector - Emits electricity when temperature falls below -50°C',

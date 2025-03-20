@@ -32,7 +32,7 @@ import { liquidDetector } from "./liquidDetector";
 import { pipeTeleport } from "./pipeTeleport";
 import { LIQUID_POINT_TYPES } from "../constants/pointsLiquids";
 import { smoke } from "./smoke";
-
+import { electricityAmplifier } from "./electricityAmplifier";
 export type TForceProcessor = (point: TPoint, step: number) => void
 
 const BASIC_FORCES: TForceProcessor[] = [
@@ -251,6 +251,12 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
         chaos(5),
         moveToBaseTemperature(0.1),
         convertOnTemperature('more', 0, EPointType.Water),
+    ],
+    [EPointType.Electricity_Amplifier]: [
+        staticForce,
+        electricityAmplifier,
+        sendCharge,
+        throttle(directionToGround, 10),
     ],
     [EPointType.Wire]: [
         staticForce,
