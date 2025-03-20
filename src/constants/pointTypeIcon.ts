@@ -38,6 +38,8 @@ export const POINT_TYPE_ICON: {
     [EPointType.Heal]: '💊',
     [EPointType.Acid]: '⚗️',
     [EPointType.PlantSeed]: '🌱',
+    [EPointType.Wire]: '🔌',
+    [EPointType.Pipe]: '🧪',
     eraser: '🧽',
     heatTool: '🔥🔧',
     coolTool: '❄️🔧',
@@ -107,6 +109,13 @@ export const ELEMENT_GROUPS: ElementGroup[] = [
         ]
     },
     {
+        name: "Connections",
+        elements: [
+            EPointType.Wire,
+            EPointType.Pipe,
+        ]
+    },
+    {
         name: "Explosives",
         elements: [
             EPointType.Bomb,
@@ -170,6 +179,11 @@ export const POINT_ORDER: Array<keyof typeof POINT_TYPE_ICON | 'divider'> = [
     EPointType.Cooler,
     EPointType.ColdDetector,
     EPointType.HotDetector,
+    'divider',
+    
+    // Connections
+    EPointType.Wire,
+    EPointType.Pipe,
     'divider',
     
     // Explosives

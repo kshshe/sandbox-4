@@ -18,6 +18,7 @@ export class Controls {
         simulationSpeed: number
         isPaused: boolean
         isSmoothMovementEnabled: boolean
+        isConnectionMode: boolean
     } = {
         maxSpeedMode: Storage.get('Controls.maxSpeedMode', false),
         debugMode: Storage.get('Controls.debugMode', false),
@@ -28,10 +29,12 @@ export class Controls {
         simulationSpeed: Storage.get('Controls.simulationSpeed', 1),
         isPaused: Storage.get('Controls.isPaused', false),
         isSmoothMovementEnabled: Storage.get('Controls.isSmoothMovementEnabled', true),
+        isConnectionMode: false,
         // don't forget to update initial state in controls.test.ts
     }
 
     private static subscribers: TSubscriber[] = []
+    private static connectionStartPoint: { x: number, y: number } | null = null
 
     public static subscribe(key: TSubscriber['key'], callback: TSubscriber['callback']) {
         this.subscribers.push({ key, callback })
@@ -129,5 +132,21 @@ export class Controls {
 
     public static setIsSmoothMovementEnabled(value: boolean) {
         this.setState('isSmoothMovementEnabled', value)
+    }
+
+    public static getIsConnectionMode() {
+        return this.state.isConnectionMode
+    }
+
+    public static setIsConnectionMode(value: boolean) {
+        this.setState('isConnectionMode', value)
+    }
+
+    public static getConnectionStartPoint() {
+        return this.connectionStartPoint
+    }
+
+    public static setConnectionStartPoint(value: { x: number, y: number } | null) {
+        this.connectionStartPoint = value
     }
 }

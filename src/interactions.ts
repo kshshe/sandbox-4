@@ -4,6 +4,7 @@ import { Controls } from "./classes/controls";
 import { EPointType } from "./types";
 import { isDev } from "./utils/isDev";
 import { canvas } from "./canvas";
+import { Connections } from "./classes/connections";
 
 export let hoveredPoint: TPoint | null = null;
 export let hoveredCoordinates: { x: number, y: number } | null = null;
@@ -40,9 +41,37 @@ export const initInteractions = () => {
         e.preventDefault();
         const offsetX = (e as MouseEvent).offsetX ?? (e as TouchEvent).touches[0].clientX ?? 0;
         const offsetY = (e as MouseEvent).offsetY ?? (e as TouchEvent).touches[0].clientY ?? 0;
-        isDrawing = true;
         const x = Math.floor(offsetX / CONFIG.pixelSize);
         const y = Math.floor(offsetY / CONFIG.pixelSize);
+        
+        // Handle connection drawing (wire/pipe)
+        if (drawingType === EPointType.Wire || drawingType === EPointType.Pipe) {
+            if (!Controls.getIsConnectionMode()) {
+                Controls.setIsConnectionMode(true);
+                Controls.setConnectionStartPoint({ x, y });
+            } else {
+                const startPoint = Controls.getConnectionStartPoint();
+                const endPoint = { x, y };
+                
+                if (startPoint && 
+                    (startPoint.x !== endPoint.x || startPoint.y !== endPoint.y)) {
+                    // Add connection
+                    Connections.addConnection({
+                        from: startPoint,
+                        to: endPoint,
+                        type: drawingType === EPointType.Wire ? 'wire' : 'pipe'
+                    });
+                }
+                
+                // Reset connection mode
+                Controls.setIsConnectionMode(false);
+                Controls.setConnectionStartPoint(null);
+            }
+            return;
+        }
+        
+        // Regular drawing
+        isDrawing = true;
         drawingX = x;
         drawingY = y;
         drawingInterval = setInterval(() => {
@@ -99,6 +128,14 @@ export const initInteractions = () => {
                 });
             });
         }, 1000 / 200);
+    });
+
+    // Add ESC key handler to cancel connection mode
+    window.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && Controls.getIsConnectionMode()) {
+            Controls.setIsConnectionMode(false);
+            Controls.setConnectionStartPoint(null);
+        }
     });
 
     addListeners(canvas, [

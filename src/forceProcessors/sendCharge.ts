@@ -1,5 +1,6 @@
 import { TForceProcessor } from ".";
 import { Points, TPoint } from "../classes/points";
+import { Connections } from "../classes/connections";
 import { POINTS_CAN_ACCEPT_ELECTRICITY } from "../config";
 import { EPointType } from "../types";
 import { emit } from "./utils/emit";
@@ -14,6 +15,17 @@ const sendChargeFromTo = (from: TPoint, to: TPoint) => {
 }
 
 export const sendCharge: TForceProcessor = (point) => {
+    // Check for wires first
+    const wires = Connections.getWireFromPoint(point.coordinates)
+    for (const wire of wires) {
+        const endPoint = Points.getPointByCoordinates(wire.to)
+        if (endPoint && POINTS_CAN_ACCEPT_ELECTRICITY[endPoint.type]) {
+            sendChargeFromTo(point, endPoint)
+            return
+        }
+    }
+
+    // Original logic continues
     const groundDirection = point.data.directionToGround
     if (groundDirection) {
         const pointThere = Points.getPointByCoordinates({

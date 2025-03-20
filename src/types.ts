@@ -41,6 +41,8 @@ export enum EPointType {
     ConstantHot = 'constantHot',
     ColdDetector = 'coldDetector',
     HotDetector = 'hotDetector',
+    Wire = 'wire',
+    Pipe = 'pipe',
 }
 
 export type TPoint = {

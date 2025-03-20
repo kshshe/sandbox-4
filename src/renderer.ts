@@ -8,6 +8,7 @@ import { ctx } from "./canvas";
 import { drawingX, drawingY, hoveredCoordinates, hoveredPoint } from "./interactions";
 import { EPointType } from "./types";
 import { Storage } from "./classes/storage";
+import { Connections } from "./classes/connections";
 
 const previouslyUsedPixels: Set<string> = new Set();
 let frame = 0;
@@ -155,6 +156,7 @@ export const drawPoints = () => {
     );
 
     updateStats();
+    drawConnections();
 
     requestAnimationFrame(drawPoints);
 };
@@ -183,4 +185,52 @@ const updateStats = () => {
             .filter(Boolean)
             .join('<br>');
     }
-}; 
+};
+
+export const drawConnections = () => {
+    const connections = Connections.getAllConnections();
+    
+    connections.forEach(connection => {
+        ctx.beginPath();
+        ctx.moveTo(
+            connection.from.x * CONFIG.pixelSize + CONFIG.pixelSize / 2, 
+            connection.from.y * CONFIG.pixelSize + CONFIG.pixelSize / 2
+        );
+        ctx.lineTo(
+            connection.to.x * CONFIG.pixelSize + CONFIG.pixelSize / 2, 
+            connection.to.y * CONFIG.pixelSize + CONFIG.pixelSize / 2
+        );
+        
+        if (connection.type === 'wire') {
+            ctx.strokeStyle = 'black';
+        } else { // pipe
+            ctx.strokeStyle = 'blue';
+        }
+        
+        ctx.lineWidth = 2;
+        ctx.stroke();
+    });
+
+    // Draw the connection in progress if in connection mode
+    if (Controls.getIsConnectionMode() && Controls.getConnectionStartPoint()) {
+        const startPoint = Controls.getConnectionStartPoint()!;
+        const hoverPoint = hoveredCoordinates || { x: 0, y: 0 };
+        
+        ctx.beginPath();
+        ctx.moveTo(
+            startPoint.x * CONFIG.pixelSize + CONFIG.pixelSize / 2, 
+            startPoint.y * CONFIG.pixelSize + CONFIG.pixelSize / 2
+        );
+        ctx.lineTo(
+            hoverPoint.x * CONFIG.pixelSize + CONFIG.pixelSize / 2, 
+            hoverPoint.y * CONFIG.pixelSize + CONFIG.pixelSize / 2
+        );
+        
+        const drawingType = Controls.getDrawingType();
+        ctx.strokeStyle = drawingType === EPointType.Wire ? 'black' : 'blue';
+        ctx.setLineDash([5, 5]); // Dashed line for in-progress connections
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.setLineDash([]); // Reset line style
+    }
+};

@@ -1,7 +1,16 @@
 import { TForceProcessor } from "."
+import { Connections } from "../classes/connections"
 import { Points, TPoint } from "../classes/points"
+import { Speed } from "../classes/speed"
 
 export const directionToGround: TForceProcessor = (point) => {
+    if (Connections.getWireFromPoint(point.coordinates).length > 0) {
+        point.data.distanceToGround = 0
+        point.data.directionToGround = Speed.self
+        point.data.charge = 0
+        return
+    }
+
     const neighbours = Points.getNeighbours(point, false)
     let closestToGroundPoint: TPoint | null = null
     let closestToGroundDistance: number | null = null

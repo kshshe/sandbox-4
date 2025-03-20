@@ -28,6 +28,7 @@ import { heater } from "./heater";
 import { cooler } from "./cooler";
 import { coldDetector } from "./coldDetector";
 import { hotDetector } from "./hotDetector";
+import { pipeTeleport } from "./pipeTeleport";
 
 export type TForceProcessor = (point: TPoint, step: number) => void
 
@@ -80,17 +81,20 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
     [EPointType.Water]: [
         ...BASIC_FORCES,
         liquid,
+        pipeTeleport,
         convertOnTemperature('less', -2, EPointType.Ice),
         convertOnTemperature('more', 99, EPointType.Steam),
     ],
     [EPointType.LiquidGas]: [
         ...BASIC_FORCES,
         liquid,
+        pipeTeleport,
         convertOnTemperature('more', -100, EPointType.Gas),
     ],
     [EPointType.Lava]: [
         ...BASIC_FORCES,
         liquid,
+        pipeTeleport,
         convertOnTemperature('less', 500, EPointType.StaticStone),
     ],
     [EPointType.Sand]: [
@@ -134,6 +138,7 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
     [EPointType.LiquidGlass]: [
         ...BASIC_FORCES,
         liquid,
+        pipeTeleport,
         convertOnTemperature('less', 750, EPointType.Glass),
     ],
     [EPointType.ConstantCold]: [
@@ -213,5 +218,11 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
         hotDetector,
         sendCharge,
         throttle(directionToGround, 10),
+    ],
+    [EPointType.Wire]: [
+        staticForce,
+    ],
+    [EPointType.Pipe]: [
+        staticForce,
     ],
 }

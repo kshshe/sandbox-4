@@ -4,35 +4,28 @@ import { Speed } from "../classes/speed"
 import { TemperatureGrid } from "../classes/temperatureGrid"
 import { Controls } from "../classes/controls"
 import { __fromRandomCount, __fromBufferCount, __bufferSize } from "./random"
+import { Connections } from "../classes/connections"
+
+const api = {
+    Points,
+    Controls,
+    Speed,
+    Bounds,
+    TemperatureGrid,
+    Connections,
+    random: {
+        __fromRandomCount,
+        __fromBufferCount,
+        __bufferSize
+    }
+} as const
 
 declare global {
     interface Window {
-        api: {
-            Points: typeof Points
-            Speed: typeof Speed
-            Bounds: typeof Bounds
-            TemperatureGrid: typeof TemperatureGrid
-            Controls: typeof Controls
-            random: {
-                __fromRandomCount: typeof __fromRandomCount
-                __fromBufferCount: typeof __fromBufferCount
-                __bufferSize: typeof __bufferSize
-            }
-        }
+        api: typeof api
     }
 }
 
 export const addConsoleApi = () => {
-    window.api = {
-        Points,
-        Controls,
-        Speed,
-        Bounds,
-        TemperatureGrid,
-        random: {
-            __fromRandomCount,
-            __fromBufferCount,
-            __bufferSize
-        }
-    }
+    window.api = api
 }
