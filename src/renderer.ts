@@ -31,6 +31,8 @@ export const drawPoints = () => {
         Points.updateVisualCoordinates(CONFIG.movementSmoothness * timeElapsed);
     }
 
+    const iteration = Storage.get('iteration', 0)
+
     previouslyUsedPixels.clear();
     points.forEach(point => {
         if (!point.visualCoordinates) {
@@ -94,7 +96,7 @@ export const drawPoints = () => {
         }
 
         if (point.data.lastCloneStep) {
-            const stepsSinceClone = Storage.get('iteration', 0) - point.data.lastCloneStep;
+            const stepsSinceClone = iteration - point.data.lastCloneStep;
             if (stepsSinceClone < 10) {
                 ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(1, stepsSinceClone / 10)})`;
                 ctx.fillRect(point.visualCoordinates.x * CONFIG.pixelSize, point.visualCoordinates.y * CONFIG.pixelSize, CONFIG.pixelSize, CONFIG.pixelSize);
@@ -190,7 +192,14 @@ const updateStats = () => {
 export const drawConnections = () => {
     const connections = Connections.getAllConnections();
     
+    const iteration = Storage.get('iteration', 0)
     connections.forEach(connection => {
+        let widthMultiplier = 1;
+        if (connection.lastUsed && iteration - connection.lastUsed < 10) {
+            // bigger if used recently
+            widthMultiplier = 1 + (10 - (iteration - connection.lastUsed)) / 10;
+        }
+
         const startX = connection.from.x * CONFIG.pixelSize + CONFIG.pixelSize / 2;
         const startY = connection.from.y * CONFIG.pixelSize + CONFIG.pixelSize / 2;
         const endX = connection.to.x * CONFIG.pixelSize + CONFIG.pixelSize / 2;
@@ -203,7 +212,7 @@ export const drawConnections = () => {
             ctx.lineTo(endX, startY);
             ctx.lineTo(endX, endY);
             ctx.strokeStyle = 'black';
-            ctx.lineWidth = 2;
+            ctx.lineWidth = 2 * widthMultiplier;
             ctx.stroke();
         } else { // pipe
             // Draw pipe with thickness and rounded caps
@@ -216,7 +225,7 @@ export const drawConnections = () => {
             ctx.lineTo(endX, endY);
             
             ctx.strokeStyle = 'blue';
-            ctx.lineWidth = 4;
+            ctx.lineWidth = 4 * widthMultiplier;
             ctx.lineCap = 'round';
             ctx.lineJoin = 'round';
             ctx.stroke();
@@ -229,7 +238,7 @@ export const drawConnections = () => {
             ctx.lineTo(endX, endY);
             
             ctx.strokeStyle = 'rgba(100, 180, 255, 0.6)';
-            ctx.lineWidth = 2;
+            ctx.lineWidth = 2 * widthMultiplier;
             ctx.stroke();
             
             // Reset line cap and join

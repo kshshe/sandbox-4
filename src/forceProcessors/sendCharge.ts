@@ -14,12 +14,13 @@ const sendChargeFromTo = (from: TPoint, to: TPoint) => {
     Points.markNeighboursAsUsed(to)
 }
 
-export const sendCharge: TForceProcessor = (point) => {
+export const sendCharge: TForceProcessor = (point, iteration) => {
     // Check for wires first
     const wires = Connections.getWireFromPoint(point.coordinates)
     for (const wire of wires) {
         const endPoint = Points.getPointByCoordinates(wire.to)
         if (endPoint && POINTS_CAN_ACCEPT_ELECTRICITY[endPoint.type]) {
+            wire.lastUsed = iteration;
             sendChargeFromTo(point, endPoint)
             return
         }

@@ -5,6 +5,7 @@ export interface TConnection {
   from: TCoordinate;
   to: TCoordinate;
   type: 'wire' | 'pipe';
+  lastUsed?: number;
 }
 
 export class Connections {
@@ -13,6 +14,11 @@ export class Connections {
   static saveConnections(): void {
     this.mergeConnections();
     Storage.set('Connections', this.connections);
+  }
+
+  static deleteAllConnections(): void {
+    this.connections = [];
+    this.saveConnections();
   }
 
   static mergeConnections(): void {

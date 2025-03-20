@@ -2,6 +2,7 @@ import { CANT_BE_UNSED, INITIAL_TEMPERATURE } from '../config'
 import { TCoordinate, EPointType } from '../types'
 import { shake } from '../utils/shake'
 import { Bounds } from './bounds'
+import { Connections } from './connections'
 import { Controls } from './controls'
 import { Speed, TRoundedSpeed } from './speed'
 import { Storage } from './storage'
@@ -31,6 +32,7 @@ export class Points {
         this.coordinatesIndex = {}
         this.unusedPoints = new WeakSet()
         Storage.set('wasInit', false)
+        Connections.deleteAllConnections()
     }
 
     static isUnused(point: TPoint) {

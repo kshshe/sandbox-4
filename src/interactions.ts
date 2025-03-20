@@ -45,7 +45,8 @@ const createConnection = (x: number, y: number, drawingType: EPointType) => {
         Connections.addConnection({
             from: startPoint,
             to: endPoint,
-            type: drawingType === EPointType.Wire ? 'wire' : 'pipe'
+            type: drawingType === EPointType.Wire ? 'wire' : 'pipe',
+            lastUsed: 0,
         });
         const pointOnStart = Points.getPointByCoordinates(startPoint);
         if (pointOnStart) {
