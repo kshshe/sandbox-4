@@ -118,6 +118,7 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
         ...BASIC_FORCES,
         lifetime(8, 50),
         staticTemperature(INITIAL_TEMPERATURE[EPointType.Fire] ?? 2000),
+        emitter(EPointType.Smoke, 0.02, 0.001),
     ],
     [EPointType.IceFire]: [
         ...BASIC_FORCES,
@@ -167,13 +168,13 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
         lifetime(500, 1000),
         staticTemperature(800),
         emitter(EPointType.Fire, 0.2),
-        emitter(EPointType.Smoke, 0.2),
+        emitter(EPointType.Smoke, 0.2, 0.001),
     ],
     [EPointType.FireEmitter]: [
         ...BASIC_FORCES,
         lifetime(30, 120),
         emitter(EPointType.Fire),
-        emitter(EPointType.Smoke, 0.05),
+        emitter(EPointType.Smoke, 0.05, 0.001),
     ],
     [EPointType.Clone]: [
         staticForce,
@@ -188,7 +189,7 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
         ...BASIC_FORCES,
         liquid,
         emitter(EPointType.Fire, 0.5),
-        emitter(EPointType.Smoke, 0.05),
+        emitter(EPointType.Smoke, 0.05, 0.001),
         staticTemperature(400),
         lifetime(100, 200),
     ],
