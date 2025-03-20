@@ -246,6 +246,12 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
         sendCharge,
         throttle(directionToGround, 10),
     ],
+    [EPointType.Snow]: [
+        ...BASIC_FORCES,
+        chaos(5),
+        moveToBaseTemperature(0.1),
+        convertOnTemperature('more', 0, EPointType.Water),
+    ],
     [EPointType.Wire]: [
         staticForce,
     ],

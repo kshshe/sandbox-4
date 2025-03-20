@@ -44,6 +44,7 @@ export const POINT_TYPE_ICON: {
     [EPointType.Oil]: '🛢️',
     [EPointType.BurningOil]: '🔥🛢️',
     [EPointType.Smoke]: '🚬',
+    [EPointType.Snow]: '❄️☃️',
     eraser: '🧽',
     heatTool: '🔥🔧',
     coolTool: '❄️🔧',
@@ -99,6 +100,7 @@ export const ELEMENT_GROUPS: ElementGroup[] = [
             EPointType.IceFire,
             EPointType.ConstantHot,
             EPointType.ConstantCold,
+            EPointType.Snow,
         ]
     },
     {

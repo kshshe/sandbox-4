@@ -38,6 +38,7 @@ export const POINT_TYPE_HINT: {
     [EPointType.PlantSeed]: 'Plant Seed - Grows into a plant when given the right conditions',
     [EPointType.Wire]: 'Wire - Creates a direct electrical connection between two points',
     [EPointType.Pipe]: 'Pipe - Creates a direct path for liquids to flow between two points',
+    [EPointType.Snow]: 'Snow - Light particles that melt into water when heated above 0°C',
     eraser: 'Eraser - Removes elements from the simulation',
     heatTool: 'Heat Tool - Increases temperature of elements',
     coolTool: 'Cool Tool - Decreases temperature of elements',

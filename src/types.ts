@@ -47,6 +47,7 @@ export enum EPointType {
     LiquidDetector = 'liquidDetector',
     Wire = 'wire',
     Pipe = 'pipe',
+    Snow = 'snow',
 }
 
 export type TPoint = {
