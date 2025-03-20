@@ -15,4 +15,5 @@ export const POINTS_PROBABILITY_TO_CHANGE_DIRECTION_MODIFIERS: {
     [EPointType.Steam]: 10,
     [EPointType.Gas]: 10,
     [EPointType.Electricity_Spark]: 10,
+    [EPointType.Smoke]: 5,
 } 

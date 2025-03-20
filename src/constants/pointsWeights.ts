@@ -9,6 +9,7 @@ export const POINTS_WEIGHTS: Record<EPointType, number> = {
     [EPointType.Fire]: -0.8,
     [EPointType.IceFire]: -0.8,
     [EPointType.Steam]: -0.1,
+    [EPointType.Smoke]: -0.3,
     [EPointType.Bomb]: 1,
     [EPointType.Gas]: 0,
     [EPointType.Electricity_Spark]: 1,

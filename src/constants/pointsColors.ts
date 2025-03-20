@@ -45,6 +45,7 @@ export const POINTS_COLORS: Record<EPointType, { r: number, g: number, b: number
     [EPointType.PlantSeed]: { r: 0, g: 255, b: 0 },               // green
     [EPointType.Wire]: { r: 0, g: 0, b: 0 },                // black
     [EPointType.Pipe]: { r: 0, g: 50, b: 255 },             // blue
+    [EPointType.Smoke]: { r: 128, g: 128, b: 128 },        // gray
     eraser: { r: 200, g: 200, b: 200 },                     // gray
     heatTool: { r: 255, g: 69, b: 0 },                      // orangered
     coolTool: { r: 135, g: 206, b: 250 },                   // lightskyblue

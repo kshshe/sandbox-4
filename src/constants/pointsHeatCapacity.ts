@@ -18,6 +18,7 @@ export const POINTS_HEAT_CAPACITY: {
 
     steam: 0.1,
     gas: 0.1,
+    smoke: 0.1,
 
     [EPointType.Electricity_Ground]: 1,
     [EPointType.Electricity_Source]: 1,

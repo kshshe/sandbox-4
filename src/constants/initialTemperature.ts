@@ -13,6 +13,7 @@ export const INITIAL_TEMPERATURE: {
     [EPointType.Acid]: 20,
     [EPointType.Glass]: 20,
     [EPointType.LiquidGlass]: 900,
+    [EPointType.Smoke]: 50,
 
     [EPointType.ConstantCold]: -500,
     [EPointType.ConstantHot]: 500,

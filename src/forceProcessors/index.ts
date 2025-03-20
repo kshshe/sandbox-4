@@ -31,6 +31,7 @@ import { hotDetector } from "./hotDetector";
 import { liquidDetector } from "./liquidDetector";
 import { pipeTeleport } from "./pipeTeleport";
 import { LIQUID_POINT_TYPES } from "../constants/pointsLiquids";
+import { smoke } from "./smoke";
 
 export type TForceProcessor = (point: TPoint, step: number) => void
 
@@ -108,6 +109,11 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
         ...BASIC_FORCES,
         convertOnTemperature('more', 550, EPointType.Lava),
     ],
+    [EPointType.Smoke]: [
+        ...BASIC_FORCES,
+        lifetime(100, 200),
+        smoke,
+    ],
     [EPointType.Fire]: [
         ...BASIC_FORCES,
         lifetime(8, 50),
@@ -161,11 +167,13 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
         lifetime(500, 1000),
         staticTemperature(800),
         emitter(EPointType.Fire, 0.2),
+        emitter(EPointType.Smoke, 0.2),
     ],
     [EPointType.FireEmitter]: [
         ...BASIC_FORCES,
         lifetime(30, 120),
         emitter(EPointType.Fire),
+        emitter(EPointType.Smoke, 0.05),
     ],
     [EPointType.Clone]: [
         staticForce,
