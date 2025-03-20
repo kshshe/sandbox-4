@@ -35,13 +35,22 @@ import { smoke } from "./smoke";
 import { electricityAmplifier } from "./electricityAmplifier";
 export type TForceProcessor = (point: TPoint, step: number) => void
 
+const noopDetector = () => {}
+
+const BASIC_TEMPERATURE_PROCESSORS = [
+    noopDetector,
+    throttle(moveToBaseTemperature(0.05), 10),
+]
+
 const BASIC_FORCES: TForceProcessor[] = [
+    ...BASIC_TEMPERATURE_PROCESSORS,
     gravity,
     drowning,
 ]
 
 export const forcesByType: Record<EPointType, TForceProcessor[]> = {
     [EPointType.Metal]: [
+        ...BASIC_TEMPERATURE_PROCESSORS,
         staticForce,
         throttle(directionToGround, 10),
         sendCharge,
@@ -59,29 +68,34 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
         spark,
     ],
     [EPointType.Electricity_Source]: [
+        ...BASIC_TEMPERATURE_PROCESSORS,
         staticForce,
         sendCharge,
         electricitySource,
         throttle(directionToGround, 10),
     ],
     [EPointType.Electricity_Ground]: [
+        ...BASIC_TEMPERATURE_PROCESSORS,
         staticForce,
         throttle(ground, 10),
         throttle(directionToGround, 10),
     ],
     [EPointType.Electricity_Amplifier]: [
+        ...BASIC_TEMPERATURE_PROCESSORS,
         staticForce,
         electricityAmplifier,
         sendCharge,
         throttle(directionToGround, 10),
     ],
     [EPointType.Heater]: [
+        ...BASIC_TEMPERATURE_PROCESSORS,
         heater,
         staticForce,
         sendCharge,
         ground,
     ],
     [EPointType.Cooler]: [
+        ...BASIC_TEMPERATURE_PROCESSORS,
         cooler,
         staticForce,
         sendCharge,
@@ -108,6 +122,7 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
         convertOnTemperature('more', 850, EPointType.LiquidGlass),
     ],
     [EPointType.StaticStone]: [
+        ...BASIC_TEMPERATURE_PROCESSORS,
         staticForce,
         convertOnTemperature('more', 550, EPointType.Lava),
     ],
@@ -136,14 +151,17 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
         bomb,
     ],
     [EPointType.Dynamite]: [
+        ...BASIC_TEMPERATURE_PROCESSORS,
         staticForce,
         dynamite,
     ],
     [EPointType.Ice]: [
+        ...BASIC_TEMPERATURE_PROCESSORS,
         staticForce,
         convertOnTemperature('more', 3, EPointType.Water),
     ],
     [EPointType.Glass]: [
+        ...BASIC_TEMPERATURE_PROCESSORS,
         staticForce,
         convertOnTemperature('more', 850, EPointType.LiquidGlass),
     ],
@@ -153,10 +171,12 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
         convertOnTemperature('less', 750, EPointType.Glass),
     ],
     [EPointType.ConstantCold]: [
+        ...BASIC_TEMPERATURE_PROCESSORS,
         staticTemperature(INITIAL_TEMPERATURE[EPointType.ConstantCold] ?? -500),
         staticForce,
     ],
     [EPointType.ConstantHot]: [
+        ...BASIC_TEMPERATURE_PROCESSORS,
         staticTemperature(INITIAL_TEMPERATURE[EPointType.ConstantHot] ?? 500),
         staticForce,
     ],
@@ -166,10 +186,12 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
         convertOnTemperature('more', 250, EPointType.FireEmitter),
     ],
     [EPointType.Wood]: [
+        ...BASIC_TEMPERATURE_PROCESSORS,
         staticForce,
         convertOnTemperature('more', 400, EPointType.BurningWood),
     ],
     [EPointType.BurningWood]: [
+        ...BASIC_TEMPERATURE_PROCESSORS,
         staticForce,
         lifetime(500, 1000),
         staticTemperature(800),
@@ -183,6 +205,7 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
         emitter(EPointType.Smoke, 0.05, 0.001),
     ],
     [EPointType.Clone]: [
+        ...BASIC_TEMPERATURE_PROCESSORS,
         staticForce,
         clone,
     ],
@@ -205,12 +228,16 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
         convertOnTemperature('less', 60, EPointType.Water),
         moveToBaseTemperature(0.3),
     ],
-    [EPointType.Border]: [],
+    [EPointType.Border]: [
+        noopDetector,
+    ],
     [EPointType.Void]: [
+        ...BASIC_TEMPERATURE_PROCESSORS,
         voidProcessor,
         staticForce,
     ],
     [EPointType.Virus]: [
+        ...BASIC_TEMPERATURE_PROCESSORS,
         virus,
         staticForce,
     ],
@@ -235,18 +262,21 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
         convertOnTemperature('more', 400, EPointType.BurningWood),
     ],
     [EPointType.ColdDetector]: [
+        ...BASIC_TEMPERATURE_PROCESSORS,
         staticForce,
         coldDetector,
         sendCharge,
         throttle(directionToGround, 10),
     ],
     [EPointType.HotDetector]: [
+        ...BASIC_TEMPERATURE_PROCESSORS,
         staticForce,
         hotDetector,
         sendCharge,
         throttle(directionToGround, 10),
     ],
     [EPointType.LiquidDetector]: [
+        ...BASIC_TEMPERATURE_PROCESSORS,
         staticForce,
         liquidDetector,
         sendCharge,
@@ -259,12 +289,23 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
         convertOnTemperature('more', 0, EPointType.Water),
     ],
     [EPointType.Wire]: [
+        ...BASIC_TEMPERATURE_PROCESSORS,
         staticForce,
     ],
     [EPointType.Pipe]: [
+        ...BASIC_TEMPERATURE_PROCESSORS,
         staticForce,
     ],
 }
+
+Object.keys(forcesByType).forEach(type => {
+    const hasNoopDetector = forcesByType[type as EPointType].some(force => force === noopDetector)
+    if (!hasNoopDetector) {
+        console.warn(`Noop detector is missing for ${type}`)
+    } else {
+        forcesByType[type as EPointType] = forcesByType[type as EPointType].filter(force => force !== noopDetector)
+    }
+})
 
 Object.keys(LIQUID_POINT_TYPES).forEach(type => {
     forcesByType[type as EPointType] = [

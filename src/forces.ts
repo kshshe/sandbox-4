@@ -13,7 +13,7 @@ import { incrementVirusSteps } from './forceProcessors/virus'
 
 const MAX_SPEED = 6
 const MAX_UNUSED_ITERATIONS = 50
-const USE_POINT_EVERY_N_ITERATION = MAX_UNUSED_ITERATIONS * 2
+const USE_POINT_EVERY_N_ITERATION = MAX_UNUSED_ITERATIONS
 const MAX_UNUSED_SPEED = 0.3
 
 let iteration = Storage.get('iteration', 0)
@@ -40,7 +40,7 @@ const processFrame = () => {
     incrementVirusSteps()
     for (const index in points) {
         const point = points[index]
-        const isUnused = Points.isUnused(point)
+        let isUnused = Points.isUnused(point)
         if (point.wasDeleted) {
             continue
         }
@@ -56,7 +56,12 @@ const processFrame = () => {
             point.visualCoordinates.y = point.coordinates.y
         }
 
-        if (!isUnused || iteration % USE_POINT_EVERY_N_ITERATION === 0 && +index % 10 === 0) {
+        if (iteration % USE_POINT_EVERY_N_ITERATION === 0 && +index % 10 === 0) {
+            Points.markPointAsUsed(point)
+            isUnused = false
+        }
+
+        if (!isUnused) {
             const forcesList = forcesByType[point.type] || []
             for (const force of forcesList) {
                 force(point, iteration)
