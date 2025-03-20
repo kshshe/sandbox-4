@@ -43,6 +43,7 @@ export const POINT_TYPE_ICON: {
     [EPointType.Pipe]: '🧪',
     [EPointType.Oil]: '🛢️',
     [EPointType.BurningOil]: '🔥🛢️',
+    [EPointType.Smoke]: '🚬',
     eraser: '🧽',
     heatTool: '🔥🔧',
     coolTool: '❄️🔧',
@@ -87,6 +88,7 @@ export const ELEMENT_GROUPS: ElementGroup[] = [
         name: "Gases",
         elements: [
             EPointType.Gas,
+            EPointType.Smoke,
         ]
     },
     {
