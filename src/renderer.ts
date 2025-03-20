@@ -191,24 +191,51 @@ export const drawConnections = () => {
     const connections = Connections.getAllConnections();
     
     connections.forEach(connection => {
-        ctx.beginPath();
-        ctx.moveTo(
-            connection.from.x * CONFIG.pixelSize + CONFIG.pixelSize / 2, 
-            connection.from.y * CONFIG.pixelSize + CONFIG.pixelSize / 2
-        );
-        ctx.lineTo(
-            connection.to.x * CONFIG.pixelSize + CONFIG.pixelSize / 2, 
-            connection.to.y * CONFIG.pixelSize + CONFIG.pixelSize / 2
-        );
+        const startX = connection.from.x * CONFIG.pixelSize + CONFIG.pixelSize / 2;
+        const startY = connection.from.y * CONFIG.pixelSize + CONFIG.pixelSize / 2;
+        const endX = connection.to.x * CONFIG.pixelSize + CONFIG.pixelSize / 2;
+        const endY = connection.to.y * CONFIG.pixelSize + CONFIG.pixelSize / 2;
         
         if (connection.type === 'wire') {
+            // Draw a steppy line for wires (horizontal then vertical)
+            ctx.beginPath();
+            ctx.moveTo(startX, startY);
+            ctx.lineTo(endX, startY);
+            ctx.lineTo(endX, endY);
             ctx.strokeStyle = 'black';
+            ctx.lineWidth = 2;
+            ctx.stroke();
         } else { // pipe
+            // Draw pipe with thickness and rounded caps
+            const midX = (startX + endX) / 2;
+            
+            ctx.beginPath();
+            ctx.moveTo(startX, startY);
+            ctx.lineTo(midX, startY);
+            ctx.lineTo(midX, endY);
+            ctx.lineTo(endX, endY);
+            
             ctx.strokeStyle = 'blue';
+            ctx.lineWidth = 4;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.stroke();
+            
+            // Add a lighter color in the middle to give a 3D pipe effect
+            ctx.beginPath();
+            ctx.moveTo(startX, startY);
+            ctx.lineTo(midX, startY);
+            ctx.lineTo(midX, endY);
+            ctx.lineTo(endX, endY);
+            
+            ctx.strokeStyle = 'rgba(100, 180, 255, 0.6)';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            
+            // Reset line cap and join
+            ctx.lineCap = 'butt';
+            ctx.lineJoin = 'miter';
         }
-        
-        ctx.lineWidth = 2;
-        ctx.stroke();
     });
 
     // Draw the connection in progress if in connection mode
@@ -216,21 +243,43 @@ export const drawConnections = () => {
         const startPoint = Controls.getConnectionStartPoint()!;
         const hoverPoint = hoveredCoordinates || { x: 0, y: 0 };
         
-        ctx.beginPath();
-        ctx.moveTo(
-            startPoint.x * CONFIG.pixelSize + CONFIG.pixelSize / 2, 
-            startPoint.y * CONFIG.pixelSize + CONFIG.pixelSize / 2
-        );
-        ctx.lineTo(
-            hoverPoint.x * CONFIG.pixelSize + CONFIG.pixelSize / 2, 
-            hoverPoint.y * CONFIG.pixelSize + CONFIG.pixelSize / 2
-        );
+        const startX = startPoint.x * CONFIG.pixelSize + CONFIG.pixelSize / 2;
+        const startY = startPoint.y * CONFIG.pixelSize + CONFIG.pixelSize / 2;
+        const endX = hoverPoint.x * CONFIG.pixelSize + CONFIG.pixelSize / 2;
+        const endY = hoverPoint.y * CONFIG.pixelSize + CONFIG.pixelSize / 2;
         
         const drawingType = Controls.getDrawingType();
-        ctx.strokeStyle = drawingType === EPointType.Wire ? 'black' : 'blue';
         ctx.setLineDash([5, 5]); // Dashed line for in-progress connections
-        ctx.lineWidth = 2;
-        ctx.stroke();
+        
+        if (drawingType === EPointType.Wire) {
+            // Steppy preview for wire
+            ctx.beginPath();
+            ctx.moveTo(startX, startY);
+            ctx.lineTo(endX, startY);
+            ctx.lineTo(endX, endY);
+            ctx.strokeStyle = 'black';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+        } else {
+            // Steppy preview for pipe
+            const midX = (startX + endX) / 2;
+            
+            ctx.beginPath();
+            ctx.moveTo(startX, startY);
+            ctx.lineTo(midX, startY);
+            ctx.lineTo(midX, endY);
+            ctx.lineTo(endX, endY);
+            ctx.strokeStyle = 'blue';
+            ctx.lineWidth = 4;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.stroke();
+            
+            // Reset line cap and join
+            ctx.lineCap = 'butt';
+            ctx.lineJoin = 'miter';
+        }
+        
         ctx.setLineDash([]); // Reset line style
     }
 };
