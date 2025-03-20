@@ -8,5 +8,7 @@ export const LIQUID_POINT_TYPES: {
     [EPointType.LiquidGas]: true,
     [EPointType.MoltenMetal]: true,
     [EPointType.LiquidGlass]: true,
-    [EPointType.Acid]: true
+    [EPointType.Acid]: true,
+    [EPointType.Oil]: true,
+    [EPointType.BurningOil]: true,
 } 

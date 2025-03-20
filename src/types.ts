@@ -12,6 +12,8 @@ export enum EPointType {
     StaticStone = 'staticStone',
     Lava = 'lava',
     Fire = 'fire',
+    Oil = 'oil',
+    BurningOil = 'burningOil',
     IceFire = 'iceFire',
     Bomb = 'bomb',
     Ice = 'ice',

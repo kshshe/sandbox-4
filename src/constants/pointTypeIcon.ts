@@ -41,6 +41,8 @@ export const POINT_TYPE_ICON: {
     [EPointType.PlantSeed]: '🌱',
     [EPointType.Wire]: '🔌',
     [EPointType.Pipe]: '🧪',
+    [EPointType.Oil]: '🛢️',
+    [EPointType.BurningOil]: '🔥🛢️',
     eraser: '🧽',
     heatTool: '🔥🔧',
     coolTool: '❄️🔧',
@@ -78,6 +80,7 @@ export const ELEMENT_GROUPS: ElementGroup[] = [
             EPointType.LiquidGas,
             EPointType.LiquidGlass,
             EPointType.Acid,
+            EPointType.Oil,
         ]
     },
     {

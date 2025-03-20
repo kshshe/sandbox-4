@@ -179,6 +179,19 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
         staticForce,
         clone,
     ],
+    [EPointType.Oil]: [
+        ...BASIC_FORCES,
+        liquid,
+        convertOnTemperature('more', 350, EPointType.BurningOil),
+    ],
+    [EPointType.BurningOil]: [
+        ...BASIC_FORCES,
+        liquid,
+        emitter(EPointType.Fire, 0.5),
+        emitter(EPointType.Smoke, 0.05),
+        staticTemperature(400),
+        lifetime(100, 200),
+    ],
     [EPointType.Steam]: [
         ...BASIC_FORCES,
         chaos(100),

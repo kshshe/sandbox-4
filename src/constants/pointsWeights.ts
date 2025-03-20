@@ -4,6 +4,8 @@ export const POINTS_WEIGHTS: Record<EPointType, number> = {
     [EPointType.Stone]: 1,
     [EPointType.Sand]: 1,
     [EPointType.Water]: 0.9,
+    [EPointType.Oil]: 0.85,
+    [EPointType.BurningOil]: 0.8,
     [EPointType.LiquidGas]: 0.89,
     [EPointType.Lava]: 2,
     [EPointType.Fire]: -0.8,
