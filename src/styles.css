@@ -48,3 +48,25 @@ canvas {
         pointer-events: auto;
     }
 }
+
+.hovered-point-description {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 0.5em;
+    font-family: monospace;
+    font-size: 1em;
+    pointer-events: none;
+    transform: translate(0, 0);
+    opacity: 1;
+    transition: opacity 0.1s, transform 0.1s;
+    z-index: 1000;
+    border-radius: 0.5em;
+    pointer-events: none;
+}
+
+.hidden {
+    opacity: 0;
+}

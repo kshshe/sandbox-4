@@ -5,7 +5,7 @@ import { Bounds } from "./classes/bounds";
 import { TemperatureGrid } from "./classes/temperatureGrid";
 import { Stats } from "./classes/stats";
 import { ctx } from "./canvas";
-import { drawingX, drawingY, hoveredCoordinates, hoveredPoint } from "./interactions";
+import { drawingX, drawingY, hoveredCoordinates } from "./interactions";
 import { EPointType } from "./types";
 import { Storage } from "./classes/storage";
 import { Connections } from "./classes/connections";
@@ -24,7 +24,7 @@ export const drawPoints = () => {
     const currentTime = performance.now();
     const timeElapsed = (currentTime - lastFrameTime) * Controls.getSimulationSpeed();
     lastFrameTime = currentTime;
-    
+
     // Update visual coordinates with interpolation factor if smooth movement is enabled
     const isSmoothMovementEnabled = Controls.getIsSmoothMovementEnabled();
     if (isSmoothMovementEnabled) {
@@ -38,16 +38,16 @@ export const drawPoints = () => {
         if (!point.visualCoordinates) {
             point.visualCoordinates = { ...point.coordinates };
         }
-        
+
         // If smooth movement is disabled, set visual coordinates to match actual coordinates
         if (!isSmoothMovementEnabled) {
             point.visualCoordinates.x = point.coordinates.x;
             point.visualCoordinates.y = point.coordinates.y;
         }
-        
+
         const key = `${Math.round(point.visualCoordinates.x)}:${Math.round(point.visualCoordinates.y)}`;
         const thereIsPointAlready = previouslyUsedPixels.has(key);
-        
+
         // Use varied color if colorVariation is set, otherwise use the default color
         if (point.colorVariation !== undefined) {
             ctx.fillStyle = getVariedColor(point.type, point.colorVariation * CONFIG.colorVariation);
@@ -55,7 +55,7 @@ export const drawPoints = () => {
             const color = POINTS_COLORS[point.type];
             ctx.fillStyle = `rgb(${color.r}, ${color.g}, ${color.b})`;
         }
-        
+
         if (debugMode && thereIsPointAlready) {
             ctx.fillStyle = 'red';
             previouslyUsedPixels.add(key);
@@ -63,9 +63,9 @@ export const drawPoints = () => {
 
         // Use visual coordinates for rendering
         ctx.fillRect(
-            point.visualCoordinates.x * CONFIG.pixelSize, 
-            point.visualCoordinates.y * CONFIG.pixelSize, 
-            CONFIG.pixelSize, 
+            point.visualCoordinates.x * CONFIG.pixelSize,
+            point.visualCoordinates.y * CONFIG.pixelSize,
+            CONFIG.pixelSize,
             CONFIG.pixelSize
         );
 
@@ -152,9 +152,9 @@ export const drawPoints = () => {
     ctx.lineWidth = 1;
     const brushSize = Controls.getBrushSize();
     ctx.strokeRect(
-        (drawingX + 1) * CONFIG.pixelSize - brushSize * CONFIG.pixelSize, 
-        (drawingY + 1) * CONFIG.pixelSize - brushSize * CONFIG.pixelSize, 
-        (brushSize * 2 - 1) * CONFIG.pixelSize, 
+        (drawingX + 1) * CONFIG.pixelSize - brushSize * CONFIG.pixelSize,
+        (drawingY + 1) * CONFIG.pixelSize - brushSize * CONFIG.pixelSize,
+        (brushSize * 2 - 1) * CONFIG.pixelSize,
         (brushSize * 2 - 1) * CONFIG.pixelSize
     );
 
@@ -164,7 +164,12 @@ export const drawPoints = () => {
     requestAnimationFrame(drawPoints);
 };
 
+const limitLineLength = (line: string, maxLength: number) => {
+    return line.length > maxLength ? line.substring(0, maxLength) + '...' : line;
+}
+
 const updateStats = () => {
+    const iteration = Storage.get('iteration', 0)
     const stats = document.querySelector('.stats') as HTMLDivElement;
     if (frame++ % 20 === 0) {
         const pointsGroupedByType = Points.getPoints().reduce((acc, point) => {
@@ -172,22 +177,14 @@ const updateStats = () => {
             return acc;
         }, {} as Record<EPointType, number>)
         stats.innerHTML = [
+            process.env.VERCEL_GIT_COMMIT_MESSAGE && `Commit: ${limitLineLength(process.env.VERCEL_GIT_COMMIT_MESSAGE, 20)}`,
             `Frame: ${(Math.round(Stats.data.elapsedTime * 10) / 10).toFixed(1)} ms`,
-            hoveredPoint && `${hoveredPoint.type}`,
-            hoveredPoint?.wasDeleted && 'Deleted',
-            hoveredPoint && hoveredPoint.data?.lifetime && `Lifetime: ${hoveredPoint.data.lifetime}`,
-            hoveredPoint && hoveredPoint.data?.charge && `Charge: ${Math.round(hoveredPoint.data.charge * 10) / 10}`,
-            hoveredCoordinates && `Coordinates: ${hoveredCoordinates.x}:${hoveredCoordinates.y}`,
-            hoveredCoordinates && `Temperature: ${Math.round(TemperatureGrid.getTemperatureOnPoint(hoveredCoordinates.x, hoveredCoordinates.y))} °C`,
+            `Iteration: ${iteration}`,
             Object.entries(pointsGroupedByType)
                 .sort((a, b) => a[0].localeCompare(b[0]))
                 .sort((a, b) => b[1] - a[1])
                 .map(([type, count]) => `${type}: ${count}`)
                 .join('<br>'),
-            // Vercel commit message
-            process.env.VERCEL_GIT_COMMIT_MESSAGE && `Commit: ${process.env.VERCEL_GIT_COMMIT_MESSAGE.substring(0, 20)}${
-                process.env.VERCEL_GIT_COMMIT_MESSAGE.length > 20 ? '...' : ''
-            }`
         ]
             .filter(Boolean)
             .join('<br>');
@@ -196,7 +193,7 @@ const updateStats = () => {
 
 export const drawConnections = () => {
     const connections = Connections.getAllConnections();
-    
+
     const iteration = Storage.get('iteration', 0)
     connections.forEach(connection => {
         let opacity = 0.2;
@@ -209,7 +206,7 @@ export const drawConnections = () => {
         const startY = connection.from.y * CONFIG.pixelSize + CONFIG.pixelSize / 2;
         const endX = connection.to.x * CONFIG.pixelSize + CONFIG.pixelSize / 2;
         const endY = connection.to.y * CONFIG.pixelSize + CONFIG.pixelSize / 2;
-        
+
         if (connection.type === 'wire') {
             // Draw a steppy line for wires (horizontal then vertical)
             ctx.beginPath();
@@ -222,30 +219,30 @@ export const drawConnections = () => {
         } else { // pipe
             // Draw pipe with thickness and rounded caps
             const midX = (startX + endX) / 2;
-            
+
             ctx.beginPath();
             ctx.moveTo(startX, startY);
             ctx.lineTo(midX, startY);
             ctx.lineTo(midX, endY);
             ctx.lineTo(endX, endY);
-            
+
             ctx.strokeStyle = `rgba(0, 0, 255, ${opacity})`;
             ctx.lineWidth = 4;
             ctx.lineCap = 'round';
             ctx.lineJoin = 'round';
             ctx.stroke();
-            
+
             // Add a lighter color in the middle to give a 3D pipe effect
             ctx.beginPath();
             ctx.moveTo(startX, startY);
             ctx.lineTo(midX, startY);
             ctx.lineTo(midX, endY);
             ctx.lineTo(endX, endY);
-            
+
             ctx.strokeStyle = `rgba(100, 180, 255, ${opacity})`;
             ctx.lineWidth = 2;
             ctx.stroke();
-            
+
             // Reset line cap and join
             ctx.lineCap = 'butt';
             ctx.lineJoin = 'miter';
@@ -256,15 +253,15 @@ export const drawConnections = () => {
     if (Controls.getIsConnectionMode() && Controls.getConnectionStartPoint()) {
         const startPoint = Controls.getConnectionStartPoint()!;
         const hoverPoint = hoveredCoordinates || { x: 0, y: 0 };
-        
+
         const startX = startPoint.x * CONFIG.pixelSize + CONFIG.pixelSize / 2;
         const startY = startPoint.y * CONFIG.pixelSize + CONFIG.pixelSize / 2;
         const endX = hoverPoint.x * CONFIG.pixelSize + CONFIG.pixelSize / 2;
         const endY = hoverPoint.y * CONFIG.pixelSize + CONFIG.pixelSize / 2;
-        
+
         const drawingType = Controls.getDrawingType();
         ctx.setLineDash([5, 5]); // Dashed line for in-progress connections
-        
+
         if (drawingType === EPointType.Wire) {
             // Steppy preview for wire
             ctx.beginPath();
@@ -277,7 +274,7 @@ export const drawConnections = () => {
         } else {
             // Steppy preview for pipe
             const midX = (startX + endX) / 2;
-            
+
             ctx.beginPath();
             ctx.moveTo(startX, startY);
             ctx.lineTo(midX, startY);
@@ -288,12 +285,12 @@ export const drawConnections = () => {
             ctx.lineCap = 'round';
             ctx.lineJoin = 'round';
             ctx.stroke();
-            
+
             // Reset line cap and join
             ctx.lineCap = 'butt';
             ctx.lineJoin = 'miter';
         }
-        
+
         ctx.setLineDash([]); // Reset line style
     }
 };

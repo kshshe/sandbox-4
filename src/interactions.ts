@@ -5,6 +5,7 @@ import { EPointType } from "./types";
 import { isDev } from "./utils/isDev";
 import { canvas } from "./canvas";
 import { Connections } from "./classes/connections";
+import { POINT_NAMES } from "./constants/pointNames";
 
 export let hoveredPoint: TPoint | null = null;
 export let hoveredCoordinates: { x: number, y: number } | null = null;
@@ -12,6 +13,54 @@ export let isDrawing = false;
 export let drawingX = 0;
 export let drawingY = 0;
 let drawingInterval: NodeJS.Timeout | null = null;
+
+const hoveredPointDescriptionElement = document.createElement('div');
+hoveredPointDescriptionElement.classList.add('hovered-point-description');
+hoveredPointDescriptionElement.classList.add('hidden');
+document.body.appendChild(hoveredPointDescriptionElement);
+
+const IGNORED_KEYS = ['temperature', 'speed', 'visualCoordinates', 'colorVariation', 'lastMoveOnIteration', 'wasDeleted'];
+
+const renderDataPair = (key: string, value: unknown) => {
+    if (IGNORED_KEYS.includes(key)) {
+        return null;
+    }
+    if (typeof value === 'number') {
+        return `${key}: ${value.toFixed(2)}`;
+    }
+    return `${key}: ${value}`;
+}
+
+const getDescription = (point: TPoint) => {
+    return [
+        `${point.coordinates.x}:${point.coordinates.y} ${POINT_NAMES[point.type] ?? point.type}`,
+        `${Math.round(point.data.temperature)} °C`,
+        `Speed: ${Math.sqrt(point.speed.x ** 2 + point.speed.y ** 2).toFixed(2)}`,
+        ...Object.entries(point.data).map(([key, value]) => renderDataPair(key, value)).filter(Boolean),
+    ].join('<br>')
+}
+
+const updateHoveredPointDescription = () => {
+    const brushSize = Controls.getBrushSize();
+    hoveredPointDescriptionElement.classList.remove('hidden');
+    const pointX = hoveredPoint?.coordinates.x
+    const pointY = hoveredPoint?.coordinates.y
+    const hoveredX = hoveredCoordinates?.x
+    const hoveredY = hoveredCoordinates?.y
+    if (pointX === hoveredX && pointY === hoveredY && typeof pointX === 'number' && typeof pointY === 'number') {
+        hoveredPointDescriptionElement.style.transform = `translate(${pointX * CONFIG.pixelSize + 15 * brushSize}px, ${pointY * CONFIG.pixelSize - 10 * brushSize}px)`;
+    }
+
+    if (!hoveredPoint) {
+        hoveredPointDescriptionElement.classList.add('hidden');
+        return;
+    }
+
+    hoveredPointDescriptionElement.innerHTML = getDescription(hoveredPoint);
+}
+
+setInterval(updateHoveredPointDescription, 1000 / 20);
+Controls.subscribe('brushSize', updateHoveredPointDescription);
 
 // Temperature change amount per application
 const HEAT_AMOUNT = 20;
@@ -87,6 +136,9 @@ export const initInteractions = () => {
         isDrawing = true;
         drawingX = x;
         drawingY = y;
+        hoveredCoordinates = { x, y };
+        hoveredPoint = Points.getPointByCoordinates({ x, y }) || null;
+        updateHoveredPointDescription();
         drawingInterval = setInterval(() => {
             const points = Points.getPoints();
             const neighboursAndSelf = getArea(0, 0);
@@ -172,6 +224,9 @@ export const initInteractions = () => {
         if (drawingInterval) {
             clearInterval(drawingInterval);
         }
+        hoveredCoordinates = null;
+        hoveredPoint = null;
+        updateHoveredPointDescription();
     });
 
     addListeners(canvas, ['mousemove', 'touchmove'], (e) => {
@@ -184,5 +239,6 @@ export const initInteractions = () => {
         drawingY = y;
         hoveredCoordinates = { x, y };
         hoveredPoint = Points.getPointByCoordinates({ x, y }) || null;
+        updateHoveredPointDescription();
     });
 }; 
