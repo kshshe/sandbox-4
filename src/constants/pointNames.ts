@@ -48,4 +48,5 @@ export const POINT_NAMES: {
     [EPointType.Wire]: 'Wire',
     [EPointType.Pipe]: 'Pipe',
     [EPointType.Snow]: 'Snow',
+    [EPointType.Magnet]: 'Magnet',
 }

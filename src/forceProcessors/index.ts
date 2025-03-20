@@ -33,6 +33,8 @@ import { pipeTeleport } from "./pipeTeleport";
 import { LIQUID_POINT_TYPES } from "../constants/pointsLiquids";
 import { smoke } from "./smoke";
 import { electricityAmplifier } from "./electricityAmplifier";
+import { magnetAttraction } from "./magnetAttraction";
+
 export type TForceProcessor = (point: TPoint, step: number) => void
 
 const noopDetector = () => {}
@@ -249,6 +251,10 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
         ...BASIC_FORCES,
         liquid,
         acid,
+    ],
+    [EPointType.Magnet]: [
+        ...BASIC_FORCES,
+        magnetAttraction,
     ],
     [EPointType.Plant]: [
         ...BASIC_FORCES,

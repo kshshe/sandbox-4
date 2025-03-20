@@ -23,9 +23,11 @@ export const POINTS_WEIGHTS: Record<EPointType, number> = {
     [EPointType.PlantSeed]: 1,
     [EPointType.Plant]: 0,
     [EPointType.Snow]: 0.5,
+    [EPointType.Magnet]: 1,
 
     [EPointType.Electricity_Source]: Infinity,
     [EPointType.Electricity_Ground]: Infinity,
+    [EPointType.Electricity_Amplifier]: Infinity,
     [EPointType.Metal]: Infinity,
     [EPointType.Dynamite]: Infinity,
     [EPointType.Wood]: Infinity,

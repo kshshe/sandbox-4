@@ -49,6 +49,7 @@ export enum EPointType {
     Wire = 'wire',
     Pipe = 'pipe',
     Snow = 'snow',
+    Magnet = 'magnet',
 }
 
 export type TPoint = {

@@ -47,6 +47,7 @@ export const POINT_TYPE_ICON: {
     [EPointType.Oil]: '🛢️',
     [EPointType.Smoke]: '🚬',
     [EPointType.Snow]: '❄️☃️',
+    [EPointType.Magnet]: '🧲',
     eraser: '🧽',
     heatTool: '🔥🔧',
     coolTool: '❄️🔧',
@@ -66,6 +67,7 @@ export const ELEMENT_GROUPS: ElementGroup[] = [
             EPointType.Border,
             EPointType.Wood,
             EPointType.Glass,
+            EPointType.Magnet,
         ]
     },
     {
@@ -142,6 +144,7 @@ export const ELEMENT_GROUPS: ElementGroup[] = [
             EPointType.Virus,
             EPointType.Heal,
             EPointType.PlantSeed,
+            EPointType.Magnet,
         ]
     }
 ]

@@ -4,6 +4,11 @@ type TConfig = {
     [key in EPointType]?: true
 }
 
+export const MAGNET_POINTS_TO_MAGNETIZE: TConfig = {
+    [EPointType.Metal]: true,
+    [EPointType.MoltenMetal]: true,
+}
+
 // Acid processor exceptions
 export const ACID_POINTS_TO_IGNORE: TConfig = {
     [EPointType.Acid]: true,

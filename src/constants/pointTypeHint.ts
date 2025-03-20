@@ -40,6 +40,7 @@ export const POINT_TYPE_HINT: {
     [EPointType.Wire]: 'Wire - Creates a direct electrical connection between two points',
     [EPointType.Pipe]: 'Pipe - Creates a direct path for liquids to flow between two points',
     [EPointType.Snow]: 'Snow - Light particles that melt into water when heated above 0°C',
+    [EPointType.Magnet]: 'Magnet - Dark-gray powder that is attracted to metal objects',
     eraser: 'Eraser - Removes elements from the simulation',
     heatTool: 'Heat Tool - Increases temperature of elements',
     coolTool: 'Cool Tool - Decreases temperature of elements',
