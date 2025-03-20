@@ -57,16 +57,14 @@ const getDescription = (point: TPoint) => {
 
 const updateHoveredPointDescription = () => {
     const brushSize = Controls.getBrushSize();
-    hoveredPointDescriptionElement.classList.remove('hidden');
     const pointX = hoveredPoint?.coordinates.x
     const pointY = hoveredPoint?.coordinates.y
     const hoveredX = hoveredCoordinates?.x
     const hoveredY = hoveredCoordinates?.y
     if (pointX === hoveredX && pointY === hoveredY && typeof pointX === 'number' && typeof pointY === 'number') {
+        hoveredPointDescriptionElement.classList.remove('hidden');
         hoveredPointDescriptionElement.style.transform = `translate(${pointX * CONFIG.pixelSize + 15 * brushSize}px, ${pointY * CONFIG.pixelSize - 10 * brushSize}px)`;
-    }
-
-    if (!hoveredPoint) {
+    } else {
         hoveredPointDescriptionElement.classList.add('hidden');
         return;
     }
