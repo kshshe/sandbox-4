@@ -69,6 +69,12 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
         throttle(ground, 10),
         throttle(directionToGround, 10),
     ],
+    [EPointType.Electricity_Amplifier]: [
+        staticForce,
+        electricityAmplifier,
+        sendCharge,
+        throttle(directionToGround, 10),
+    ],
     [EPointType.Heater]: [
         heater,
         staticForce,
@@ -251,12 +257,6 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
         chaos(5),
         moveToBaseTemperature(0.1),
         convertOnTemperature('more', 0, EPointType.Water),
-    ],
-    [EPointType.Electricity_Amplifier]: [
-        staticForce,
-        electricityAmplifier,
-        sendCharge,
-        throttle(directionToGround, 10),
     ],
     [EPointType.Wire]: [
         staticForce,

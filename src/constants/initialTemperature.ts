@@ -15,7 +15,7 @@ export const INITIAL_TEMPERATURE: {
     [EPointType.LiquidGlass]: 900,
     [EPointType.Smoke]: 50,
     [EPointType.Snow]: -20,
-
+    [EPointType.Electricity_Amplifier]: 20,
     [EPointType.ConstantCold]: -500,
     [EPointType.ConstantHot]: 500,
     [EPointType.BurningWood]: 800,

@@ -117,12 +117,16 @@ export class Points {
             return
         }
         const pointWithData: TPoint = {
-            data: {
-                temperature: INITIAL_TEMPERATURE[point.type] ?? Controls.getBaseTemperature()
-            },
+            data: {},
             ...point,
             visualCoordinates: { ...point.coordinates },
             colorVariation: Math.random() * 2 - 1 // Random value between -1 and 1
+        }
+        if (!pointWithData.data) {
+            pointWithData.data = {}
+        }
+        if (!pointWithData.data.temperature) {
+            pointWithData.data.temperature = INITIAL_TEMPERATURE[point.type] ?? Controls.getBaseTemperature()
         }
         this.setPointInIndex(point.coordinates, pointWithData)
         this._points.push(pointWithData)

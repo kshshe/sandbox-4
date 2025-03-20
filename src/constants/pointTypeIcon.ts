@@ -43,7 +43,6 @@ export const POINT_TYPE_ICON: {
     [EPointType.Wire]: '🔌',
     [EPointType.Pipe]: '🧪',
     [EPointType.Oil]: '🛢️',
-    [EPointType.BurningOil]: '🔥🛢️',
     [EPointType.Smoke]: '🚬',
     [EPointType.Snow]: '❄️☃️',
     eraser: '🧽',
@@ -151,4 +150,6 @@ const allElementsInIcon = Object.keys(POINT_TYPE_ICON);
 
 if (allElementsInGroups.length !== allElementsInIcon.length) {
     console.warn('Not all elements are included in groups');
+    const missingElements = allElementsInIcon.filter(element => !ELEMENT_GROUPS.some(group => group.elements.includes(element as keyof typeof POINT_TYPE_ICON)));
+    console.log(missingElements);
 }

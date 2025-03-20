@@ -367,7 +367,11 @@ export class TemperatureQuadTree {
     if (!this.root) return Controls.getBaseTemperature();
     
     const node = this.root.getLeafAt(x, y);
-    return node ? node.temperature : Controls.getBaseTemperature();
+    const temp = node ? node.temperature : Controls.getBaseTemperature();
+    if (isNaN(temp)) {
+      return Controls.getBaseTemperature();
+    }
+    return temp;
   }
 
   // Apply a global pull toward base temperature for all air cells
