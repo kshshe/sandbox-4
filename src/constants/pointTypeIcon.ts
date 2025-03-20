@@ -19,6 +19,7 @@ export const POINT_TYPE_ICON: {
     [EPointType.Cooler]: '❄️⚡',
     [EPointType.ColdDetector]: '❄️🔋',
     [EPointType.HotDetector]: '🔥🔋',
+    [EPointType.LiquidDetector]: '💧🔋',
     [EPointType.Wood]: '🪵',
     [EPointType.Border]: '🧱',
     [EPointType.Fire]: '🔥',
@@ -106,6 +107,7 @@ export const ELEMENT_GROUPS: ElementGroup[] = [
             EPointType.Cooler,
             EPointType.ColdDetector,
             EPointType.HotDetector,
+            EPointType.LiquidDetector,
         ]
     },
     {
@@ -134,81 +136,10 @@ export const ELEMENT_GROUPS: ElementGroup[] = [
     }
 ]
 
-// Keep POINT_ORDER for backward compatibility
-export const POINT_ORDER: Array<keyof typeof POINT_TYPE_ICON | 'divider'> = [
-    // Basic elements
-    EPointType.Sand,
-    EPointType.Stone,
-    EPointType.Border,
-    EPointType.Wood,
-    EPointType.Glass,
-    'divider',
-    
-    // Tools
-    'eraser',
-    'heatTool',
-    'coolTool',
-    'divider',
-    
-    // Liquids
-    EPointType.Water,
-    EPointType.Lava,
-    EPointType.LiquidGas,
-    EPointType.LiquidGlass,
-    EPointType.Acid,
-    'divider',
-    
-    // Gases
-    EPointType.Gas,
-    'divider',
-    
-    // Temperature elements
-    EPointType.Fire,
-    EPointType.Ice,
-    EPointType.IceFire,
-    EPointType.ConstantHot,
-    EPointType.ConstantCold,
-    'divider',
-    
-    // Electricity
-    EPointType.Metal,
-    EPointType.Electricity_Source,
-    EPointType.Electricity_Ground,
-    EPointType.Electricity_Spark,
-    EPointType.Heater,
-    EPointType.Cooler,
-    EPointType.ColdDetector,
-    EPointType.HotDetector,
-    'divider',
-    
-    // Connections
-    EPointType.Wire,
-    EPointType.Pipe,
-    'divider',
-    
-    // Explosives
-    EPointType.Bomb,
-    EPointType.Dynamite,
-    'divider',
-    
-    // Special elements
-    EPointType.Clone,
-    EPointType.Void,
-    EPointType.Virus,
-    EPointType.Heal,
-    EPointType.PlantSeed,
-]
-
 // Check if all elements in POINT_TYPE_ICON are included in at least one group
 const allElementsInGroups = ELEMENT_GROUPS.flatMap(group => group.elements);
 const allElementsInIcon = Object.keys(POINT_TYPE_ICON);
 
 if (allElementsInGroups.length !== allElementsInIcon.length) {
     console.warn('Not all elements are included in groups');
-}
-
-if (POINT_ORDER.filter(key => key !== 'divider').length !== Object.keys(POINT_TYPE_ICON).length) {
-    console.warn('POINT_ORDER and POINT_TYPE_ICON have different lengths');
-} else {
-    console.log('POINT_TYPE_ICON is valid');
 }

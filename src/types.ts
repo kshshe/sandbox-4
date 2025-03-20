@@ -41,6 +41,7 @@ export enum EPointType {
     ConstantHot = 'constantHot',
     ColdDetector = 'coldDetector',
     HotDetector = 'hotDetector',
+    LiquidDetector = 'liquidDetector',
     Wire = 'wire',
     Pipe = 'pipe',
 }

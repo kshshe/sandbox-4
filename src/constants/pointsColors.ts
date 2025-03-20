@@ -34,6 +34,7 @@ export const POINTS_COLORS: Record<EPointType, { r: number, g: number, b: number
     [EPointType.Cooler]: { r: 100, g: 180, b: 255 },        // light blue
     [EPointType.ColdDetector]: { r: 0, g: 100, b: 255 },    // blue with green
     [EPointType.HotDetector]: { r: 255, g: 130, b: 0 },     // orange
+    [EPointType.LiquidDetector]: { r: 0, g: 160, b: 230 },  // sky blue
     [EPointType.ConstantCold]: { r: 0, g: 0, b: 255 },      // blue
     [EPointType.ConstantHot]: { r: 255, g: 0, b: 0 },       // red
     [EPointType.Void]: { r: 0, g: 0, b: 0 },                // black

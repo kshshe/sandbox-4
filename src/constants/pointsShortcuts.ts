@@ -18,6 +18,7 @@ export const POINTS_SHORTCUTS: {
     l: 'coolTool',
     d: EPointType.ColdDetector,
     t: EPointType.HotDetector,
+    q: EPointType.LiquidDetector,
 }
 
 export const REVERSED_POINTS_SHORTCUTS: {

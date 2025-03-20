@@ -16,6 +16,7 @@ export const POINT_TYPE_HINT: {
     [EPointType.Cooler]: 'Cooler - Consumes electricity to absorb heat',
     [EPointType.ColdDetector]: 'Cold Detector - Emits electricity when temperature falls below -50°C',
     [EPointType.HotDetector]: 'Hot Detector - Emits electricity when temperature rises above 90°C',
+    [EPointType.LiquidDetector]: 'Liquid Detector - Emits electricity when in contact with liquids',
     [EPointType.Wood]: 'Wood - Burns at high temperatures (above 400°C)',
     [EPointType.Border]: 'Border - Immovable boundary element',
     [EPointType.Fire]: 'Fire - Short-lived hot element that burns nearby materials',

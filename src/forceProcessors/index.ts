@@ -28,6 +28,7 @@ import { heater } from "./heater";
 import { cooler } from "./cooler";
 import { coldDetector } from "./coldDetector";
 import { hotDetector } from "./hotDetector";
+import { liquidDetector } from "./liquidDetector";
 import { pipeTeleport } from "./pipeTeleport";
 import { LIQUID_POINT_TYPES } from "../constants/pointsLiquids";
 
@@ -213,6 +214,12 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
     [EPointType.HotDetector]: [
         staticForce,
         hotDetector,
+        sendCharge,
+        throttle(directionToGround, 10),
+    ],
+    [EPointType.LiquidDetector]: [
+        staticForce,
+        liquidDetector,
         sendCharge,
         throttle(directionToGround, 10),
     ],
