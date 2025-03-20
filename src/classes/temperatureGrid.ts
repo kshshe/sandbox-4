@@ -11,6 +11,14 @@ export class TemperatureGrid {
         Storage.set("TemperatureGrid.temperatureGrid", this.temperatureGrid);
     }
 
+    public static getMinTemperature() {
+        return Math.min(...this.temperatureGrid.flat());
+    }
+
+    public static getMaxTemperature() {
+        return Math.max(...this.temperatureGrid.flat());
+    }
+
     public static initGrid() {
         // Initialize both the traditional grid and the quadtree
         const baseTemperature = Controls.getBaseTemperature();

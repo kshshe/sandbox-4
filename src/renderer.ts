@@ -133,13 +133,14 @@ export const drawPoints = () => {
 
     if (debugMode) {
         const bounds = Bounds.getBounds();
+        const minTemperature = TemperatureGrid.getMinTemperature()
+        const maxTemperature = TemperatureGrid.getMaxTemperature()
         for (let x = bounds.left; x <= bounds.right; x++) {
             for (let y = bounds.top; y <= bounds.bottom; y++) {
                 const temperature = TemperatureGrid.getTemperatureOnPoint(x, y);
-                const temperatureWithLimit = Math.min(100, Math.max(-100, temperature));
-                const temperatureColor = temperatureWithLimit > 0
-                    ? `rgba(${Math.round(255 * temperatureWithLimit / 100)}, 0, 0, 0.3)`
-                    : `rgba(0, 0, ${Math.round(255 * -temperatureWithLimit / 100)}, 0.3)`;
+                const temperatureColor = temperature > 0
+                    ? `rgba(${Math.round(255 * temperature / maxTemperature)}, 0, 0, 0.3)`
+                    : `rgba(0, 0, ${Math.round(255 * -temperature / minTemperature)}, 0.3)`;
                 ctx.fillStyle = temperatureColor;
                 ctx.fillRect(x * CONFIG.pixelSize, y * CONFIG.pixelSize, CONFIG.pixelSize, CONFIG.pixelSize);
             }
