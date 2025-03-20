@@ -195,10 +195,10 @@ export const drawConnections = () => {
     
     const iteration = Storage.get('iteration', 0)
     connections.forEach(connection => {
-        let opacity = 0.5;
-        if (connection.lastUsed && iteration - connection.lastUsed < 10) {
+        let opacity = 0.2;
+        if (connection.lastUsed && iteration - connection.lastUsed < 30) {
             // more visible if used recently
-            opacity = 1 - (iteration - connection.lastUsed) / 10;
+            opacity = 1 - (iteration - connection.lastUsed) / 30;
         }
 
         const startX = connection.from.x * CONFIG.pixelSize + CONFIG.pixelSize / 2;
