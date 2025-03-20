@@ -97,7 +97,7 @@ const ProcessedPointsMeter: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
-  if (pointsTotal === 0) {
+  if (pointsTotal < 2000) {
     return null;
   }
 
