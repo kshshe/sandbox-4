@@ -153,8 +153,7 @@ export const ELEMENT_GROUPS: ElementGroup[] = [
 const allElementsInGroups = ELEMENT_GROUPS.flatMap(group => group.elements);
 const allElementsInIcon = Object.keys(POINT_TYPE_ICON);
 
-if (allElementsInGroups.length !== allElementsInIcon.length) {
-    console.warn('Not all elements are included in groups');
-    const missingElements = allElementsInIcon.filter(element => !ELEMENT_GROUPS.some(group => group.elements.includes(element as keyof typeof POINT_TYPE_ICON)));
-    console.log(missingElements);
+const missingElements = allElementsInIcon.filter(element => !ELEMENT_GROUPS.some(group => group.elements.includes(element as keyof typeof POINT_TYPE_ICON)));
+if (missingElements.length > 0) {
+    console.warn('Not all elements are included in groups', missingElements);
 }
