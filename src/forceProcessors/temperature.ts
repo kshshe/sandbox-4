@@ -23,17 +23,17 @@ export const convertOnTemperature = (
     }
 
     if (type === 'more' && point.data.temperature > temperature && point.type !== typeToConvert) {
+        Points.markNeighboursAsUsed(point)
         if (random() < CHANCE_TO_CONVERT) {
             point.type = typeToConvert
         }
-        Points.markNeighboursAsUsed(point)
     }
 
     if (type === 'less' && point.data.temperature < temperature && point.type !== typeToConvert) {
+        Points.markNeighboursAsUsed(point)
         if (random() < CHANCE_TO_CONVERT) {
             point.type = typeToConvert
         }
-        Points.markNeighboursAsUsed(point)
     }
 }
 
