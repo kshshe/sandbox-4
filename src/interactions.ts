@@ -28,6 +28,15 @@ const renderDataPair = (key: string, value: unknown) => {
     if (typeof value === 'number') {
         return `${key}: ${value.toFixed(2)}`;
     }
+    if (typeof value === 'boolean') {
+        return `${key}: ${value ? 'Yes' : 'No'}`;
+    }
+    if (typeof value === 'object') {
+        if (typeof value.x === 'number' && typeof value.y === 'number') {
+            return `${key}: ${Math.round(value.x)}:${Math.round(value.y)}`;
+        }
+        return `${key}: ${JSON.stringify(value)}`;
+    }
     return `${key}: ${value}`;
 }
 
@@ -35,7 +44,7 @@ const getDescription = (point: TPoint) => {
     return [
         `${point.coordinates.x}:${point.coordinates.y} ${POINT_NAMES[point.type] ?? point.type}`,
         `${Math.round(point.data.temperature)} °C`,
-        `Speed: ${Math.sqrt(point.speed.x ** 2 + point.speed.y ** 2).toFixed(2)}`,
+        `speed: ${Math.sqrt(point.speed.x ** 2 + point.speed.y ** 2).toFixed(2)}`,
         ...Object.entries(point.data).map(([key, value]) => renderDataPair(key, value)).filter(Boolean),
     ].join('<br>')
 }

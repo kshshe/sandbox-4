@@ -226,7 +226,7 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
         ...BASIC_FORCES,
         chaos(100),
         convertOnTemperature('less', 60, EPointType.Water),
-        moveToBaseTemperature(0.3),
+        moveToBaseTemperature(0.02),
     ],
     [EPointType.Border]: [
         noopDetector,
@@ -285,7 +285,6 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
     [EPointType.Snow]: [
         ...BASIC_FORCES,
         chaos(5),
-        moveToBaseTemperature(0.1),
         convertOnTemperature('more', 0, EPointType.Water),
     ],
     [EPointType.Wire]: [
