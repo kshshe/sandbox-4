@@ -21,6 +21,24 @@ document.body.appendChild(hoveredPointDescriptionElement);
 
 const IGNORED_KEYS = ['temperature', 'speed', 'visualCoordinates', 'colorVariation', 'lastMoveOnIteration', 'wasDeleted'];
 
+const getVectorDiv = (vector: { x: number, y: number }) => {
+    const normalizedVector = {
+        x: vector.x / Math.sqrt(vector.x ** 2 + vector.y ** 2),
+        y: vector.y / Math.sqrt(vector.x ** 2 + vector.y ** 2),
+    }
+    if (!normalizedVector.x && !normalizedVector.y) {
+        return '';
+    }
+    if (normalizedVector.x < 0.01 && normalizedVector.y < 0.01) {
+        return `<div class="vector-container">
+            <div class="vector-dot"></div>
+        </div>`;
+    }
+    return `<div class="vector-container">
+        <div class="vector-arrow" style="transform: rotate(${Math.atan2(normalizedVector.y, normalizedVector.x) * 180 / Math.PI}deg);"></div>
+    </div>`
+}
+
 const renderDataPair = (key: string, value: unknown) => {
     if (IGNORED_KEYS.includes(key)) {
         return null;
@@ -37,7 +55,7 @@ const renderDataPair = (key: string, value: unknown) => {
     if (typeof value === 'object') {
         const vectorValue = value as { x: number, y: number };
         if (typeof vectorValue.x === 'number' && typeof vectorValue.y === 'number') {
-            return `${key}: ${Math.round(vectorValue.x)}:${Math.round(vectorValue.y)}`;
+            return `${key}: ${getVectorDiv(vectorValue)}`;
         }
         return `${key}: ${JSON.stringify(value)}`;
     }
@@ -54,7 +72,7 @@ const getDescription = (point: TPoint) => {
     return [
         `${point.coordinates.x}:${point.coordinates.y} ${POINT_NAMES[point.type] ?? point.type}`,
         `${Math.round(point.data.temperature)} °C`,
-        `speed: ${Math.sqrt(point.speed.x ** 2 + point.speed.y ** 2).toFixed(2)}`,
+        `speed: ${Math.sqrt(point.speed.x ** 2 + point.speed.y ** 2).toFixed(2)} ${getVectorDiv(point.speed)}`,
         ...Object.entries(point.data).map(([key, value]) => renderDataPair(key, value)).filter(Boolean),
     ].join('<br>')
 }
