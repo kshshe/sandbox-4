@@ -25,11 +25,13 @@ export const magnetAttraction = (attractTo: TConfig): TForceProcessor => (point)
         // Calculate direction vector toward the metal
         const dirX = metalPoint.coordinates.x - point.coordinates.x;
         const dirY = metalPoint.coordinates.y - point.coordinates.y;
+        // the more distance, the less force
+        const distanceCoefficient = 1 / Math.sqrt(dirX ** 2 + dirY ** 2)
         
         // Apply a slight attraction force in that direction
         // The force decreases with distance (naturally gets stronger as particles get closer)
-        point.speed.x += dirX * MAGNET_FORCE;
-        point.speed.y += dirY * MAGNET_FORCE;
+        point.speed.x += dirX * MAGNET_FORCE * distanceCoefficient;
+        point.speed.y += dirY * MAGNET_FORCE * distanceCoefficient;
         point.speed.x *= 0.95
         point.speed.y *= 0.95
     }
