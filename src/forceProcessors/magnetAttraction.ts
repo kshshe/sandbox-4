@@ -30,5 +30,7 @@ export const magnetAttraction = (attractTo: TConfig): TForceProcessor => (point)
         // The force decreases with distance (naturally gets stronger as particles get closer)
         point.speed.x += dirX * MAGNET_FORCE;
         point.speed.y += dirY * MAGNET_FORCE;
+        point.speed.x *= 0.95
+        point.speed.y *= 0.95
     }
 }; 
