@@ -54,9 +54,15 @@ export const POINT_TYPE_ICON: {
     coolTool: '❄️🔧',
 }
 
+export type TElementInGroup = keyof typeof POINT_TYPE_ICON | {
+    type: keyof typeof POINT_TYPE_ICON
+    data: Record<string, any>
+    icon?: string
+}
+
 export type ElementGroup = {
     name: string;
-    elements: Array<keyof typeof POINT_TYPE_ICON>;
+    elements: Array<TElementInGroup>;
 }
 
 export const ELEMENT_GROUPS: ElementGroup[] = [
@@ -140,7 +146,46 @@ export const ELEMENT_GROUPS: ElementGroup[] = [
     {
         name: "Environmental",
         elements: [
-            EPointType.WindSource,
+            {
+                type: EPointType.WindSource,
+                data: {
+                    windDirection: {
+                        x: 0,
+                        y: -1,
+                    },
+                },
+                icon: '💨⬆️',
+            },
+            {
+                type: EPointType.WindSource,
+                data: {
+                    windDirection: {
+                        x: 0,
+                        y: 1,
+                    },
+                },
+                icon: '💨⬇️',
+            },
+            {
+                type: EPointType.WindSource,
+                data: {
+                    windDirection: {
+                        x: 1,
+                        y: 0,
+                    },
+                },
+                icon: '💨➡️',
+            },
+            {
+                type: EPointType.WindSource,
+                data: {
+                    windDirection: {
+                        x: -1,
+                        y: 0,
+                    },
+                },
+                icon: '💨⬅️',
+            },
         ]
     },
     {

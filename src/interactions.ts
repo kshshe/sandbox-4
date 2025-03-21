@@ -223,6 +223,7 @@ export const initInteractions = () => {
                     },
                     type: drawingType as EPointType,
                     speed: { x: 0, y: 0 },
+                    data: Controls.getDrawingData(),
                 });
             });
         }, 1000 / 200);

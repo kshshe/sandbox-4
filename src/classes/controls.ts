@@ -13,6 +13,7 @@ export class Controls {
         maxSpeedMode: boolean
         isTemperatureEnabled: boolean
         drawingType: EPointType | 'eraser' | 'heatTool' | 'coolTool'
+        drawingData: Record<string, any>
         baseTemperature: number
         brushSize: number
         simulationSpeed: number
@@ -24,6 +25,7 @@ export class Controls {
         debugMode: Storage.get('Controls.debugMode', false),
         isTemperatureEnabled: Storage.get('Controls.isTemperatureEnabled', true),
         drawingType: Storage.get('Controls.drawingType', EPointType.Water),
+        drawingData: Storage.get('Controls.drawingData', {}),
         baseTemperature: Storage.get('Controls.baseTemperature', 20),
         brushSize: Storage.get('Controls.brushSize', 2),
         simulationSpeed: Storage.get('Controls.simulationSpeed', 1),
@@ -76,6 +78,14 @@ export class Controls {
 
     public static setDrawingType(value: EPointType | 'eraser' | 'heatTool' | 'coolTool') {
         this.setState('drawingType', value)
+    }
+
+    public static getDrawingData() {
+        return this.state.drawingData
+    }
+
+    public static setDrawingData(value: Record<string, any>) {
+        this.setState('drawingData', value)
     }
 
     public static getDebugMode() {

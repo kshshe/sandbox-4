@@ -5,7 +5,7 @@ import classNames from "classnames";
 import { POINTS_COLORS, POINT_TYPE_ICON, POINTS_SHORTCUTS, REVERSED_POINTS_SHORTCUTS } from "../../../config";
 import { Tooltip } from 'react-tooltip'
 import { POINT_TYPE_HINT } from "../../../constants/pointTypeHint";
-import { ELEMENT_GROUPS } from "../../../constants/pointTypeIcon";
+import { ELEMENT_GROUPS, TElementInGroup } from "../../../constants/pointTypeIcon";
 import { EPointType } from "../../../types";
 
 const ICONS = {
@@ -32,7 +32,7 @@ export const ElementsPanel: React.FC = () => {
   const [isClosing, setIsClosing] = React.useState(false);
   const [isOpened, setIsOpened] = React.useState(false);
   const [drawingType, setDrawingType] = useControls("drawingType");
-
+  const [drawingData, setDrawingData] = useControls("drawingData");
   React.useEffect(() => {
     if (!isOpened) {
       return;
@@ -89,7 +89,18 @@ export const ElementsPanel: React.FC = () => {
     </button>
   );
 
-  const renderElementButton = (type: string) => {
+  const renderElementButton = (groupElement: TElementInGroup) => {
+    const elementAsString = typeof groupElement === 'string'
+    let customIcon = ''
+    let type = groupElement
+    let data = {}
+    if (elementAsString) {
+      type = groupElement as keyof typeof POINT_TYPE_ICON
+    } else {
+      customIcon = groupElement.icon ?? ''
+      type = groupElement.type
+      data = groupElement.data
+    }
     const color = POINTS_COLORS[type] ?? { r: 0, g: 0, b: 0 }
     return (
       <button
@@ -97,6 +108,7 @@ export const ElementsPanel: React.FC = () => {
         className={styles.panelButton}
         onClick={() => {
           setDrawingType(type as any);
+          setDrawingData(data);
           setIsOpened(false);
         }}
         style={{
@@ -104,7 +116,7 @@ export const ElementsPanel: React.FC = () => {
         }}
         data-tooltip-id={`tooltip-${type}`}
       >
-        <Icon type={type} />
+        {customIcon || <Icon type={type} />}
         {REVERSED_POINTS_SHORTCUTS[type] && (
           <span className={styles.shortcut}>{REVERSED_POINTS_SHORTCUTS[type]}</span>
         )}
@@ -121,16 +133,18 @@ export const ElementsPanel: React.FC = () => {
         e.stopPropagation();
       }}
     >
-      {ELEMENT_GROUPS.map((group, index) => (
-        <div key={group.name} className={classNames(styles.groupContainer, {
-          [styles.last]: index === ELEMENT_GROUPS.length - 1,
-        })}>
-          <h3 className={styles.groupTitle}>{group.name}</h3>
-          <div className={styles.elementsRow}>
-            {group.elements.map((type) => renderElementButton(type as string))}
+      {ELEMENT_GROUPS.map((group, index) => {
+        return (
+          <div key={group.name} className={classNames(styles.groupContainer, {
+            [styles.last]: index === ELEMENT_GROUPS.length - 1,
+          })}>
+            <h3 className={styles.groupTitle}>{group.name}</h3>
+            <div className={styles.elementsRow}>
+              {group.elements.map((type) => renderElementButton(type as string))}
+            </div>
           </div>
-        </div>
-      ))}
+        )
+      })}
       <div>
         {Object.keys(POINT_TYPE_ICON).map((type) => (
           <Tooltip
