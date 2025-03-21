@@ -14,6 +14,7 @@ import { WindVectors } from "./classes/windVectors";
 const previouslyUsedPixels: Set<string> = new Set();
 let frame = 0;
 let lastFrameTime = 0;
+let wasFaviconUpdated = false;
 
 export const drawPoints = () => {
     const debugMode = Controls.getDebugMode();
@@ -162,6 +163,10 @@ export const drawPoints = () => {
     updateStats();
     drawConnections();
     drawWindVectors();
+    if (frame % 200 === 0 || !wasFaviconUpdated) {
+        updateFavicon();
+        wasFaviconUpdated = true;
+    }
 
     requestAnimationFrame(drawPoints);
 };
@@ -298,6 +303,46 @@ export const drawConnections = () => {
         ctx.setLineDash([]); // Reset line style
     }
 };
+
+let faviconElement = document.querySelector('link[rel="icon"]') as HTMLLinkElement;
+if (!faviconElement) {
+    faviconElement = document.createElement('link');
+    faviconElement.rel = 'icon';
+    document.head.appendChild(faviconElement);
+}
+
+const updateFavicon = () => {
+    // Create a temporary canvas for the favicon
+    const faviconCanvas = document.createElement('canvas');
+    const faviconSize = 32; // Standard favicon size
+    faviconCanvas.width = faviconSize;
+    faviconCanvas.height = faviconSize;
+    
+    // Get the context for drawing on the favicon canvas
+    const faviconCtx = faviconCanvas.getContext('2d');
+    
+    if (!faviconCtx) {
+        return;
+    }
+    
+    // Sample the main canvas and draw it to the favicon canvas
+    faviconCtx.drawImage(
+        ctx.canvas, 
+        0, 
+        0, 
+        ctx.canvas.width, 
+        ctx.canvas.height, 
+        0, 
+        0, 
+        faviconSize, 
+        faviconSize
+    );
+    
+    // Convert the favicon canvas to a data URL (PNG format)
+    const dataUrl = faviconCanvas.toDataURL('image/png');
+    
+    faviconElement.href = dataUrl;
+}
 
 const drawWindVectors = () => {
     if (isDrawing) {
