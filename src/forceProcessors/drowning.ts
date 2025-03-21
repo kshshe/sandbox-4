@@ -68,8 +68,8 @@ export const drowning: TForceProcessor = (point) => {
             const currentIteration = Storage.get('iteration', 0)
             pointBySpeed.lastMoveOnIteration = currentIteration
 
-            pointBySpeed.speed.x -= roundedSpeed.x * 0.1
-            pointBySpeed.speed.y -= roundedSpeed.y * 0.1
+            pointBySpeed.speed.x -= roundedSpeed.x * 0.04
+            pointBySpeed.speed.y -= roundedSpeed.y * 0.04
             
             // Mark neighbors as used
             Points.markNeighboursAsUsed(pointBySpeed)
