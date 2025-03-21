@@ -2,16 +2,13 @@ import { Points } from './classes/points'
 import { Speed } from './classes/speed'
 import { Stats } from './classes/stats'
 import { forcesByType } from './forceProcessors'
-import { EPointType } from './types'
 import { wait } from './utils/wait'
 import { Controls } from './classes/controls'
 import { Storage } from './classes/storage'
-import { CANT_BE_UNSED, POINTS_WEIGHTS } from './config'
+import { CANT_BE_UNSED } from './config'
 import { Bounds } from './classes/bounds'
 import { TemperatureGrid } from './classes/temperatureGrid'
 import { incrementVirusSteps } from './forceProcessors/virus'
-import { POINTS_CAN_NOT_SHARE_SPEED } from './constants/pointsExceptions'
-import { WindVectors } from './classes/windVectors'
 
 const MAX_SPEED = 6
 const MAX_UNUSED_ITERATIONS = 50
@@ -40,7 +37,6 @@ const processFrame = () => {
 
     iteration++
     incrementVirusSteps()
-    WindVectors.clearVectors()
     for (const index in points) {
         const point = points[index]
         let isUnused = Points.isUnused(point)

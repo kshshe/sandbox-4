@@ -1,4 +1,3 @@
-import { Storage } from './storage';
 import { TCoordinate } from '../types';
 
 export type TWindVector = {
@@ -9,25 +8,47 @@ export type TWindVector = {
 };
 
 export class WindVectors {
-  private static vectors: Record<string, TWindVector> = Storage.get('windVectors', {});
+  private static vectors: Record<string, TWindVector> = {};
+  private static cache: Record<string, TWindVector[]> = {};
+  private static cacheHits = 0;
+  private static cacheMisses = 0;
 
-  static saveVectors(): void {
-    Storage.set('windVectors', this.vectors);
+  static clearCache(): void {
+    this.cache = {};
+  }
+
+  static getCacheStats(): { hits: number, misses: number } {
+    return {
+      hits: this.cacheHits,
+      misses: this.cacheMisses
+    };
   }
   
   static addVector(coordinates: TCoordinate, vector: TWindVector): void {
     const key = `${coordinates.x},${coordinates.y}`;
+    if (this.vectors[key]) {
+      const isSame = this.vectors[key].strength === vector.strength && this.vectors[key].radius === vector.radius && this.vectors[key].x === vector.x && this.vectors[key].y === vector.y;
+      if (isSame) {
+        return;
+      }
+    }
     this.vectors[key] = vector;
-    this.saveVectors();
+    this.clearCache();
   }
   
   static removeVector(coordinates: TCoordinate): void {
     const key = `${coordinates.x},${coordinates.y}`;
     delete this.vectors[key];
-    this.saveVectors();
+    this.clearCache();
   }
   
   static getVectorsAffectingPoint(coordinates: TCoordinate): TWindVector[] {
+    const cacheKey = `${coordinates.x},${coordinates.y}`;
+    if (this.cache[cacheKey]) {
+      this.cacheHits++;
+      return this.cache[cacheKey];
+    }
+    this.cacheMisses++;
     const result: TWindVector[] = [];
     
     Object.entries(this.vectors).forEach(([key, vector]) => {
@@ -45,12 +66,14 @@ export class WindVectors {
         });
       }
     });
+
+    this.cache[cacheKey] = result;
     
     return result;
   }
   
   static clearVectors(): void {
     this.vectors = {};
-    this.saveVectors();
+    this.clearCache();
   }
 } 

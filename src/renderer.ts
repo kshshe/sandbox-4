@@ -9,6 +9,7 @@ import { drawingX, drawingY, hoveredCoordinates } from "./interactions";
 import { EPointType } from "./types";
 import { Storage } from "./classes/storage";
 import { Connections } from "./classes/connections";
+import { WindVectors } from "./classes/windVectors";
 
 const previouslyUsedPixels: Set<string> = new Set();
 let frame = 0;
@@ -169,6 +170,7 @@ const limitLineLength = (line: string, maxLength: number) => {
 }
 
 const updateStats = () => {
+    const debugMode = Controls.getDebugMode();
     const iteration = Storage.get('iteration', 0)
     const stats = document.querySelector('.stats') as HTMLDivElement;
     if (frame++ % 20 === 0) {
@@ -177,6 +179,7 @@ const updateStats = () => {
             return acc;
         }, {} as Record<EPointType, number>)
         stats.innerHTML = [
+            debugMode && `Cache: ${WindVectors.getCacheStats().hits} hits, ${WindVectors.getCacheStats().misses} misses`,
             process.env.VERCEL_GIT_COMMIT_MESSAGE && `Commit: ${limitLineLength(process.env.VERCEL_GIT_COMMIT_MESSAGE, 20)}`,
             `Frame: ${(Math.round(Stats.data.elapsedTime * 10) / 10).toFixed(1)} ms`,
             `Iteration: ${iteration}`,

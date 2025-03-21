@@ -6,6 +6,7 @@ import { Connections } from './connections'
 import { Controls } from './controls'
 import { Speed, TRoundedSpeed } from './speed'
 import { Storage } from './storage'
+import { WindVectors } from './windVectors'
 
 export type TPoint = {
     coordinates: TCoordinate
@@ -145,6 +146,9 @@ export class Points {
 
     static deletePoint(point: TPoint) {
         this.markNeighboursAsUsed(point)
+        if (point.type === EPointType.WindSource) {
+            WindVectors.clearVectors()
+        }
         const pointByCoordinates = this.getPointByCoordinates(point.coordinates)
         if (pointByCoordinates === point) {
             this.deletePointInIndex(point.coordinates)
