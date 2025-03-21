@@ -5,7 +5,7 @@ import { TConfig } from "../constants/pointsExceptions";
 const MAGNET_FORCE = 0.01;
 
 export const magnetAttraction = (attractTo: TConfig): TForceProcessor => (point) => {
-    const neighbors = Points.getNeighbours(point, true);
+    const neighbors = Points.getNeighbours(point, true, 4);
     
     // Find any metal neighbors
     const metalNeighbors = neighbors.filter(neighbor => 

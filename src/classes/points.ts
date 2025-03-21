@@ -159,9 +159,29 @@ export class Points {
         return this.points
     }
 
-    static getPointsNear(coordinates: TCoordinate, withBorder = true): TPoint[] {
+    private static getPossibleNeighbours(distance = 1): TCoordinate[] {
+        if (distance === 0) {
+            return []
+        }
+        if (distance === 1) {
+            return Speed.possibleNeighbours
+        }
+        const possiblePositions: TCoordinate[] = []
+        for (let x = -distance; x <= distance; x++) {
+            for (let y = -distance; y <= distance; y++) {
+                if (x === 0 && y === 0) {
+                    continue
+                }
+                possiblePositions.push({ x, y })
+            }
+        }
+        return possiblePositions
+    }
+
+    static getPointsNear(coordinates: TCoordinate, withBorder = true, distance = 1): TPoint[] {
         const points: TPoint[] = []
-        for (const neighbourPosition of Speed.possibleNeighbours) {
+        const possiblePositions = this.getPossibleNeighbours(distance)
+        for (const neighbourPosition of possiblePositions) {
             const pointByCoordinates = this.getPointByCoordinates({
                 x: coordinates.x + neighbourPosition.x,
                 y: coordinates.y + neighbourPosition.y
@@ -190,8 +210,8 @@ export class Points {
         })
     }
 
-    static getNeighbours(point: TPoint, withBorder = true): TPoint[] {
-        return this.getPointsNear(point.coordinates, withBorder)
+    static getNeighbours(point: TPoint, withBorder = true, distance = 1): TPoint[] {
+        return this.getPointsNear(point.coordinates, withBorder, distance)
     }
 
     static getPointBySpeed(fromPoint: TPoint, roundedSpeed: TRoundedSpeed): TPoint | undefined {
