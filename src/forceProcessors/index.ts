@@ -44,7 +44,7 @@ const noopDetector = () => {}
 
 const BASIC_TEMPERATURE_PROCESSORS = [
     noopDetector,
-    throttle(moveToBaseTemperature(0.05), 10),
+    throttle(moveToBaseTemperature(0.01), 10),
 ]
 
 const BASIC_FORCES: TForceProcessor[] = [
@@ -60,13 +60,13 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
         staticForce,
         throttle(directionToGround, 10),
         sendCharge,
-        convertOnTemperature('more', 1200, EPointType.MoltenMetal),
+        convertOnTemperature('more', 1500, EPointType.MoltenMetal),
     ],
     [EPointType.MoltenMetal]: [
         ...BASIC_FORCES,
         directionToGround,
         sendCharge,
-        convertOnTemperature('less', 450, EPointType.Metal),
+        convertOnTemperature('less', 1400, EPointType.Metal),
     ],
     [EPointType.Electricity_Spark]: [
         ...BASIC_FORCES,
@@ -110,31 +110,31 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
     [EPointType.Water]: [
         ...BASIC_FORCES,
         liquid,
-        convertOnTemperature('less', -2, EPointType.Ice),
-        convertOnTemperature('more', 99, EPointType.Steam),
+        convertOnTemperature('less', 0, EPointType.Ice),
+        convertOnTemperature('more', 100, EPointType.Steam),
     ],
     [EPointType.LiquidGas]: [
         ...BASIC_FORCES,
         liquid,
-        convertOnTemperature('more', -100, EPointType.Gas),
+        convertOnTemperature('more', -160, EPointType.Gas),
     ],
     [EPointType.Lava]: [
         ...BASIC_FORCES,
         liquid,
-        convertOnTemperature('less', 500, EPointType.StaticStone),
+        convertOnTemperature('less', 1200, EPointType.StaticStone),
     ],
     [EPointType.Sand]: [
         ...BASIC_FORCES,
-        convertOnTemperature('more', 850, EPointType.LiquidGlass),
+        convertOnTemperature('more', 1700, EPointType.LiquidGlass),
     ],
     [EPointType.StaticStone]: [
         ...BASIC_TEMPERATURE_PROCESSORS,
         staticForce,
-        convertOnTemperature('more', 550, EPointType.Lava),
+        convertOnTemperature('more', 1300, EPointType.Lava),
     ],
     [EPointType.Stone]: [
         ...BASIC_FORCES,
-        convertOnTemperature('more', 550, EPointType.Lava),
+        convertOnTemperature('more', 1300, EPointType.Lava),
     ],
     [EPointType.Smoke]: [
         ...BASIC_FORCES,
@@ -144,13 +144,13 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
     [EPointType.Fire]: [
         ...BASIC_FORCES,
         lifetime(8, 50),
-        staticTemperature(INITIAL_TEMPERATURE[EPointType.Fire] ?? 2000),
+        staticTemperature(() => INITIAL_TEMPERATURE[EPointType.Fire] ?? 2000),
         emitter(EPointType.Smoke, 0.02, 0.001),
     ],
     [EPointType.IceFire]: [
         ...BASIC_FORCES,
         lifetime(30, 120),
-        staticTemperature(INITIAL_TEMPERATURE[EPointType.IceFire] ?? -700),
+        staticTemperature(() => INITIAL_TEMPERATURE[EPointType.IceFire] ?? -700),
     ],
     [EPointType.Bomb]: [
         ...BASIC_FORCES,
@@ -164,43 +164,43 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
     [EPointType.Ice]: [
         ...BASIC_TEMPERATURE_PROCESSORS,
         staticForce,
-        convertOnTemperature('more', 3, EPointType.Water),
+        convertOnTemperature('more', 0, EPointType.Water),
     ],
     [EPointType.Glass]: [
         ...BASIC_TEMPERATURE_PROCESSORS,
         staticForce,
-        convertOnTemperature('more', 850, EPointType.LiquidGlass),
+        convertOnTemperature('more', 1400, EPointType.LiquidGlass),
     ],
     [EPointType.LiquidGlass]: [
         ...BASIC_FORCES,
         liquid,
-        convertOnTemperature('less', 750, EPointType.Glass),
+        convertOnTemperature('less', 1300, EPointType.Glass),
     ],
     [EPointType.ConstantCold]: [
         ...BASIC_TEMPERATURE_PROCESSORS,
-        staticTemperature(INITIAL_TEMPERATURE[EPointType.ConstantCold] ?? -500),
+        staticTemperature(() => INITIAL_TEMPERATURE[EPointType.ConstantCold] ?? -500),
         staticForce,
     ],
     [EPointType.ConstantHot]: [
         ...BASIC_TEMPERATURE_PROCESSORS,
-        staticTemperature(INITIAL_TEMPERATURE[EPointType.ConstantHot] ?? 500),
+        staticTemperature(() => INITIAL_TEMPERATURE[EPointType.ConstantHot] ?? 500),
         staticForce,
     ],
     [EPointType.Gas]: [
         ...BASIC_FORCES,
         chaos(1000),
-        convertOnTemperature('more', 250, EPointType.FireEmitter),
+        convertOnTemperature('more', 400, EPointType.FireEmitter),
     ],
     [EPointType.Wood]: [
         ...BASIC_TEMPERATURE_PROCESSORS,
         staticForce,
-        convertOnTemperature('more', 400, EPointType.BurningWood),
+        convertOnTemperature('more', 300, EPointType.BurningWood),
     ],
     [EPointType.BurningWood]: [
         ...BASIC_TEMPERATURE_PROCESSORS,
         staticForce,
         lifetime(500, 1000),
-        staticTemperature(800),
+        staticTemperature(() => INITIAL_TEMPERATURE[EPointType.BurningWood] ?? 800),
         emitter(EPointType.Fire, 0.2),
         emitter(EPointType.Smoke, 0.2, 0.001),
     ],
@@ -218,20 +218,20 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
     [EPointType.Oil]: [
         ...BASIC_FORCES,
         liquid,
-        convertOnTemperature('more', 350, EPointType.BurningOil),
+        convertOnTemperature('more', 250, EPointType.BurningOil),
     ],
     [EPointType.BurningOil]: [
         ...BASIC_FORCES,
         liquid,
         emitter(EPointType.Fire, 0.5),
         emitter(EPointType.Smoke, 0.05, 0.001),
-        staticTemperature(400),
+        staticTemperature(() => INITIAL_TEMPERATURE[EPointType.BurningOil] ?? 400),
         lifetime(100, 200),
     ],
     [EPointType.Steam]: [
         ...BASIC_FORCES,
         chaos(100),
-        convertOnTemperature('less', 60, EPointType.Water),
+        convertOnTemperature('less', 99, EPointType.Water),
         moveToBaseTemperature(0.02),
     ],
     [EPointType.Border]: [
@@ -264,12 +264,12 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
         ...BASIC_FORCES,
         staticForce,
         plant,
-        convertOnTemperature('more', 400, EPointType.BurningWood),
+        convertOnTemperature('more', 300, EPointType.BurningWood),
     ],
     [EPointType.PlantSeed]: [
         ...BASIC_FORCES,
         plant,
-        convertOnTemperature('more', 400, EPointType.BurningWood),
+        convertOnTemperature('more', 300, EPointType.BurningWood),
     ],
     [EPointType.ColdDetector]: [
         ...BASIC_TEMPERATURE_PROCESSORS,

@@ -3,11 +3,23 @@ import { TForceProcessor } from ".";
 import { Points } from "../classes/points";
 import { Controls } from "../classes/controls";
 import { random } from "../utils/random";
-export const staticTemperature = (temperature: number): TForceProcessor => (point) => {
-    point.data.temperature = temperature
+
+export const staticTemperature = (temperature: number | (() => number)): TForceProcessor => (point) => {
+    let temperatureValue: number
+    if (typeof temperature === 'function') {
+        temperatureValue = temperature()
+    } else {
+        temperatureValue = temperature
+    }
+    point.data.temperature = temperatureValue
 }
 
 const CHANCE_TO_CONVERT = 0.03
+
+export const conversionTemperatureStats = {
+    max: 500,
+    min: -500,
+}
 
 export const convertOnTemperature = (
     type: 'more' | 'less',
@@ -20,6 +32,12 @@ export const convertOnTemperature = (
 
     if (!point.data.temperature) {
         point.data.temperature = 15
+    }
+
+    if (type === 'more') {
+        conversionTemperatureStats.max = Math.max(conversionTemperatureStats.max, temperature)
+    } else {
+        conversionTemperatureStats.min = Math.min(conversionTemperatureStats.min, temperature)
     }
 
     if (type === 'more' && point.data.temperature > temperature && point.type !== typeToConvert) {
