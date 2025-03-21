@@ -28,6 +28,8 @@ describe('Controls', () => {
       simulationSpeed: 1,
       isPaused: false,
       isSmoothMovementEnabled: true,
+      drawingData: {},
+      isConnectionMode: false,
     };
     Controls['subscribers'] = [];
   });
