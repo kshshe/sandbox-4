@@ -27,9 +27,6 @@ const getVectorDiv = (vector: { x: number, y: number }) => {
         y: vector.y / Math.sqrt(vector.x ** 2 + vector.y ** 2),
     }
     if (!normalizedVector.x && !normalizedVector.y) {
-        return '';
-    }
-    if (normalizedVector.x < 0.01 && normalizedVector.y < 0.01) {
         return `<div class="vector-container">
             <div class="vector-dot"></div>
         </div>`;
