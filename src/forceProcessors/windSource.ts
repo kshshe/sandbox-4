@@ -17,7 +17,7 @@ export const windSource: TForceProcessor = (point) => {
   }
   
   if (!point.data.windRadius) {
-    point.data.windRadius = 20; // Default radius
+    point.data.windRadius = 10; // Default radius
   }
   
   // Create or update the wind vector

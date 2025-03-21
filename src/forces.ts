@@ -40,6 +40,7 @@ const processFrame = () => {
 
     iteration++
     incrementVirusSteps()
+    WindVectors.clearVectors()
     for (const index in points) {
         const point = points[index]
         let isUnused = Points.isUnused(point)
