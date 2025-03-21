@@ -5,7 +5,7 @@ import { Bounds } from "./classes/bounds";
 import { TemperatureGrid } from "./classes/temperatureGrid";
 import { Stats } from "./classes/stats";
 import { ctx } from "./canvas";
-import { drawingX, drawingY, hoveredCoordinates } from "./interactions";
+import { drawingX, drawingY, hoveredCoordinates, isDrawing } from "./interactions";
 import { EPointType } from "./types";
 import { Storage } from "./classes/storage";
 import { Connections } from "./classes/connections";
@@ -161,6 +161,7 @@ export const drawPoints = () => {
 
     updateStats();
     drawConnections();
+    drawWindVectors();
 
     requestAnimationFrame(drawPoints);
 };
@@ -297,3 +298,42 @@ export const drawConnections = () => {
         ctx.setLineDash([]); // Reset line style
     }
 };
+
+const drawWindVectors = () => {
+    if (isDrawing) {
+        return;
+    }
+    if (!Controls.getDebugMode()) {
+        return;
+    }
+    const bounds = Bounds.getBounds();
+    const vectorsCount = WindVectors.getVectorsCount();
+    if (vectorsCount > 500 || !vectorsCount) {
+        return;
+    }
+    for (let x = bounds.left; x <= bounds.right; x++) {
+        for (let y = bounds.top; y <= bounds.bottom; y++) {
+            const vectors = WindVectors.getVectorsAffectingPoint({ x, y });
+            vectors.forEach(vector => {
+                const startX = x * CONFIG.pixelSize + CONFIG.pixelSize / 2;
+                const startY = y * CONFIG.pixelSize + CONFIG.pixelSize / 2;
+                const endX = startX + vector.x * vector.strength * 5;
+                const endY = startY + vector.y * vector.strength * 5;
+
+                // line with a dot at the end
+                ctx.beginPath();
+                ctx.moveTo(startX, startY);
+                ctx.lineTo(endX, endY);
+                ctx.strokeStyle = 'rgba(0, 0, 0, 0.3)';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+
+                // dot at the end
+                ctx.beginPath();
+                ctx.arc(endX, endY, 1, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+                ctx.fill();
+            });
+        }
+    }
+}

@@ -17,13 +17,17 @@ export class WindVectors {
     this.cache = {};
   }
 
+  static getVectorsCount(): number {
+    return Object.keys(this.vectors).length;
+  }
+
   static getCacheStats(): { hits: number, misses: number } {
     return {
       hits: this.cacheHits,
       misses: this.cacheMisses
     };
   }
-  
+
   static addVector(coordinates: TCoordinate, vector: TWindVector): void {
     const key = `${coordinates.x},${coordinates.y}`;
     if (this.vectors[key]) {
