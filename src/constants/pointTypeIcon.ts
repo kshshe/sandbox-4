@@ -201,11 +201,16 @@ export const ELEMENT_GROUPS: ElementGroup[] = [
     }
 ]
 
-// Check if all elements in POINT_TYPE_ICON are included in at least one group
-const allElementsInGroups = ELEMENT_GROUPS.flatMap(group => group.elements);
 const allElementsInIcon = Object.keys(POINT_TYPE_ICON);
 
-const missingElements = allElementsInIcon.filter(element => !ELEMENT_GROUPS.some(group => group.elements.includes(element as keyof typeof POINT_TYPE_ICON)));
+const missingElements = allElementsInIcon.filter(element => !ELEMENT_GROUPS.some(group => {
+    return group.elements.some(groupElement => {
+        if (typeof groupElement === 'string') {
+            return groupElement === element
+        }
+        return groupElement.type === element
+    })
+}));
 if (missingElements.length > 0) {
     console.warn('Not all elements are included in groups', missingElements);
 }

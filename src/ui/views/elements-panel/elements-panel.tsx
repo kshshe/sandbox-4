@@ -104,7 +104,7 @@ export const ElementsPanel: React.FC = () => {
     const color = POINTS_COLORS[type] ?? { r: 0, g: 0, b: 0 }
     return (
       <button
-        key={type}
+        key={type + JSON.stringify(data)}
         className={styles.panelButton}
         onClick={() => {
           setDrawingType(type as any);
