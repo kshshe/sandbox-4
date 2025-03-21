@@ -320,19 +320,12 @@ const drawWindVectors = () => {
                 const endX = startX + vector.x * vector.strength * 5;
                 const endY = startY + vector.y * vector.strength * 5;
 
-                // line with a dot at the end
                 ctx.beginPath();
                 ctx.moveTo(startX, startY);
                 ctx.lineTo(endX, endY);
                 ctx.strokeStyle = 'rgba(0, 0, 0, 0.3)';
                 ctx.lineWidth = 1;
                 ctx.stroke();
-
-                // dot at the end
-                ctx.beginPath();
-                ctx.arc(endX, endY, 1, 0, Math.PI * 2);
-                ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
-                ctx.fill();
             });
         }
     }
