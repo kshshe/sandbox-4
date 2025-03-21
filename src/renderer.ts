@@ -163,7 +163,7 @@ export const drawPoints = () => {
     updateStats();
     drawConnections();
     drawWindVectors();
-    if (frame % 200 === 0 || !wasFaviconUpdated) {
+    if (points.length && (frame % 200 === 0 || !wasFaviconUpdated)) {
         updateFavicon();
         wasFaviconUpdated = true;
     }
