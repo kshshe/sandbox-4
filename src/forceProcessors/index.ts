@@ -35,6 +35,8 @@ import { smoke } from "./smoke";
 import { electricityAmplifier } from "./electricityAmplifier";
 import { magnetAttraction } from "./magnetAttraction";
 import { MAGNET_POINTS_TO_MAGNETIZE } from "../constants/pointsExceptions";
+import { windForce } from "./wind";
+import { windSource } from "./windSource";
 
 export type TForceProcessor = (point: TPoint, step: number) => void
 
@@ -49,6 +51,7 @@ const BASIC_FORCES: TForceProcessor[] = [
     ...BASIC_TEMPERATURE_PROCESSORS,
     gravity,
     drowning,
+    windForce,
 ]
 
 export const forcesByType: Record<EPointType, TForceProcessor[]> = {
@@ -301,6 +304,11 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
     [EPointType.Pipe]: [
         ...BASIC_TEMPERATURE_PROCESSORS,
         staticForce,
+    ],
+    [EPointType.WindSource]: [
+        ...BASIC_TEMPERATURE_PROCESSORS,
+        staticForce,
+        windSource,
     ],
 }
 

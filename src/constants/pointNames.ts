@@ -49,4 +49,5 @@ export const POINT_NAMES: {
     [EPointType.Pipe]: 'Pipe',
     [EPointType.Snow]: 'Snow',
     [EPointType.Magnet]: 'Magnet',
+    [EPointType.WindSource]: 'Wind Source',
 }

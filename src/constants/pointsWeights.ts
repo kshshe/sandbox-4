@@ -48,4 +48,5 @@ export const POINTS_WEIGHTS: Record<EPointType, number> = {
     [EPointType.FireEmitter]: Infinity,
     [EPointType.Wire]: Infinity,
     [EPointType.Pipe]: Infinity,
+    [EPointType.WindSource]: Infinity,
 } 

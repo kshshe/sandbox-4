@@ -48,6 +48,7 @@ export const POINT_TYPE_ICON: {
     [EPointType.Smoke]: '🚬',
     [EPointType.Snow]: '❄️☃️',
     [EPointType.Magnet]: '🧲',
+    [EPointType.WindSource]: '💨',
     eraser: '🧽',
     heatTool: '🔥🔧',
     coolTool: '❄️🔧',
@@ -134,6 +135,12 @@ export const ELEMENT_GROUPS: ElementGroup[] = [
         elements: [
             EPointType.Bomb,
             EPointType.Dynamite,
+        ]
+    },
+    {
+        name: "Environmental",
+        elements: [
+            EPointType.WindSource,
         ]
     },
     {

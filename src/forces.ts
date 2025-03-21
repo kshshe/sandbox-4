@@ -11,6 +11,7 @@ import { Bounds } from './classes/bounds'
 import { TemperatureGrid } from './classes/temperatureGrid'
 import { incrementVirusSteps } from './forceProcessors/virus'
 import { POINTS_CAN_NOT_SHARE_SPEED } from './constants/pointsExceptions'
+import { WindVectors } from './classes/windVectors'
 
 const MAX_SPEED = 6
 const MAX_UNUSED_ITERATIONS = 50

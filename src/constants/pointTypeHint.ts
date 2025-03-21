@@ -41,6 +41,7 @@ export const POINT_TYPE_HINT: {
     [EPointType.Pipe]: 'Pipe - Creates a direct path for liquids to flow between two points',
     [EPointType.Snow]: 'Snow - Light particles that melt into water when heated above 0°C',
     [EPointType.Magnet]: 'Magnet - Dark-gray powder that is attracted to metal objects',
+    [EPointType.WindSource]: 'Wind Source - Creates air currents that push lighter elements',
     eraser: 'Eraser - Removes elements from the simulation',
     heatTool: 'Heat Tool - Increases temperature of elements',
     coolTool: 'Cool Tool - Decreases temperature of elements',
