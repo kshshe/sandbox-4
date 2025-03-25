@@ -2,6 +2,8 @@
 
 This project is an interactive particle simulation sandbox where users can experiment with different element types and observe their behaviors in a physics-based environment. 
 
+[Play the game](https://sandgame.fyi)
+
 ## Getting Started
 
 ### Prerequisites
