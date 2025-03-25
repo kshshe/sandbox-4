@@ -48,11 +48,15 @@ const BASIC_TEMPERATURE_PROCESSORS = [
     throttle(moveToBaseTemperature(0.01), 10),
 ]
 
-const BASIC_FORCES: TForceProcessor[] = [
+const BASIC_FORCES_EXCEPT_GRAVITY = [
     ...BASIC_TEMPERATURE_PROCESSORS,
-    gravity,
     drowning,
     windForce,
+]
+
+const BASIC_FORCES: TForceProcessor[] = [
+    ...BASIC_FORCES_EXCEPT_GRAVITY,
+    gravity,
 ]
 
 export const forcesByType: Record<EPointType, TForceProcessor[]> = {
@@ -312,7 +316,7 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
         windSource,
     ],
     [EPointType.Ant]: [
-        ...BASIC_FORCES,
+        ...BASIC_FORCES_EXCEPT_GRAVITY,
         ant,
     ],
 }
