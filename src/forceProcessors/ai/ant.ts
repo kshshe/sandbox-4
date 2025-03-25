@@ -5,11 +5,20 @@ import { TPoint } from "../../types";
 import { Speed } from "../../classes/speed";
 import { randomOf } from "../../utils/randomOf";
 import { gravity } from "../gravity";
+import { random } from "../../utils/random";
 
 const CONVERT_ON_TOUCH: {
     [key in EPointType]?: EPointType
 } = {
     [EPointType.Sand]: EPointType.StaticSand,
+}
+
+const CHANCE_TO_EAT_POINT: {
+    [key in EPointType]?: number
+} = {
+    [EPointType.StaticSand]: 0.01,
+    [EPointType.Sand]: 0.1,
+    [EPointType.Wood]: 0.1,
 }
 
 const moveTo = (point: TPoint, target: TCoordinate) => {
@@ -36,6 +45,16 @@ export const ant: TForceProcessor = (point, step) => {
 
     for (const neighbor of neighbors) {
         if (neighbor.type === point.type) {
+            continue
+        }
+
+        const chanceToEatPoint = CHANCE_TO_EAT_POINT[neighbor.type]
+        if (chanceToEatPoint && random() < chanceToEatPoint) {
+            point.data.previousTarget = {
+                x: neighbor.coordinates.x - point.coordinates.x,
+                y: neighbor.coordinates.y - point.coordinates.y,
+            }
+            Points.deletePoint(neighbor)
             continue
         }
 
