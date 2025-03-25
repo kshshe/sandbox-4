@@ -2,10 +2,10 @@ import { TForceProcessor } from "..";
 import { TCoordinate } from "../../types";
 import { Points } from "../../classes/points";
 import { TPoint } from "../../types";
-import { random }from "../../utils/random";
 import { Speed } from "../../classes/speed";
 import { randomOf } from "../../utils/randomOf";
 import { gravity } from "../gravity";
+
 const moveTo = (point: TPoint, target: TCoordinate) => {
     if (!Points.getPointByCoordinates(target)) {
         Points.deletePointInIndex(point.coordinates)
