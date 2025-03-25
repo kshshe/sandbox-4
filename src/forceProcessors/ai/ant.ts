@@ -11,6 +11,7 @@ const CONVERT_ON_TOUCH: {
     [key in EPointType]?: EPointType
 } = {
     [EPointType.Sand]: EPointType.StaticSand,
+    [EPointType.Stone]: EPointType.StaticStone,
 }
 
 const CHANCE_TO_EAT_POINT = {
@@ -23,6 +24,7 @@ const CHANCE_TO_CARRY_POINT = {
     [EPointType.StaticSand]: 0.04,
     [EPointType.StaticStone]: 0.04,
     [EPointType.Wood]: 0.08,
+    default: 0.01,
 } as const
 
 const CHANCE_TO_PUT_POINT = 0.1
@@ -110,7 +112,8 @@ export const ant: TForceProcessor = (point, step) => {
         }
 
         // Carry point
-        const chanceToCarryPoint = !point.data.carriedPoint && CHANCE_TO_CARRY_POINT[neighbor.type]
+        const chanceToCarryPointForThisType = CHANCE_TO_CARRY_POINT[neighbor.type] ?? CHANCE_TO_CARRY_POINT.default
+        const chanceToCarryPoint = !point.data.carriedPoint && chanceToCarryPointForThisType
         if (chanceToCarryPoint && random() < chanceToCarryPoint) {
             point.data.carriedPoint = neighbor
             Points.deletePoint(neighbor)
