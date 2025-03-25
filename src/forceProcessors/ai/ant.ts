@@ -58,6 +58,10 @@ export const ant: TForceProcessor = (point, step) => {
         return
     }
 
+    if (point.data.temperature !== undefined && point.data.temperature < 2) {
+        return;
+    }
+
     point.data.age = (point.data.age ?? 0) + 1
 
     if (random() < CHANCE_TO_REPRODUCE && point.data.age > AGE_TO_REPRODUCE) {
