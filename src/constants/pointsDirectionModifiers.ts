@@ -3,6 +3,7 @@ import { EPointType } from "../types"
 export const POINTS_PROBABILITY_TO_CHANGE_DIRECTION_MODIFIERS: {
     [key in EPointType]?: number
 } = {
+    [EPointType.Sand]: 0.01,
     [EPointType.Stone]: 0,
     [EPointType.StaticStone]: 0,
     [EPointType.Void]: 0,

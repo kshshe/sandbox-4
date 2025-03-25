@@ -37,6 +37,7 @@ import { magnetAttraction } from "./magnetAttraction";
 import { MAGNET_POINTS_TO_MAGNETIZE } from "../constants/pointsExceptions";
 import { windForce } from "./wind";
 import { windSource } from "./windSource";
+import { ant } from "./ai/ant";
 
 export type TForceProcessor = (point: TPoint, step: number) => void
 
@@ -312,6 +313,7 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
     ],
     [EPointType.Ant]: [
         ...BASIC_FORCES,
+        ant,
     ],
 }
 
