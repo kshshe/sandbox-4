@@ -14,19 +14,24 @@ const CONVERT_ON_TOUCH: {
 }
 
 const CHANCE_TO_EAT_POINT = {
-    [EPointType.StaticSand]: 0.005,
+    [EPointType.StaticSand]: 0.001,
     [EPointType.Sand]: 0.07,
-    [EPointType.Wood]: 0.005,
+    [EPointType.Wood]: 0.001,
 } as const
 
 const CHANCE_TO_CARRY_POINT = {
-    [EPointType.StaticSand]: 0.01,
-    [EPointType.StaticStone]: 0.01,
-    [EPointType.Wood]: 0.02,
+    [EPointType.StaticSand]: 0.04,
+    [EPointType.StaticStone]: 0.04,
+    [EPointType.Wood]: 0.08,
 } as const
 
 const CHANCE_TO_PUT_POINT = 0.05
-const CHANCE_TO_REPRODUCE = 0.0001
+const CHANCE_TO_REPRODUCE = 0.005
+const AGE_TO_REPRODUCE = 1000
+
+const DIE_IF_TOUCHED_POINT = {
+    [EPointType.Water]: true,
+} as const
 
 const moveTo = (point: TPoint, target: TCoordinate) => {
     if (!Points.getPointByCoordinates(target)) {
@@ -46,15 +51,20 @@ export const ant: TForceProcessor = (point, step) => {
         return
     }
 
-    if (random() < CHANCE_TO_REPRODUCE) {
+    point.data.age = (point.data.age ?? 0) + 1
+
+    if (random() < CHANCE_TO_REPRODUCE && point.data.age > AGE_TO_REPRODUCE) {
         const firstAvailablePosition = Speed.possibleNeighbours.find(position => !Points.getPointByCoordinates({
             x: position.x + point.coordinates.x,
             y: position.y + point.coordinates.y,
         }))
         if (firstAvailablePosition) {
+            point.data.age = 0
             Points.addPoint({
-                ...JSON.parse(JSON.stringify(point)),
-                coordinates: firstAvailablePosition,
+                coordinates: {
+                    x: firstAvailablePosition.x + point.coordinates.x,
+                    y: firstAvailablePosition.y + point.coordinates.y,
+                },
                 type: point.type,
                 speed: { x: 0, y: 0 },
             })
@@ -78,14 +88,22 @@ export const ant: TForceProcessor = (point, step) => {
         }
         const target = randomOf(possibleDirections)
         Points.addPoint({
-            ...carriedPoint,
             coordinates: target,
+            type: carriedPoint.type,
+            speed: { x: 0, y: 0 },
         })
         point.data.carriedPoint = null
     }
 
     for (const neighbor of neighbors) {
         if (neighbor.type === point.type) {
+            continue
+        }
+
+        if (DIE_IF_TOUCHED_POINT[neighbor.type]) {
+            if (random() < 0.1) {
+                Points.deletePoint(neighbor)
+            }
             continue
         }
 
