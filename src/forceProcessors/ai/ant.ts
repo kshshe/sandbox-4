@@ -24,6 +24,7 @@ const CHANCE_TO_CARRY_POINT = {
     [EPointType.StaticSand]: 0.04,
     [EPointType.StaticStone]: 0.04,
     [EPointType.Wood]: 0.08,
+    [EPointType.Ant]: 0,
     default: 0.01,
 } as const
 
