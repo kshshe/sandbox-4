@@ -86,36 +86,6 @@ export const ant: TForceProcessor = (point, step) => {
     const possibleTargets: Record<string, TCoordinate> = {}
     const neighborsOfOtherType = neighbors.filter(neighbor => neighbor.type !== point.type)
 
-    const carriedPoint = point.data.carriedPoint as TPoint | null
-    if (carriedPoint && (random() < CHANCE_TO_PUT_POINT || !neighborsOfOtherType.length)) {
-        const possibleDirections = Speed.possibleNeighbours.map(position => ({
-            x: position.x + point.coordinates.x,
-            y: position.y + point.coordinates.y,
-        })).filter(target => {
-            const targetPoint = Points.getPointByCoordinates(target)
-            return !targetPoint
-        })
-        if (possibleDirections.length === 0) {
-            return
-        }
-        const possibleDirectionsWithSomeNeighbours = possibleDirections.filter(direction => {
-            return Speed.possibleNeighbours.some(neighbour => {
-                return Points.getPointByCoordinates({
-                    x: direction.x + neighbour.x,
-                    y: direction.y + neighbour.y,
-                }) !== point
-            })
-        })
-        const target = randomOf(possibleDirectionsWithSomeNeighbours.length ? possibleDirectionsWithSomeNeighbours : possibleDirections)
-        Points.addPoint({
-            coordinates: target,
-            type: carriedPoint.type,
-            speed: { x: 0, y: 0 },
-            data: cloneDeep(carriedPoint.data),
-        })
-        point.data.carriedPoint = null
-    }
-
     for (const neighbor of neighbors) {
         if (neighbor.type === point.type) {
             continue
@@ -205,7 +175,25 @@ export const ant: TForceProcessor = (point, step) => {
             y: targetDiffY,
         }
 
+        const oldCoordinatesX = point.coordinates.x
+        const oldCoordinatesY = point.coordinates.y
+
         moveTo(point, randomTarget)
+
+        const carriedPoint = point.data.carriedPoint as TPoint | null
+        if (carriedPoint && random() < CHANCE_TO_PUT_POINT) {
+            Points.addPoint({
+                coordinates: {
+                    x: oldCoordinatesX,
+                    y: oldCoordinatesY,
+                },
+                type: carriedPoint.type,
+                speed: { x: 0, y: 0 },
+                data: cloneDeep(carriedPoint.data),
+            })
+            point.data.carriedPoint = null
+        }
+
         return
     }
 
