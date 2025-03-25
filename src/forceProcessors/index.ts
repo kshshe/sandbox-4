@@ -187,12 +187,12 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
         convertOnTemperature('less', 1300, EPointType.Glass),
     ],
     [EPointType.ConstantCold]: [
-        ...BASIC_TEMPERATURE_PROCESSORS,
+        noopDetector,
         staticTemperature(() => INITIAL_TEMPERATURE[EPointType.ConstantCold] ?? -500),
         staticForce,
     ],
     [EPointType.ConstantHot]: [
-        ...BASIC_TEMPERATURE_PROCESSORS,
+        noopDetector,
         staticTemperature(() => INITIAL_TEMPERATURE[EPointType.ConstantHot] ?? 500),
         staticForce,
     ],

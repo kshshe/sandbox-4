@@ -24,6 +24,7 @@ const CHANCE_TO_CARRY_POINT = {
     [EPointType.StaticSand]: 0.04,
     [EPointType.StaticStone]: 0.04,
     [EPointType.Wood]: 0.08,
+    [EPointType.Water]: 0.04,
     [EPointType.Ant]: 0,
     [EPointType.Border]: 0,
     default: 0.01,
@@ -106,7 +107,7 @@ export const ant: TForceProcessor = (point, step) => {
         }
 
         if (DIE_IF_TOUCHED_POINT[neighbor.type]) {
-            if (random() < 0.01) {
+            if (random() < 0.001) {
                 Points.deletePoint(point)
                 return
             }
