@@ -6,6 +6,7 @@ import { Speed } from "../../classes/speed";
 import { randomOf } from "../../utils/randomOf";
 import { gravity } from "../gravity";
 import { random } from "../../utils/random";
+import { cloneDeep } from "../../utils/cloneDeep";
 
 const CONVERT_ON_TOUCH: {
     [key in EPointType]?: EPointType
@@ -97,6 +98,7 @@ export const ant: TForceProcessor = (point, step) => {
             coordinates: target,
             type: carriedPoint.type,
             speed: { x: 0, y: 0 },
+            data: cloneDeep(carriedPoint.data),
         })
         point.data.carriedPoint = null
     }
