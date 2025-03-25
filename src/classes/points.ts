@@ -117,6 +117,11 @@ export class Points {
         if (this.getPointByCoordinates(point.coordinates)) {
             return
         }
+        const availablePointsCount = Bounds.getWidth() * Bounds.getHeight()
+        if (this._points.length >= availablePointsCount * 0.95) {
+            console.warn('Too many points, skipping', point)
+            return
+        }
         const pointWithData: TPoint = {
             data: {},
             ...point,

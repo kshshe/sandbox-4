@@ -12,12 +12,15 @@ export class Bounds {
     })
 
     private static witdh = Storage.get('width', 0)
+    private static height = Storage.get('height', 0)
 
     private static set bounds(bounds: typeof Bounds._bounds) {
         Bounds._bounds = bounds
         Bounds.witdh = bounds.right - bounds.left
+        Bounds.height = bounds.bottom - bounds.top
         Storage.set('bounds', bounds)
         Storage.set('width', Bounds.witdh)
+        Storage.set('height', Bounds.height)
     }
 
     private static get bounds() {
@@ -30,6 +33,10 @@ export class Bounds {
 
     static getWidth() {
         return Bounds.witdh
+    }
+
+    static getHeight() {
+        return Bounds.height
     }
 
     static setBounds(bounds: typeof Bounds.bounds) {
