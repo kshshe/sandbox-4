@@ -13,6 +13,8 @@ export let isDrawing = false;
 export let drawingX = 0;
 export let drawingY = 0;
 let drawingInterval: NodeJS.Timeout | null = null;
+let drawingStartPoint: { x: number, y: number } | null = null;
+let isShiftPressed = false;
 
 const hoveredPointDescriptionElement = document.createElement('div');
 hoveredPointDescriptionElement.classList.add('hovered-point-description');
@@ -157,6 +159,10 @@ export const initInteractions = () => {
         const x = Math.floor(offsetX / CONFIG.pixelSize);
         const y = Math.floor(offsetY / CONFIG.pixelSize);
 
+        drawingStartPoint = { x, y };
+        drawingX = x;
+        drawingY = y;
+
         // Handle connection drawing (wire/pipe)
         if (drawingType === EPointType.Wire || drawingType === EPointType.Pipe) {
             if (!Controls.getIsConnectionMode()) {
@@ -170,8 +176,6 @@ export const initInteractions = () => {
 
         // Regular drawing
         isDrawing = true;
-        drawingX = x;
-        drawingY = y;
         drawingInterval = setInterval(() => {
             const points = Points.getPoints();
             const neighboursAndSelf = getArea(0, 0);
@@ -239,6 +243,15 @@ export const initInteractions = () => {
             Controls.setIsConnectionMode(false);
             Controls.setConnectionStartPoint(null);
         }
+        if (e.key === "Shift") {
+            isShiftPressed = true;
+        }
+    });
+
+    window.addEventListener("keyup", (e) => {
+        if (e.key === "Shift") {
+            isShiftPressed = false;
+        }
     });
 
     addListeners(canvas, [
@@ -258,6 +271,7 @@ export const initInteractions = () => {
         if (drawingInterval) {
             clearInterval(drawingInterval);
         }
+        drawingStartPoint = null;
         hoveredCoordinates = null;
         hoveredPoint = null;
         updateHoveredPointDescription();
@@ -269,10 +283,25 @@ export const initInteractions = () => {
         const offsetY = (e as MouseEvent).offsetY ?? (e as TouchEvent).touches[0].clientY ?? 0;
         const x = Math.floor(offsetX / CONFIG.pixelSize);
         const y = Math.floor(offsetY / CONFIG.pixelSize);
-        drawingX = x;
-        drawingY = y;
-        hoveredCoordinates = { x, y };
-        hoveredPoint = Points.getPointByCoordinates({ x, y }) || null;
+
+        if (isDrawing && isShiftPressed && drawingStartPoint) {
+            const dx = Math.abs(x - drawingStartPoint.x);
+            const dy = Math.abs(y - drawingStartPoint.y);
+            
+            if (dx > dy) {
+                drawingX = x;
+                drawingY = drawingStartPoint.y;
+            } else {
+                drawingX = drawingStartPoint.x;
+                drawingY = y;
+            }
+        } else {
+            drawingX = x;
+            drawingY = y;
+        }
+
+        hoveredCoordinates = { x: drawingX, y: drawingY };
+        hoveredPoint = Points.getPointByCoordinates({ x: drawingX, y: drawingY }) || null;
         updateHoveredPointDescription();
     });
 }; 
