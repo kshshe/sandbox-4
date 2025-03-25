@@ -32,8 +32,8 @@ const CHANCE_TO_CARRY_POINT = {
 } as const
 
 const CHANCE_TO_PUT_POINT = 0.1
-const CHANCE_TO_REPRODUCE = 0.005
-const AGE_TO_REPRODUCE = 1000
+const CHANCE_TO_REPRODUCE = 0.002
+const AGE_TO_REPRODUCE = 1500
 
 const DIE_IF_TOUCHED_POINT = {
     [EPointType.Water]: true,
