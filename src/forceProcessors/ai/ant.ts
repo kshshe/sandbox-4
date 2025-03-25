@@ -23,7 +23,7 @@ const moveTo = (point: TPoint, target: TCoordinate) => {
     }
 }
 
-const STEP_TO_MOVE = 20
+const STEP_TO_MOVE = 3
 
 export const ant: TForceProcessor = (point, step) => {
     const neighbors = Points.getNeighbours(point)
