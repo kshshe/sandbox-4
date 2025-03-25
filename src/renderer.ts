@@ -10,6 +10,7 @@ import { EPointType } from "./types";
 import { Storage } from "./classes/storage";
 import { Connections } from "./classes/connections";
 import { WindVectors } from "./classes/windVectors";
+import { POINT_NAMES } from "./constants/pointNames";
 
 const previouslyUsedPixels: Set<string> = new Set();
 let frame = 0;
@@ -192,7 +193,7 @@ const updateStats = () => {
             Object.entries(pointsGroupedByType)
                 .sort((a, b) => a[0].localeCompare(b[0]))
                 .sort((a, b) => b[1] - a[1])
-                .map(([type, count]) => `${type}: ${count}`)
+                .map(([type, count]) => `${POINT_NAMES[type] || type}: ${count}`)
                 .join('<br>'),
         ]
             .filter(Boolean)
