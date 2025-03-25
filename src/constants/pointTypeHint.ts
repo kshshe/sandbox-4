@@ -42,6 +42,7 @@ export const POINT_TYPE_HINT: {
     [EPointType.Snow]: 'Snow - Light particles that melt into water when heated above 0°C',
     [EPointType.Magnet]: 'Magnet - Dark-gray powder that is attracted to metal objects',
     [EPointType.WindSource]: 'Wind Source - Creates air currents that push lighter elements',
+    [EPointType.Ant]: 'Ant - A small creature that moves around and can carry small objects',
     eraser: 'Eraser - Removes elements from the simulation',
     heatTool: 'Heat Tool - Increases temperature of elements',
     coolTool: 'Cool Tool - Decreases temperature of elements',

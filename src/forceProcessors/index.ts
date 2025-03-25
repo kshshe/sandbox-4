@@ -310,6 +310,9 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
         staticForce,
         windSource,
     ],
+    [EPointType.Ant]: [
+        ...BASIC_FORCES,
+    ],
 }
 
 Object.keys(forcesByType).forEach(type => {

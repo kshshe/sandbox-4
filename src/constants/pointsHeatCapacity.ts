@@ -7,6 +7,7 @@ export const POINTS_HEAT_CAPACITY: {
     sand: 1,
     virus: 1,
     acid: 1,
+    ant: 1,
     
     liquidGas: 2,
     stone: 2,

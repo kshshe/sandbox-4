@@ -49,6 +49,7 @@ export const POINT_TYPE_ICON: {
     [EPointType.Snow]: '❄️☃️',
     [EPointType.Magnet]: '🧲',
     [EPointType.WindSource]: '💨',
+    [EPointType.Ant]: '🐜',
     eraser: '🧽',
     heatTool: '🔥🔧',
     coolTool: '❄️🔧',
@@ -83,6 +84,12 @@ export const ELEMENT_GROUPS: ElementGroup[] = [
             'eraser',
             'heatTool',
             'coolTool',
+        ]
+    },
+    {
+        name: 'Live',
+        elements: [
+            EPointType.Ant,
         ]
     },
     {

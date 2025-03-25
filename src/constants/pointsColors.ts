@@ -52,6 +52,7 @@ export const POINTS_COLORS: Record<EPointType, { r: number, g: number, b: number
     [EPointType.Snow]: { r: 240, g: 240, b: 240 },           // white
     [EPointType.Magnet]: { r: 70, g: 70, b: 70 },            // dark gray
     [EPointType.WindSource]: { r: 135, g: 206, b: 250 },     // light sky blue
+    [EPointType.Ant]: { r: 0, g: 0, b: 0 },                  // black
     eraser: { r: 200, g: 200, b: 200 },                      // gray
     heatTool: { r: 255, g: 69, b: 0 },                       // orangered
     coolTool: { r: 135, g: 206, b: 250 },                    // lightskyblue
