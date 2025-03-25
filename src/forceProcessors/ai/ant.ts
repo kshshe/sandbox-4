@@ -19,6 +19,7 @@ const moveTo = (point: TPoint, target: TCoordinate) => {
         point.speed.x = 0
         point.speed.y = 0
         Points.setPointInIndex(point.coordinates, point)
+        Points.markPointAsUsed(point)
     }
 }
 
