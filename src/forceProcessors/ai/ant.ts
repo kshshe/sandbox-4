@@ -90,7 +90,6 @@ export const ant: TForceProcessor = (point, step) => {
 
     const neighbors = Points.getNeighbours(point)
     const possibleTargets: Record<string, TCoordinate> = {}
-    const neighborsOfOtherType = neighbors.filter(neighbor => neighbor.type !== point.type)
 
     for (const neighbor of neighbors) {
         if (neighbor.type === point.type) {
