@@ -98,7 +98,15 @@ export const ant: TForceProcessor = (point, step) => {
         if (possibleDirections.length === 0) {
             return
         }
-        const target = randomOf(possibleDirections)
+        const possibleDirectionsWithSomeNeighbours = possibleDirections.filter(direction => {
+            return Speed.possibleNeighbours.some(neighbour => {
+                return Points.getPointByCoordinates({
+                    x: direction.x + neighbour.x,
+                    y: direction.y + neighbour.y,
+                })
+            })
+        })
+        const target = randomOf(possibleDirectionsWithSomeNeighbours.length ? possibleDirectionsWithSomeNeighbours : possibleDirections)
         Points.addPoint({
             coordinates: target,
             type: carriedPoint.type,
