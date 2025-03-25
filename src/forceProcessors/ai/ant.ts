@@ -33,6 +33,7 @@ const CHANCE_TO_CARRY_POINT = {
 } as const
 
 const CHANCE_TO_PUT_POINT = 0.1
+const CHANCE_TO_KEEP_POINT_AFTER_PUT = 0.2
 const CHANCE_TO_REPRODUCE = 0.0002
 const AGE_TO_REPRODUCE = 1500
 
@@ -62,15 +63,15 @@ export const ant: TForceProcessor = (point, step) => {
         return;
     }
 
-    point.data.age = (point.data.age ?? 0) + 1
+    point.data.reproduceSteps = (point.data.reproduceSteps ?? 0) + 1
 
-    if (random() < CHANCE_TO_REPRODUCE && point.data.age > AGE_TO_REPRODUCE) {
+    if (random() < CHANCE_TO_REPRODUCE && point.data.reproduceSteps > AGE_TO_REPRODUCE) {
         const firstAvailablePosition = Speed.possibleNeighbours.find(position => !Points.getPointByCoordinates({
             x: position.x + point.coordinates.x,
             y: position.y + point.coordinates.y,
         }))
         if (firstAvailablePosition) {
-            point.data.age = 0
+            point.data.reproduceSteps = -AGE_TO_REPRODUCE * 100
             Points.addPoint({
                 coordinates: {
                     x: firstAvailablePosition.x + point.coordinates.x,
@@ -191,7 +192,9 @@ export const ant: TForceProcessor = (point, step) => {
                 speed: { x: 0, y: 0 },
                 data: cloneDeep(carriedPoint.data),
             })
-            point.data.carriedPoint = null
+            if (random() > CHANCE_TO_KEEP_POINT_AFTER_PUT) {
+                point.data.carriedPoint = null
+            }
         }
 
         return
