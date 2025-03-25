@@ -13,13 +13,19 @@ const CONVERT_ON_TOUCH: {
     [EPointType.Sand]: EPointType.StaticSand,
 }
 
-const CHANCE_TO_EAT_POINT: {
-    [key in EPointType]?: number
-} = {
+const CHANCE_TO_EAT_POINT = {
     [EPointType.StaticSand]: 0.01,
     [EPointType.Sand]: 0.02,
     [EPointType.Wood]: 0.02,
-}
+} as const
+
+const ENERGY_FROM_EATING_POINT: {
+    [key in keyof typeof CHANCE_TO_EAT_POINT]?: number
+} = {
+    [EPointType.StaticSand]: 10,
+    [EPointType.Sand]: 20,
+    [EPointType.Wood]: 20,
+} as const
 
 const moveTo = (point: TPoint, target: TCoordinate) => {
     if (!Points.getPointByCoordinates(target)) {
@@ -33,14 +39,31 @@ const moveTo = (point: TPoint, target: TCoordinate) => {
 }
 
 const STEP_TO_MOVE = 3
+const INITIAL_ENERGY = 500
+const MIN_ENERGY_TO_MOVE_FREELY = 100
 
 export const ant: TForceProcessor = (point, step) => {
-    const neighbors = Points.getNeighbours(point)
-
     if (step % STEP_TO_MOVE !== 0) {
         return
     }
 
+    if (typeof point.data.energy !== 'number') {
+        point.data.energy = INITIAL_ENERGY
+    }
+
+    if (point.data.energy <= 0) {
+        Points.deletePoint(point)
+        return
+    }
+
+    const power = 2 * point.data.energy / MIN_ENERGY_TO_MOVE_FREELY
+
+    if (power < 1 && random() > power) {
+        return
+    }
+    point.data.energy -= 1
+
+    const neighbors = Points.getNeighbours(point)
     const possibleTargets: Record<string, TCoordinate> = {}
 
     for (const neighbor of neighbors) {
@@ -54,6 +77,7 @@ export const ant: TForceProcessor = (point, step) => {
                 x: neighbor.coordinates.x - point.coordinates.x,
                 y: neighbor.coordinates.y - point.coordinates.y,
             }
+            point.data.energy += ENERGY_FROM_EATING_POINT[neighbor.type]
             Points.deletePoint(neighbor)
             continue
         }
