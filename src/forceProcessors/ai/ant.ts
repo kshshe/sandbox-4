@@ -25,7 +25,7 @@ const CHANCE_TO_CARRY_POINT = {
     [EPointType.Wood]: 0.08,
 } as const
 
-const CHANCE_TO_PUT_POINT = 0.05
+const CHANCE_TO_PUT_POINT = 0.1
 const CHANCE_TO_REPRODUCE = 0.005
 const AGE_TO_REPRODUCE = 1000
 
@@ -73,9 +73,10 @@ export const ant: TForceProcessor = (point, step) => {
 
     const neighbors = Points.getNeighbours(point)
     const possibleTargets: Record<string, TCoordinate> = {}
+    const neighborsOfOtherType = neighbors.filter(neighbor => neighbor.type !== point.type)
 
     const carriedPoint = point.data.carriedPoint as TPoint | null
-    if (carriedPoint && random() < CHANCE_TO_PUT_POINT) {
+    if (carriedPoint && (random() < CHANCE_TO_PUT_POINT || !neighborsOfOtherType.length)) {
         const possibleDirections = Speed.possibleNeighbours.map(position => ({
             x: position.x + point.coordinates.x,
             y: position.y + point.coordinates.y,
