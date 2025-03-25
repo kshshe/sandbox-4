@@ -4,6 +4,7 @@
   "scripts": {
     "start": "parcel index.html",
     "build": "parcel build index.html",
+    "build:zip": "parcel build --public-url '.' index.html && zip -r sandbox-4.zip dist",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage --coverageDirectory=coverage",
