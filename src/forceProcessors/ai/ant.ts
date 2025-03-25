@@ -26,6 +26,7 @@ const CHANCE_TO_CARRY_POINT = {
 } as const
 
 const CHANCE_TO_PUT_POINT = 0.05
+const CHANCE_TO_REPRODUCE = 0.0001
 
 const moveTo = (point: TPoint, target: TCoordinate) => {
     if (!Points.getPointByCoordinates(target)) {
@@ -43,6 +44,21 @@ const STEP_TO_MOVE = 3
 export const ant: TForceProcessor = (point, step) => {
     if (step % STEP_TO_MOVE !== 0) {
         return
+    }
+
+    if (random() < CHANCE_TO_REPRODUCE) {
+        const firstAvailablePosition = Speed.possibleNeighbours.find(position => !Points.getPointByCoordinates({
+            x: position.x + point.coordinates.x,
+            y: position.y + point.coordinates.y,
+        }))
+        if (firstAvailablePosition) {
+            Points.addPoint({
+                ...JSON.parse(JSON.stringify(point)),
+                coordinates: firstAvailablePosition,
+                type: point.type,
+                speed: { x: 0, y: 0 },
+            })
+        }
     }
 
     const neighbors = Points.getNeighbours(point)
