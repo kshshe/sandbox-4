@@ -14,18 +14,18 @@ const CONVERT_ON_TOUCH: {
 }
 
 const CHANCE_TO_EAT_POINT = {
-    [EPointType.StaticSand]: 0.01,
-    [EPointType.Sand]: 0.5,
-    [EPointType.Wood]: 0.2,
+    [EPointType.StaticSand]: 0.005,
+    [EPointType.Sand]: 0.07,
+    [EPointType.Wood]: 0.005,
 } as const
 
-const ENERGY_FROM_EATING_POINT: {
-    [key in keyof typeof CHANCE_TO_EAT_POINT]?: number
-} = {
-    [EPointType.StaticSand]: 60,
-    [EPointType.Sand]: 100,
-    [EPointType.Wood]: 100,
+const CHANCE_TO_CARRY_POINT = {
+    [EPointType.StaticSand]: 0.01,
+    [EPointType.StaticStone]: 0.01,
+    [EPointType.Wood]: 0.02,
 } as const
+
+const CHANCE_TO_PUT_POINT = 0.05
 
 const moveTo = (point: TPoint, target: TCoordinate) => {
     if (!Points.getPointByCoordinates(target)) {
@@ -39,49 +39,60 @@ const moveTo = (point: TPoint, target: TCoordinate) => {
 }
 
 const STEP_TO_MOVE = 3
-const INITIAL_ENERGY = 1000
-const MIN_ENERGY_TO_MOVE_FREELY = 100
 
 export const ant: TForceProcessor = (point, step) => {
     if (step % STEP_TO_MOVE !== 0) {
         return
     }
 
-    if (typeof point.data.energy !== 'number') {
-        point.data.energy = INITIAL_ENERGY
-    }
-
-    if (point.data.energy <= 0) {
-        Points.deletePoint(point)
-        return
-    }
-
-    const power = 2 * point.data.energy / MIN_ENERGY_TO_MOVE_FREELY
-
-    if (power < 1 && random() > power) {
-        return
-    }
-    point.data.energy -= 1
-
     const neighbors = Points.getNeighbours(point)
     const possibleTargets: Record<string, TCoordinate> = {}
+
+    const carriedPoint = point.data.carriedPoint as TPoint | null
+    if (carriedPoint && random() < CHANCE_TO_PUT_POINT) {
+        const possibleDirections = Speed.possibleNeighbours.map(position => ({
+            x: position.x + point.coordinates.x,
+            y: position.y + point.coordinates.y,
+        })).filter(target => {
+            const targetPoint = Points.getPointByCoordinates(target)
+            return !targetPoint
+        })
+        if (possibleDirections.length === 0) {
+            return
+        }
+        const target = randomOf(possibleDirections)
+        Points.addPoint({
+            ...carriedPoint,
+            coordinates: target,
+        })
+        point.data.carriedPoint = null
+    }
 
     for (const neighbor of neighbors) {
         if (neighbor.type === point.type) {
             continue
         }
 
+        // Carry point
+        const chanceToCarryPoint = !point.data.carriedPoint && CHANCE_TO_CARRY_POINT[neighbor.type]
+        if (chanceToCarryPoint && random() < chanceToCarryPoint) {
+            point.data.carriedPoint = neighbor
+            Points.deletePoint(neighbor)
+            continue
+        }
+
+        // Eat point
         const chanceToEatPoint = CHANCE_TO_EAT_POINT[neighbor.type]
         if (chanceToEatPoint && random() < chanceToEatPoint) {
             point.data.previousTarget = {
                 x: neighbor.coordinates.x - point.coordinates.x,
                 y: neighbor.coordinates.y - point.coordinates.y,
             }
-            point.data.energy += ENERGY_FROM_EATING_POINT[neighbor.type]
             Points.deletePoint(neighbor)
             continue
         }
 
+        // Convert on touch
         const convertOnTouch = CONVERT_ON_TOUCH[neighbor.type]
         if (convertOnTouch) {
             neighbor.type = convertOnTouch

@@ -19,7 +19,7 @@ hoveredPointDescriptionElement.classList.add('hovered-point-description');
 hoveredPointDescriptionElement.classList.add('hidden');
 document.body.appendChild(hoveredPointDescriptionElement);
 
-const IGNORED_KEYS = ['temperature', 'speed', 'visualCoordinates', 'colorVariation', 'lastMoveOnIteration', 'wasDeleted'];
+const IGNORED_KEYS = ['temperature', 'speed', 'visualCoordinates', 'colorVariation', 'lastMoveOnIteration', 'wasDeleted', 'coordinates'];
 
 const getVectorDiv = (vector: { x: number, y: number }) => {
     const normalizedVector = {
@@ -54,7 +54,11 @@ const renderDataPair = (key: string, value: unknown) => {
         if (typeof vectorValue.x === 'number' && typeof vectorValue.y === 'number') {
             return `${key}: ${getVectorDiv(vectorValue)}`;
         }
-        return `${key}: ${JSON.stringify(value)}`;
+        const keyValuePairs = Object.entries(value).map(([key, value]) => renderDataPair(key, value)).filter(Boolean).map(pair => `&nbsp;&nbsp;&nbsp;&nbsp;${pair}`).join('<br>');
+        if (!keyValuePairs.trim()) {
+            return null;
+        }
+        return `${key}:<br>${keyValuePairs}`
     }
     if (typeof value === 'string') {
         return `${key}: ${value}`;

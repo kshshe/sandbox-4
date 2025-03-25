@@ -113,6 +113,14 @@ export const drawPoints = () => {
             ctx.fillRect(point.visualCoordinates.x * CONFIG.pixelSize, point.visualCoordinates.y * CONFIG.pixelSize, CONFIG.pixelSize, CONFIG.pixelSize);
         }
 
+        if (point.data.carriedPoint) {
+            // draw a small rectangle border around the point
+            const color = `rgba(${POINTS_COLORS[point.data.carriedPoint.type].r}, ${POINTS_COLORS[point.data.carriedPoint.type].g}, ${POINTS_COLORS[point.data.carriedPoint.type].b}, 0.5)`;
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 2;
+            ctx.strokeRect(point.visualCoordinates.x * CONFIG.pixelSize, point.visualCoordinates.y * CONFIG.pixelSize, CONFIG.pixelSize, CONFIG.pixelSize);
+        }
+
         if (point.type === EPointType.Metal && point.data.temperature > 0) {
             // add a red overlay depending on temperature
             const temperatureColor = `rgba(255, 0, 0, ${Math.min(1, Math.max(0, (point.data.temperature - 20) / 300))})`;
