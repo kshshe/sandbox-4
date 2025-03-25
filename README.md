@@ -1,4 +1,4 @@
-![Website](https://img.shields.io/website?url=https%3A%2F%2Fsandgame.fyi)
+[![Website](https://img.shields.io/website?url=https%3A%2F%2Fsandgame.fyi)](https://sandgame.fyi)
 
 # Sandbox-4 (or 3 🤷‍♂️): Interactive Particle Simulation
 
