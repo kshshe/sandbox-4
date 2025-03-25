@@ -19,7 +19,7 @@ hoveredPointDescriptionElement.classList.add('hovered-point-description');
 hoveredPointDescriptionElement.classList.add('hidden');
 document.body.appendChild(hoveredPointDescriptionElement);
 
-const IGNORED_KEYS = ['temperature', 'speed', 'visualCoordinates', 'lastMoveOnIteration', 'wasDeleted', 'coordinates'];
+const IGNORED_KEYS = ['temperature', 'speed', 'visualCoordinates', 'wasDeleted', 'coordinates'];
 
 const getVectorDiv = (vector: { x: number, y: number }) => {
     const normalizedVector = {

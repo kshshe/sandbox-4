@@ -46,18 +46,20 @@ const CANT_WALK_ON_POINT = {
     [EPointType.Border]: true,
 } as const
 
-const moveTo = (point: TPoint, target: TCoordinate) => {
+const moveTo = (point: TPoint, target: TCoordinate, iteration: number) => {
     if (!Points.getPointByCoordinates(target)) {
         Points.deletePointInIndex(point.coordinates)
         point.coordinates = target
         point.speed.x = 0
         point.speed.y = 0
+        point.data.lastMoveOnIteration = iteration
         Points.setPointInIndex(point.coordinates, point)
         Points.markPointAsUsed(point)
     }
 }
 
 const STEP_TO_MOVE = 3
+const MAX_STEPS_WITHOUT_MOVE = 100
 
 export const ant: TForceProcessor = (point, step) => {
     if (step % STEP_TO_MOVE !== 0) {
@@ -66,6 +68,12 @@ export const ant: TForceProcessor = (point, step) => {
 
     if (point.data.temperature !== undefined && point.data.temperature < 2) {
         return;
+    }
+
+    const lastMoveOnIteration = point.data.lastMoveOnIteration
+    if (lastMoveOnIteration && step - lastMoveOnIteration > MAX_STEPS_WITHOUT_MOVE) {
+        Points.deletePoint(point)
+        return
     }
 
     point.data.reproduceSteps = (point.data.reproduceSteps ?? 0) + 1
@@ -187,7 +195,7 @@ export const ant: TForceProcessor = (point, step) => {
         const oldCoordinatesX = point.coordinates.x
         const oldCoordinatesY = point.coordinates.y
 
-        moveTo(point, randomTarget)
+        moveTo(point, randomTarget, step)
 
         const carriedPoint = point.data.carriedPoint as TPoint | null
         if (carriedPoint && random() < CHANCE_TO_PUT_POINT) {
