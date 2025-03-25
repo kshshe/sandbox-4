@@ -15,16 +15,16 @@ const CONVERT_ON_TOUCH: {
 
 const CHANCE_TO_EAT_POINT = {
     [EPointType.StaticSand]: 0.01,
-    [EPointType.Sand]: 0.02,
-    [EPointType.Wood]: 0.02,
+    [EPointType.Sand]: 0.2,
+    [EPointType.Wood]: 0.2,
 } as const
 
 const ENERGY_FROM_EATING_POINT: {
     [key in keyof typeof CHANCE_TO_EAT_POINT]?: number
 } = {
-    [EPointType.StaticSand]: 10,
-    [EPointType.Sand]: 20,
-    [EPointType.Wood]: 20,
+    [EPointType.StaticSand]: 60,
+    [EPointType.Sand]: 100,
+    [EPointType.Wood]: 100,
 } as const
 
 const moveTo = (point: TPoint, target: TCoordinate) => {
@@ -39,7 +39,7 @@ const moveTo = (point: TPoint, target: TCoordinate) => {
 }
 
 const STEP_TO_MOVE = 3
-const INITIAL_ENERGY = 500
+const INITIAL_ENERGY = 1000
 const MIN_ENERGY_TO_MOVE_FREELY = 100
 
 export const ant: TForceProcessor = (point, step) => {
