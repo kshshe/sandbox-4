@@ -41,6 +41,11 @@ const DIE_IF_TOUCHED_POINT = {
     [EPointType.Water]: true,
 } as const
 
+const CANT_WALK_ON_POINT = {
+    ...DIE_IF_TOUCHED_POINT,
+    [EPointType.Border]: true,
+} as const
+
 const moveTo = (point: TPoint, target: TCoordinate) => {
     if (!Points.getPointByCoordinates(target)) {
         Points.deletePointInIndex(point.coordinates)
@@ -97,6 +102,10 @@ export const ant: TForceProcessor = (point, step) => {
                 Points.deletePoint(point)
                 return
             }
+            continue
+        }
+
+        if (CANT_WALK_ON_POINT[neighbor.type]) {
             continue
         }
 
