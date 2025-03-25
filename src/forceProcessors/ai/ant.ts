@@ -61,6 +61,18 @@ const moveTo = (point: TPoint, target: TCoordinate, iteration: number) => {
 const STEP_TO_MOVE = 3
 const MAX_STEPS_WITHOUT_MOVE = 100
 
+const die = (point: TPoint) => {
+    Points.deletePoint(point);
+    if (point.data.carriedPoint) {
+        Points.addPoint({
+            coordinates: point.coordinates,
+            type: point.data.carriedPoint.type,
+            speed: { x: 0, y: 0 },
+            data: cloneDeep(point.data.carriedPoint.data),
+        })
+    }
+}
+
 export const ant: TForceProcessor = (point, step) => {
     if (step % STEP_TO_MOVE !== 0) {
         return
@@ -72,7 +84,7 @@ export const ant: TForceProcessor = (point, step) => {
 
     const lastMoveOnIteration = point.data.lastMoveOnIteration
     if (lastMoveOnIteration && step - lastMoveOnIteration > MAX_STEPS_WITHOUT_MOVE) {
-        Points.deletePoint(point)
+        die(point)
         return
     }
 
@@ -106,7 +118,7 @@ export const ant: TForceProcessor = (point, step) => {
 
         if (DIE_IF_TOUCHED_POINT[neighbor.type]) {
             if (random() < 0.001) {
-                Points.deletePoint(point)
+                die(point)
                 return
             }
             continue
