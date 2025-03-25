@@ -17,8 +17,8 @@ const CHANCE_TO_EAT_POINT: {
     [key in EPointType]?: number
 } = {
     [EPointType.StaticSand]: 0.01,
-    [EPointType.Sand]: 0.1,
-    [EPointType.Wood]: 0.1,
+    [EPointType.Sand]: 0.02,
+    [EPointType.Wood]: 0.02,
 }
 
 const moveTo = (point: TPoint, target: TCoordinate) => {
