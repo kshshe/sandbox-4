@@ -33,6 +33,7 @@ export const VIRUS_POINTS_TO_IGNORE: TConfig = {
 // Plant processor exceptions
 export const PLANT_CAN_GROW_ON: TConfig = {
     [EPointType.Sand]: true,
+    [EPointType.StaticSand]: true,
     [EPointType.Plant]: true,
     [EPointType.PlantSeed]: true,
 }

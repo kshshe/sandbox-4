@@ -7,6 +7,7 @@ export const POINT_NAMES: {
     [EPointType.Water]: 'Water',
     [EPointType.Border]: 'Border',
     [EPointType.Sand]: 'Sand',
+    [EPointType.StaticSand]: 'Sand',
     [EPointType.Stone]: 'Stone',
     [EPointType.StaticStone]: 'Static Stone',
     [EPointType.Lava]: 'Lava',

@@ -7,6 +7,7 @@ export const POINTS_COLORS: Record<EPointType, { r: number, g: number, b: number
 } = {
     [EPointType.Water]: { r: 0, g: 0, b: 255 },              // blue
     [EPointType.Sand]: { r: 255, g: 204, b: 0 },             // #ffcc00
+    [EPointType.StaticSand]: { r: 230, g: 184, b: 0 },      // darker sand
     [EPointType.Border]: { r: 211, g: 211, b: 211 },         // #d3d3d3
     [EPointType.Stone]: { r: 128, g: 128, b: 128 },          // gray
     [EPointType.StaticStone]: { r: 128, g: 128, b: 128 },    // gray

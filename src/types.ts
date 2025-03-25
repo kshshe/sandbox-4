@@ -8,6 +8,7 @@ export enum EPointType {
     Water = 'water',
     Border = 'border',
     Sand = 'sand',
+    StaticSand = 'staticSand',
     Stone = 'stone',
     StaticStone = 'staticStone',
     Lava = 'lava',

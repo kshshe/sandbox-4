@@ -26,6 +26,7 @@ export const INITIAL_TEMPERATURE: {
     [EPointType.StaticStone]: 25,
     [EPointType.Stone]: 25,
     [EPointType.Sand]: 25,
+    [EPointType.StaticSand]: 25,
     [EPointType.Gas]: 25,
     [EPointType.Wood]: 25,
     [EPointType.Oil]: 20,

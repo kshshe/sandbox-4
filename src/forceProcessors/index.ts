@@ -128,6 +128,11 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
         liquid,
         convertOnTemperature('less', 1200, EPointType.StaticStone),
     ],
+    [EPointType.StaticSand]: [
+        ...BASIC_TEMPERATURE_PROCESSORS,
+        staticForce,
+        convertOnTemperature('more', 1700, EPointType.LiquidGlass),
+    ],
     [EPointType.Sand]: [
         ...BASIC_FORCES,
         convertOnTemperature('more', 1700, EPointType.LiquidGlass),

@@ -1,10 +1,16 @@
 import { TForceProcessor } from "..";
-import { TCoordinate } from "../../types";
+import { EPointType, TCoordinate } from "../../types";
 import { Points } from "../../classes/points";
 import { TPoint } from "../../types";
 import { Speed } from "../../classes/speed";
 import { randomOf } from "../../utils/randomOf";
 import { gravity } from "../gravity";
+
+const CONVERT_ON_TOUCH: {
+    [key in EPointType]?: EPointType
+} = {
+    [EPointType.Sand]: EPointType.StaticSand,
+}
 
 const moveTo = (point: TPoint, target: TCoordinate) => {
     if (!Points.getPointByCoordinates(target)) {
@@ -30,6 +36,11 @@ export const ant: TForceProcessor = (point, step) => {
     for (const neighbor of neighbors) {
         if (neighbor.type === point.type) {
             continue
+        }
+
+        const convertOnTouch = CONVERT_ON_TOUCH[neighbor.type]
+        if (convertOnTouch) {
+            neighbor.type = convertOnTouch
         }
 
         for (const position of Speed.possibleNeighbours) {
