@@ -15,6 +15,7 @@ export let drawingY = 0;
 let drawingInterval: NodeJS.Timeout | null = null;
 let drawingStartPoint: { x: number, y: number } | null = null;
 let isShiftPressed = false;
+let isHorizontalMode: boolean | null = null;
 
 const hoveredPointDescriptionElement = document.createElement('div');
 hoveredPointDescriptionElement.classList.add('hovered-point-description');
@@ -272,6 +273,7 @@ export const initInteractions = () => {
             clearInterval(drawingInterval);
         }
         drawingStartPoint = null;
+        isHorizontalMode = null;
         hoveredCoordinates = null;
         hoveredPoint = null;
         updateHoveredPointDescription();
@@ -285,10 +287,13 @@ export const initInteractions = () => {
         const y = Math.floor(offsetY / CONFIG.pixelSize);
 
         if (isDrawing && isShiftPressed && drawingStartPoint) {
-            const dx = Math.abs(x - drawingStartPoint.x);
-            const dy = Math.abs(y - drawingStartPoint.y);
+            if (isHorizontalMode === null) {
+                const dx = Math.abs(x - drawingStartPoint.x);
+                const dy = Math.abs(y - drawingStartPoint.y);
+                isHorizontalMode = dx > dy;
+            }
             
-            if (dx > dy) {
+            if (isHorizontalMode) {
                 drawingX = x;
                 drawingY = drawingStartPoint.y;
             } else {
@@ -298,6 +303,7 @@ export const initInteractions = () => {
         } else {
             drawingX = x;
             drawingY = y;
+            isHorizontalMode = null;
         }
 
         hoveredCoordinates = { x: drawingX, y: drawingY };
