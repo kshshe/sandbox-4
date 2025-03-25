@@ -66,3 +66,13 @@ export const moveToBaseTemperature = (intencity: number = 0.1): TForceProcessor 
     const difference = baseTemperature - temperature
     point.data.temperature += difference * intencity
 }
+
+export const diesOnTemperature = (type: 'more' | 'less', temperature: number): TForceProcessor => (point) => {
+    if (type === 'more' && point.data.temperature && point.data.temperature > temperature) {
+        Points.deletePoint(point)
+    }
+
+    if (type === 'less' && point.data.temperature && point.data.temperature < temperature) {
+        Points.deletePoint(point)
+    }
+}
