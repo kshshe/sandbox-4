@@ -101,8 +101,9 @@ export const ant: TForceProcessor = (point, step) => {
         }
 
         if (DIE_IF_TOUCHED_POINT[neighbor.type]) {
-            if (random() < 0.1) {
-                Points.deletePoint(neighbor)
+            if (random() < 0.01) {
+                Points.deletePoint(point)
+                return
             }
             continue
         }

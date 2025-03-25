@@ -114,11 +114,12 @@ export const drawPoints = () => {
         }
 
         if (point.data.carriedPoint) {
-            // draw a small rectangle border around the point
-            const color = `rgba(${POINTS_COLORS[point.data.carriedPoint.type].r}, ${POINTS_COLORS[point.data.carriedPoint.type].g}, ${POINTS_COLORS[point.data.carriedPoint.type].b}, 0.5)`;
-            ctx.strokeStyle = color;
-            ctx.lineWidth = 2;
-            ctx.strokeRect(point.visualCoordinates.x * CONFIG.pixelSize, point.visualCoordinates.y * CONFIG.pixelSize, CONFIG.pixelSize, CONFIG.pixelSize);
+            // round dot in the center of the point
+            const color = `rgba(${POINTS_COLORS[point.data.carriedPoint.type].r}, ${POINTS_COLORS[point.data.carriedPoint.type].g}, ${POINTS_COLORS[point.data.carriedPoint.type].b}, 1)`;
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.arc(point.visualCoordinates.x * CONFIG.pixelSize + CONFIG.pixelSize / 2, point.visualCoordinates.y * CONFIG.pixelSize + CONFIG.pixelSize / 2, CONFIG.pixelSize / 3, 0, 2 * Math.PI);
+            ctx.fill();
         }
 
         if (point.type === EPointType.Metal && point.data.temperature > 0) {
