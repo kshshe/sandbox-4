@@ -19,7 +19,7 @@ hoveredPointDescriptionElement.classList.add('hovered-point-description');
 hoveredPointDescriptionElement.classList.add('hidden');
 document.body.appendChild(hoveredPointDescriptionElement);
 
-const IGNORED_KEYS = ['temperature', 'speed', 'visualCoordinates', 'colorVariation', 'lastMoveOnIteration', 'wasDeleted', 'coordinates'];
+const IGNORED_KEYS = ['temperature', 'speed', 'visualCoordinates', 'lastMoveOnIteration', 'wasDeleted', 'coordinates'];
 
 const getVectorDiv = (vector: { x: number, y: number }) => {
     const normalizedVector = {
@@ -44,7 +44,7 @@ const renderDataPair = (key: string, value: unknown) => {
         return `${key}: empty`;
     }
     if (typeof value === 'number') {
-        return `${key}: ${value.toFixed(2)}`;
+        return `${key}: ${Math.round(value * 100) / 100}`;
     }
     if (typeof value === 'boolean') {
         return `${key}: ${value ? 'Yes' : 'No'}`;
@@ -73,7 +73,7 @@ const getDescription = (point: TPoint) => {
     return [
         `${point.coordinates.x}:${point.coordinates.y} ${POINT_NAMES[point.type] ?? point.type}`,
         `${Math.round(point.data.temperature)} °C`,
-        `speed: ${Math.sqrt(point.speed.x ** 2 + point.speed.y ** 2).toFixed(2)} ${getVectorDiv(point.speed)}`,
+        `speed: ${Math.round(Math.sqrt(point.speed.x ** 2 + point.speed.y ** 2) * 100) / 100} ${getVectorDiv(point.speed)}`,
         ...Object.entries(point.data).map(([key, value]) => renderDataPair(key, value)).filter(Boolean),
     ].join('<br>')
 }
