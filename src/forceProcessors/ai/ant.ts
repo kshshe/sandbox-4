@@ -15,7 +15,7 @@ const CONVERT_ON_TOUCH: {
 
 const CHANCE_TO_EAT_POINT = {
     [EPointType.StaticSand]: 0.01,
-    [EPointType.Sand]: 0.2,
+    [EPointType.Sand]: 0.5,
     [EPointType.Wood]: 0.2,
 } as const
 
