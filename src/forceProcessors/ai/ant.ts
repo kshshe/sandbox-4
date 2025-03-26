@@ -129,9 +129,10 @@ export const ant: TForceProcessor = (point, step) => {
         }
 
         // Carry point
+        const chanceModifier = point.data.wasPutByAnt ? 0.5 : 1
         const chanceToCarryPointForThisType = CHANCE_TO_CARRY_POINT[neighbor.type] ?? CHANCE_TO_CARRY_POINT.default
         const chanceToCarryPoint = !point.data.carriedPoint && chanceToCarryPointForThisType
-        if (chanceToCarryPoint && random() < chanceToCarryPoint) {
+        if (chanceToCarryPoint && random() < chanceToCarryPoint * chanceModifier) {
             point.data.carriedPoint = neighbor
             Points.deletePoint(neighbor)
             continue
@@ -218,7 +219,10 @@ export const ant: TForceProcessor = (point, step) => {
                 },
                 type: carriedPoint.type,
                 speed: { x: 0, y: 0 },
-                data: cloneDeep(carriedPoint.data),
+                data: {
+                    ...cloneDeep(carriedPoint.data),
+                    wasPutByAnt: true,
+                },
             })
             if (random() > CHANCE_TO_KEEP_POINT_AFTER_PUT) {
                 point.data.carriedPoint = null
