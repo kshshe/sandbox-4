@@ -290,7 +290,9 @@ export const initInteractions = () => {
             if (isHorizontalMode === null) {
                 const dx = Math.abs(x - drawingStartPoint.x);
                 const dy = Math.abs(y - drawingStartPoint.y);
-                isHorizontalMode = dx > dy;
+                if (dx > 2 || dy > 2) {
+                    isHorizontalMode = dx > dy;
+                }
             }
             
             if (isHorizontalMode) {
