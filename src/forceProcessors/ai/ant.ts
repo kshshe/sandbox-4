@@ -62,6 +62,7 @@ const STEP_TO_MOVE = 3
 const MAX_STEPS_WITHOUT_MOVE = 600
 const MAX_AGE = 10000
 const CHANCE_TO_DIE_OF_OLD_AGE = 0.0005
+const LOWER_CHANCE_TO_TAKE_POINT_FOR_STEPS = 200
 
 const die = (point: TPoint, reason: string) => {
     console.log(`Ant died: ${reason}`)
@@ -141,7 +142,8 @@ export const ant: TForceProcessor = (point, step) => {
         }
 
         // Carry point
-        const chanceModifier = point.data.wasPutByAnt ? 0.7 : 1
+        const wasPutByAntRecently = point.data.wasPutByAntOnIteration && step - point.data.wasPutByAntOnIteration < LOWER_CHANCE_TO_TAKE_POINT_FOR_STEPS
+        const chanceModifier = wasPutByAntRecently ? 0.3 : 1
         const chanceToCarryPointForThisType = CHANCE_TO_CARRY_POINT[neighbor.type] ?? CHANCE_TO_CARRY_POINT.default
         const chanceToCarryPoint = !point.data.carriedPoint && chanceToCarryPointForThisType
         if (chanceToCarryPoint && random() < chanceToCarryPoint * chanceModifier) {
@@ -233,7 +235,7 @@ export const ant: TForceProcessor = (point, step) => {
                 speed: { x: 0, y: 0 },
                 data: {
                     ...cloneDeep(carriedPoint.data),
-                    wasPutByAnt: true,
+                    wasPutByAntOnIteration: step,
                 },
             })
             if (random() > CHANCE_TO_KEEP_POINT_AFTER_PUT) {
