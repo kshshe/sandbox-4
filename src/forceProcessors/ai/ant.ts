@@ -59,9 +59,10 @@ const moveTo = (point: TPoint, target: TCoordinate, iteration: number) => {
 }
 
 const STEP_TO_MOVE = 3
-const MAX_STEPS_WITHOUT_MOVE = 100
+const MAX_STEPS_WITHOUT_MOVE = 600
 
-const die = (point: TPoint) => {
+const die = (point: TPoint, reason: string) => {
+    console.log(`Ant died: ${reason}`)
     Points.deletePoint(point);
     if (point.data.carriedPoint) {
         Points.addPoint({
@@ -84,7 +85,7 @@ export const ant: TForceProcessor = (point, step) => {
 
     const lastMoveOnIteration = point.data.lastMoveOnIteration
     if (lastMoveOnIteration && step - lastMoveOnIteration > MAX_STEPS_WITHOUT_MOVE) {
-        die(point)
+        die(point, 'Max steps without move')
         return
     }
 
@@ -118,7 +119,7 @@ export const ant: TForceProcessor = (point, step) => {
 
         if (DIE_IF_TOUCHED_POINT[neighbor.type]) {
             if (random() < 0.001) {
-                die(point)
+                die(point, 'Died if touched point')
                 return
             }
             continue
