@@ -61,7 +61,7 @@ const moveTo = (point: TPoint, target: TCoordinate, iteration: number) => {
 const STEP_TO_MOVE = 3
 const MAX_STEPS_WITHOUT_MOVE = 600
 const MAX_AGE = 10000
-const CHANCE_TO_DIE_OF_OLD_AGE = 0.0001
+const CHANCE_TO_DIE_OF_OLD_AGE = 0.0005
 
 const die = (point: TPoint, reason: string) => {
     console.log(`Ant died: ${reason}`)
