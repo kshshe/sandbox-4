@@ -19,4 +19,5 @@ export const POINTS_PROBABILITY_TO_CHANGE_DIRECTION_MODIFIERS: {
     [EPointType.Electricity_Spark]: 10,
     [EPointType.Smoke]: 5,
     [EPointType.Ant]: 1,
+    [EPointType.FireAnt]: 1,
 } 

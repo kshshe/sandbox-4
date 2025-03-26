@@ -4,6 +4,12 @@ import { Points } from "../classes/points";
 import { Controls } from "../classes/controls";
 import { random } from "../utils/random";
 
+export const minTemperature = (temperature: number): TForceProcessor => (point) => {
+    if (point.data.temperature && point.data.temperature < temperature) {
+        point.data.temperature = temperature
+    }
+}
+
 export const staticTemperature = (temperature: number | (() => number)): TForceProcessor => (point) => {
     let temperatureValue: number
     if (typeof temperature === 'function') {

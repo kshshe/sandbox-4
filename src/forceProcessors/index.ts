@@ -7,7 +7,7 @@ import { drowning } from "./drowning";
 import { lifetime } from "./lifetime";
 import { bomb } from "./bomb";
 import { staticForce } from "./static";
-import { staticTemperature, convertOnTemperature, moveToBaseTemperature, diesOnTemperature } from "./temperature";
+import { staticTemperature, convertOnTemperature, moveToBaseTemperature, diesOnTemperature, minTemperature } from "./temperature";
 import { INITIAL_TEMPERATURE } from "../config";
 import { chaos } from "./chaos";
 import { voidProcessor } from "./void";
@@ -324,6 +324,13 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
         ...BASIC_FORCES_EXCEPT_GRAVITY,
         ant,
         diesOnTemperature('more', 100),
+    ],
+    [EPointType.FireAnt]: [
+        ...BASIC_FORCES_EXCEPT_GRAVITY,
+        ant,
+        emitter(EPointType.Smoke, 0.02, 0),
+        throttle(minTemperature(700), 10),
+        diesOnTemperature('less', 200),
     ],
 }
 

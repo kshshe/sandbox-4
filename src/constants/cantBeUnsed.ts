@@ -19,4 +19,5 @@ export const CANT_BE_UNSED: {
     [EPointType.Electricity_Source]: true,
     [EPointType.Heal]: true,
     [EPointType.Ant]: true,
+    [EPointType.FireAnt]: true,
 } 

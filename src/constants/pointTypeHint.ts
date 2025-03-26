@@ -43,6 +43,7 @@ export const POINT_TYPE_HINT: {
     [EPointType.Magnet]: 'Magnet - Dark-gray powder that is attracted to metal objects',
     [EPointType.WindSource]: 'Wind Source - Creates air currents that push lighter elements',
     [EPointType.Ant]: 'Ant - A small creature that moves around and can carry small objects',
+    [EPointType.FireAnt]: 'Fire Ant - A fiery version of ant that moves around and can carry small objects',
     [EPointType.Smoke]: 'Smoke - Light particles that rise and dissipate over time',
     [EPointType.Oil]: 'Oil - Flammable liquid that burns at high temperatures',
     [EPointType.Steam]: 'Steam - Water vapor that rises and cools into water',

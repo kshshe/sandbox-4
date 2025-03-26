@@ -52,4 +52,5 @@ export const POINT_NAMES: {
     [EPointType.Magnet]: 'Magnet',
     [EPointType.WindSource]: 'Wind Source',
     [EPointType.Ant]: 'Ant',
+    [EPointType.FireAnt]: 'Fire Ant',
 }
