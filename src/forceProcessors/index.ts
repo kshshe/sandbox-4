@@ -330,7 +330,7 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
         ant,
         emitter(EPointType.Smoke, 0.02, 0),
         throttle(minTemperature(700), 4),
-        growingTemperature(3, 2000),
+        growingTemperature(10, 2000),
         diesOnTemperature('less', 200),
     ],
 }
