@@ -8,6 +8,8 @@ const CONVERTION_MAP: {
     [key in EPointType]?: EPointType
 } = {
     [EPointType.StaticStone]: EPointType.Stone,
+    [EPointType.StaticSand]: EPointType.Sand,
+    [EPointType.Glass]: EPointType.Sand
 }
 
 export const explode = (point: TPoint, processedPoints: Set<TPoint>, rest = 3) => {

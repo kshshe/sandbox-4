@@ -38,6 +38,8 @@ import { MAGNET_POINTS_TO_MAGNETIZE } from "../constants/pointsExceptions";
 import { windForce } from "./wind";
 import { windSource } from "./windSource";
 import { ant } from "./ai/ant";
+import { randomProcessor } from "./utils/random";
+import { explode } from "./utils/explode";
 
 export type TForceProcessor = (point: TPoint, step: number) => void
 
@@ -332,6 +334,7 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
         throttle(minTemperature(700), 4),
         growingTemperature(10, 2000),
         diesOnTemperature('less', 200),
+        randomProcessor(0.0003, (point) => explode(point, new Set([point])))
     ],
 }
 
