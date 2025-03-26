@@ -18,7 +18,7 @@ const CONVERT_ON_TOUCH: {
 const CHANCE_TO_EAT_POINT = {
     [EPointType.StaticSand]: 0.001,
     [EPointType.Sand]: 0.07,
-    [EPointType.Wood]: 0.001,
+    [EPointType.Wood]: 0.004,
 } as const
 
 const CHANCE_TO_CARRY_POINT = {
@@ -60,6 +60,8 @@ const moveTo = (point: TPoint, target: TCoordinate, iteration: number) => {
 
 const STEP_TO_MOVE = 3
 const MAX_STEPS_WITHOUT_MOVE = 600
+const MAX_AGE = 10000
+const CHANCE_TO_DIE_OF_OLD_AGE = 0.0001
 
 const die = (point: TPoint, reason: string) => {
     console.log(`Ant died: ${reason}`)
@@ -90,6 +92,14 @@ export const ant: TForceProcessor = (point, step) => {
     }
 
     point.data.reproduceSteps = (point.data.reproduceSteps ?? 0) + 1
+    point.data.age = (point.data.age ?? 0) + 1
+
+    if (point.data.age > MAX_AGE) {
+        if (random() < CHANCE_TO_DIE_OF_OLD_AGE) {
+            die(point, 'Died of old age')
+            return
+        }
+    }
 
     if (random() < CHANCE_TO_REPRODUCE && point.data.reproduceSteps > AGE_TO_REPRODUCE) {
         const firstAvailablePosition = Speed.possibleNeighbours.find(position => !Points.getPointByCoordinates({
