@@ -107,7 +107,8 @@ export const ant: TForceProcessor = (point, step) => {
             y: position.y + point.coordinates.y,
         }))
         if (firstAvailablePosition) {
-            point.data.reproduceSteps = -AGE_TO_REPRODUCE * 100
+            point.data.reproduceSteps = -AGE_TO_REPRODUCE * 10
+            console.log('Ant: Reproduce')
             Points.addPoint({
                 coordinates: {
                     x: firstAvailablePosition.x + point.coordinates.x,
