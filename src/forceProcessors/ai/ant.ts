@@ -129,7 +129,7 @@ export const ant: TForceProcessor = (point, step) => {
         }
 
         // Carry point
-        const chanceModifier = point.data.wasPutByAnt ? 0.5 : 1
+        const chanceModifier = point.data.wasPutByAnt ? 0.7 : 1
         const chanceToCarryPointForThisType = CHANCE_TO_CARRY_POINT[neighbor.type] ?? CHANCE_TO_CARRY_POINT.default
         const chanceToCarryPoint = !point.data.carriedPoint && chanceToCarryPointForThisType
         if (chanceToCarryPoint && random() < chanceToCarryPoint * chanceModifier) {
