@@ -247,4 +247,6 @@ export const ant: TForceProcessor = (point, step) => {
     for (let i = 0; i < STEP_TO_MOVE; i++) {
         gravity(point, step)
     }
+
+    point.data.lastMoveOnIteration = step
 }
