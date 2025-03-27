@@ -97,12 +97,13 @@ export class LightSystem {
 
     private static getDirection(amount: number) {
         return Array.from({ length: amount }, (_, i) => {
-            const angle = (i / amount) * 2 * Math.PI;
+            const smallRandomFactor = Math.random() * 0.3;
+            const angle = ((i / amount) * 2 * Math.PI) + smallRandomFactor;
             return [Math.cos(angle), Math.sin(angle)];
         });
     }
 
-    private static processLightSource(source: TPoint, forceIntensity = 1, directionsCount = 40) {
+    private static processLightSource(source: TPoint, forceIntensity = 1, directionsCount = 11) {
         if (this.processedPoints.has(source)) {
             return;
         }

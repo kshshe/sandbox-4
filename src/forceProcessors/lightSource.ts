@@ -1,6 +1,6 @@
 import { TForceProcessor } from ".";
 
-export const LIGHT_MAX_DISTANCE = 40;
+export const LIGHT_MAX_DISTANCE = 80;
 export const LIGHT_DECAY_FACTOR = 0.99;
 
 export const lightSource = (intensity: number = 1.0): TForceProcessor => (point) => {

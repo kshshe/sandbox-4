@@ -102,7 +102,7 @@ export const diesOnTemperature = (type: 'more' | 'less', temperature: number): T
     }
 }
 
-const TEMPERATURE_BY_LIGHT_FACTOR = 3
+const TEMPERATURE_BY_LIGHT_FACTOR = 1
 
 export const temperatureByLight: TForceProcessor = (point) => {
     const lightIntensity = LightSystem.getLightIntensity(point.coordinates.x, point.coordinates.y)
