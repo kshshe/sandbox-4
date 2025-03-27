@@ -51,6 +51,7 @@ type TRay = {
 
 export class LightSystem {
     private static lightMap: Map<string, number> = new Map();
+    private static lightMapHistory: Array<Map<string, number>> = [];
     private static processedPoints: Set<TPoint> = new Set();
     private static isDirty = true;
     static lastRays: TRay[] = [];
@@ -63,9 +64,16 @@ export class LightSystem {
         return `${x},${y}`;
     }
 
-    static getLightIntensity(x: number, y: number): number {
+    static getLightIntensity(x: number, y: number, withHistory = false): number {
         const key = this.getKey(x, y);
-        return this.lightMap.get(key) || 0
+        const lightIntensity = this.lightMap.get(key) || 0
+        if (withHistory) {
+            return [
+                lightIntensity,
+                ...this.lightMapHistory.map(map => map.get(key) || 0),
+            ].reduce((acc, intensity) => acc + intensity, 0) / (this.lightMapHistory.length + 1);
+        }
+        return lightIntensity;
     }
 
     static calculateLighting() {
@@ -74,6 +82,10 @@ export class LightSystem {
         this.lightMap.clear();
         this.processedPoints.clear();
         this.lastRays = [];
+        this.lightMapHistory.push(new Map(this.lightMap));
+        if (this.lightMapHistory.length > 10) {
+            this.lightMapHistory.shift();
+        }
         const lightSources = Points.getPoints().filter(point => point.data.isLightSource);
 
         for (const source of lightSources) {
