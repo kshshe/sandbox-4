@@ -10,10 +10,10 @@ const CANT_MOVE_THROUGH_POINTS = {
 } as const
 
 const CHANCE_TO_EAT = {
-    [EPointType.Worm]: 0.2,
-    [EPointType.Wood]: 0.2,
-    [EPointType.Sand]: 0.2,
-    default: 0.1,
+    [EPointType.Worm]: 0.1,
+    [EPointType.Wood]: 0.1,
+    [EPointType.Sand]: 0.1,
+    default: 0.03,
 } as const
 
 const MOVE_EACH_ITERATION = 6
