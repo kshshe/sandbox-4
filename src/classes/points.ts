@@ -113,7 +113,7 @@ export class Points {
         return this.coordinatesIndex[this.getIndexIndex(coordinates)]
     }
 
-    static addPoint(point: Omit<TPoint, 'data'> & {
+    static addPoint(point: Omit<TPoint, 'data' | 'id'> & {
         data?: TPoint['data']
     }) {
         if (this.getPointByCoordinates(point.coordinates)) {

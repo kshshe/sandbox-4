@@ -90,7 +90,31 @@ const updateHoveredPointDescription = () => {
     if (hoveredPoint && pointX === hoveredX && pointY === hoveredY && typeof pointX === 'number' && typeof pointY === 'number') {
         hoveredPointDescriptionElement.classList.remove('hidden');
         hoveredPointDescriptionElement.innerHTML = getDescription(hoveredPoint);
-        hoveredPointDescriptionElement.style.transform = `translate(${pointX * CONFIG.pixelSize + 15 * brushSize}px, ${pointY * CONFIG.pixelSize - 10 * brushSize}px)`;
+        
+        // Calculate position
+        let posX = pointX * CONFIG.pixelSize + 15 * brushSize;
+        let posY = pointY * CONFIG.pixelSize - 10 * brushSize;
+        
+        // Get window and element dimensions
+        const windowWidth = window.innerWidth;
+        const windowHeight = window.innerHeight;
+        const elemWidth = hoveredPointDescriptionElement.offsetWidth;
+        const elemHeight = hoveredPointDescriptionElement.offsetHeight;
+        
+        // Adjust positions if needed to stay within viewport
+        if (posX + elemWidth > windowWidth) {
+            posX = windowWidth - elemWidth;
+        }
+        
+        if (posY + elemHeight > windowHeight) {
+            posY = windowHeight - elemHeight;
+        }
+        
+        // Ensure positions are never negative
+        posX = Math.max(0, posX);
+        posY = Math.max(0, posY);
+        
+        hoveredPointDescriptionElement.style.transform = `translate(${posX}px, ${posY}px)`;
     } else {
         hoveredPointDescriptionElement.classList.add('hidden');
         return;
