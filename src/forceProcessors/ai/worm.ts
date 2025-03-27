@@ -9,6 +9,13 @@ const CANT_MOVE_THROUGH_POINTS = {
     [EPointType.Worm]: true,
 } as const
 
+const CHANCE_TO_EAT = {
+    [EPointType.Worm]: 0.2,
+    [EPointType.Wood]: 0.2,
+    [EPointType.Sand]: 0.2,
+    default: 0.1,
+} as const
+
 const MOVE_EACH_ITERATION = 6
 const DIRECTION_CHANGE_CHANCE = 0.1
 
@@ -17,15 +24,21 @@ const moveTo = (point: TPoint, target: TCoordinate, iteration: number) => {
     const oldX = point.coordinates.x
     const oldY = point.coordinates.y
     Points.deletePointInIndex(point.coordinates)
+    const chanceToEat = pointThere ? CHANCE_TO_EAT[pointThere.type] || CHANCE_TO_EAT.default : CHANCE_TO_EAT.default
+    const shouldEat = random() < chanceToEat
     if (pointThere) {
         Points.deletePointInIndex(pointThere.coordinates)
-        pointThere.coordinates = { x: oldX, y: oldY }
+        if (shouldEat) {
+            Points.deletePoint(pointThere)
+        } else {
+            pointThere.coordinates = { x: oldX, y: oldY }
+        }
     }
     point.coordinates = {
         x: target.x,
         y: target.y,
     }
-    if (pointThere) {
+    if (pointThere && !shouldEat) {
         Points.setPointInIndex(pointThere.coordinates, pointThere)
         Points.markNeighboursAsUsed(pointThere)
     }

@@ -349,8 +349,8 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
     [EPointType.Worm]: [
         ...BASIC_FORCES_EXCEPT_GRAVITY,
         worm,
-        diesOnTemperature('more', 100),
-        diesOnTemperature('less', 0),
+        diesOnTemperature('more', 120),
+        diesOnTemperature('less', -20),
     ],
 }
 
