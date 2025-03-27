@@ -4,8 +4,9 @@ import { Speed } from "../classes/speed"
 
 export const gravity: TForceProcessor = (point) => {
     const gravityState = Speed.rounded.down
-    const x = gravityState.x * POINTS_WEIGHTS[point.type] * 0.01
-    const y = gravityState.y * POINTS_WEIGHTS[point.type] * 0.01
+    const weight = Math.min(3, POINTS_WEIGHTS[point.type])
+    const x = gravityState.x * weight * 0.01
+    const y = gravityState.y * weight * 0.01
 
     point.speed.x += x
     point.speed.y += y

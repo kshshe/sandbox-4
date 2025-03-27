@@ -2,6 +2,7 @@ import { Points } from "../classes/points"
 import { Speed } from "../classes/speed"
 import { Storage } from "../classes/storage"
 import { POINTS_WEIGHTS } from "../config"
+import { IGNORE_DROWNING } from "../constants/pointsExceptions"
 import { TCoordinate } from "../types"
 import type { TForceProcessor } from "./index"
 
@@ -22,6 +23,11 @@ export const drowning: TForceProcessor = (point) => {
     const pointBySpeed = Points.getPointByCoordinates(targetCoordinates)
     
     if (!pointBySpeed) {
+        return
+    }
+
+    const shouldIgnore = IGNORE_DROWNING[pointBySpeed.type] || IGNORE_DROWNING[point.type]
+    if (shouldIgnore) {
         return
     }
 

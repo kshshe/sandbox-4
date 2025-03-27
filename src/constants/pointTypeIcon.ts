@@ -52,6 +52,7 @@ export const POINT_TYPE_ICON: {
     [EPointType.Ant]: '🐜',
     [EPointType.FireAnt]: '🔥🐜',
     [EPointType.IceAnt]: '❄️🐜',
+    [EPointType.Worm]: '🪱',
     eraser: '🧽',
     heatTool: '🔥🔧',
     coolTool: '❄️🔧',
@@ -94,6 +95,7 @@ export const ELEMENT_GROUPS: ElementGroup[] = [
             EPointType.Ant,
             EPointType.FireAnt,
             EPointType.IceAnt,
+            EPointType.Worm,
         ]
     },
     {

@@ -40,6 +40,7 @@ import { windSource } from "./windSource";
 import { ant } from "./ai/ant";
 import { randomProcessor } from "./utils/random";
 import { explode } from "./utils/explode";
+import { worm } from "./ai/worm";
 
 export type TForceProcessor = (point: TPoint, step: number) => void
 
@@ -340,10 +341,16 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
     [EPointType.IceAnt]: [
         ...BASIC_FORCES_EXCEPT_GRAVITY,
         ant,
-        emitter(EPointType.Snow, 0.02, 0),
+        emitter(EPointType.Snow, 0.01, 0),
         throttle(maxTemperature(-500), 2),
         decreasingTemperature(10, -1000),
         diesOnTemperature('more', 0),
+    ],
+    [EPointType.Worm]: [
+        ...BASIC_FORCES_EXCEPT_GRAVITY,
+        worm,
+        diesOnTemperature('more', 100),
+        diesOnTemperature('less', 0),
     ],
 }
 

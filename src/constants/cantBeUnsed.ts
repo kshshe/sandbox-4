@@ -21,4 +21,5 @@ export const CANT_BE_UNSED: {
     [EPointType.Ant]: true,
     [EPointType.FireAnt]: true,
     [EPointType.IceAnt]: true,
+    [EPointType.Worm]: true,
 } 

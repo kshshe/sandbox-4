@@ -4,6 +4,10 @@ export type TConfig = {
     [key in EPointType]?: true
 }
 
+export const IGNORE_DROWNING: TConfig = {
+    [EPointType.Worm]: true,
+}
+
 export const MAGNET_POINTS_TO_MAGNETIZE: TConfig = {
     [EPointType.Metal]: true,
     [EPointType.MoltenMetal]: true,

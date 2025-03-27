@@ -45,6 +45,7 @@ export const POINT_TYPE_HINT: {
     [EPointType.Ant]: 'Ant - A small creature that moves around and can carry small objects',
     [EPointType.FireAnt]: 'Fire Ant - A fiery version of ant that moves around and can carry small objects',
     [EPointType.IceAnt]: 'Ice Ant - A freezing version of ant that moves around and can carry small objects',
+    [EPointType.Worm]: 'Worm - A burrowing creature that moves through blocks',
     [EPointType.Smoke]: 'Smoke - Light particles that rise and dissipate over time',
     [EPointType.Oil]: 'Oil - Flammable liquid that burns at high temperatures',
     [EPointType.Steam]: 'Steam - Water vapor that rises and cools into water',

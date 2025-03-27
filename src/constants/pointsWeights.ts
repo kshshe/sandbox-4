@@ -28,6 +28,7 @@ export const POINTS_WEIGHTS: Record<EPointType, number> = {
     [EPointType.FireAnt]: 0.5,
     [EPointType.IceAnt]: 0.5,
 
+    [EPointType.Worm]: Infinity,
     [EPointType.Electricity_Source]: Infinity,
     [EPointType.Electricity_Ground]: Infinity,
     [EPointType.Electricity_Amplifier]: Infinity,

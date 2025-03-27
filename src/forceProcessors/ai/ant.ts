@@ -13,6 +13,7 @@ const CONVERT_ON_TOUCH: {
 } = {
     [EPointType.Sand]: EPointType.StaticSand,
     [EPointType.Stone]: EPointType.StaticStone,
+    [EPointType.Snow]: EPointType.Ice,
 }
 
 const CHANCE_TO_EAT_POINT = {

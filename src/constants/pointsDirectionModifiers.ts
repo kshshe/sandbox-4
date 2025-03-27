@@ -21,4 +21,5 @@ export const POINTS_PROBABILITY_TO_CHANGE_DIRECTION_MODIFIERS: {
     [EPointType.Ant]: 1,
     [EPointType.FireAnt]: 1,
     [EPointType.IceAnt]: 1,
+    [EPointType.Worm]: 1,
 } 
