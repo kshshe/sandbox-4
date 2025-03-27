@@ -1,5 +1,6 @@
 import { Points, TPoint } from "../../classes/points";
 import { Speed } from "../../classes/speed";
+import { LIQUID_POINT_TYPES } from "../../constants/pointsLiquids";
 import { EPointType, TCoordinate } from "../../types";
 import { random } from "../../utils/random";
 import { gravity } from "../gravity";
@@ -8,6 +9,7 @@ import { CONVERT_ON_TOUCH } from "./ant";
 const CANT_MOVE_THROUGH_POINTS = {
     [EPointType.Border]: true,
     [EPointType.Worm]: true,
+    ...LIQUID_POINT_TYPES
 } as const
 
 const CHANCE_TO_EAT = {

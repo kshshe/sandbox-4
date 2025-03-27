@@ -11,4 +11,4 @@ export const LIQUID_POINT_TYPES: {
     [EPointType.Acid]: true,
     [EPointType.Oil]: true,
     [EPointType.BurningOil]: true,
-} 
+} as const
