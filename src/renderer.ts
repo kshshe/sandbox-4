@@ -35,9 +35,6 @@ export const drawPoints = () => {
         Points.updateVisualCoordinates(CONFIG.movementSmoothness * timeElapsed);
     }
 
-    // Calculate lighting
-    LightSystem.calculateLighting();
-
     const iteration = Storage.get('iteration', 0)
 
     previouslyUsedPixels.clear();
@@ -209,6 +206,7 @@ export const drawPoints = () => {
     updateStats();
     drawConnections();
     drawWindVectors();
+    drawRays();
     if (points.length && (frame % 200 === 0 || !wasFaviconUpdated)) {
         updateFavicon();
         wasFaviconUpdated = true;
@@ -219,6 +217,25 @@ export const drawPoints = () => {
 
 const limitLineLength = (line: string, maxLength: number) => {
     return line.length > maxLength ? line.substring(0, maxLength) + '...' : line;
+}
+
+const drawRays = () => {
+    if (!Controls.getDebugMode()) {
+        return;
+    }
+    LightSystem.lastRays.forEach(({
+        fromX,
+        fromY,
+        toX,
+        toY,
+    }) => {
+        ctx.beginPath();
+        ctx.moveTo(fromX * CONFIG.pixelSize, fromY * CONFIG.pixelSize);
+        ctx.lineTo(toX * CONFIG.pixelSize, toY * CONFIG.pixelSize);
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0.1)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+    })
 }
 
 const updateStats = () => {

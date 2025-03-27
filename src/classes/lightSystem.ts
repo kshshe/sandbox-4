@@ -6,12 +6,23 @@ import { EPointType } from "../types";
 // 0 - totally opaque
 const OPACITY = {
     default: 0.2,
+    [EPointType.LightSource]: 1,
     [EPointType.Glass]: 0.9,
+    [EPointType.Border]: 0,
 } as const
+
+type TRay = {
+    fromX: number,
+    fromY: number,
+    toX: number,
+    toY: number,
+}   
 
 export class LightSystem {
     private static lightMap: Map<string, number> = new Map();
+    private static processedPoints: Set<TPoint> = new Set();
     private static isDirty = true;
+    static lastRays: TRay[] = [];
 
     static markDirty() {
         this.isDirty = true;
@@ -30,6 +41,8 @@ export class LightSystem {
         if (!this.isDirty) return;
         
         this.lightMap.clear();
+        this.processedPoints.clear();
+        this.lastRays = [];
         const lightSources = Points.getPoints().filter(point => point.data.isLightSource);
         
         for (const source of lightSources) {
@@ -46,13 +59,17 @@ export class LightSystem {
         });
     }
 
-    private static processLightSource(source: TPoint) {
+    private static processLightSource(source: TPoint, forceIntensity = 1, directionsCount = 40) {
+        if (this.processedPoints.has(source)) {
+            return;
+        }
         const sourceX = source.coordinates.x;
         const sourceY = source.coordinates.y;
-        const intensity = source.data.lightIntensity || 1;
+        const intensity = source.data.lightIntensity || forceIntensity;
+        this.processedPoints.add(source);
         
         // Cast rays in 8 directions (can be expanded for more precision)
-        const directions = this.getDirection(40);
+        const directions = this.getDirection(directionsCount);
         
         for (const [dx, dy] of directions) {
             this.castRay(sourceX, sourceY, dx, dy, intensity);
@@ -92,6 +109,13 @@ export class LightSystem {
                 currentIntensity *= opacity;
             }
         }
+
+        this.lastRays.push({
+            fromX: x,
+            fromY: y,
+            toX: currentX,
+            toY: currentY,
+        })
     }
 
     private static setLight(x: number, y: number, intensity: number) {
