@@ -95,7 +95,6 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
         ...BASIC_TEMPERATURE_PROCESSORS,
         staticForce,
         throttle(ground, 10),
-        throttle(directionToGround, 10),
     ],
     [EPointType.Electricity_Amplifier]: [
         ...BASIC_TEMPERATURE_PROCESSORS,
