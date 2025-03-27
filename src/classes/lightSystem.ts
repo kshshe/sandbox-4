@@ -20,7 +20,7 @@ const OPACITY = {
     [EPointType.Void]: 0,
     [EPointType.Gas]: 0.9,
     [EPointType.LiquidGas]: 0.8,
-    [EPointType.Metal]: 0.1,
+    [EPointType.Metal]: 0.3,
     [EPointType.MoltenMetal]: 0.3,
     [EPointType.Electricity_Spark]: 0.8,
     [EPointType.Acid]: 0.6,
@@ -35,12 +35,17 @@ const OPACITY = {
     [EPointType.BurningWood]: 0.5,
 } as const
 
+const REFLECTION_FACTOR = {
+    default: 0.5,
+    [EPointType.Metal]: 0.9,
+} as const
+
 type TRay = {
     fromX: number,
     fromY: number,
     toX: number,
     toY: number,
-}   
+}
 
 export class LightSystem {
     private static lightMap: Map<string, number> = new Map();
@@ -63,16 +68,16 @@ export class LightSystem {
 
     static calculateLighting() {
         if (!this.isDirty) return;
-        
+
         this.lightMap.clear();
         this.processedPoints.clear();
         this.lastRays = [];
         const lightSources = Points.getPoints().filter(point => point.data.isLightSource);
-        
+
         for (const source of lightSources) {
             this.processLightSource(source);
         }
-        
+
         this.isDirty = false;
     }
 
@@ -91,10 +96,10 @@ export class LightSystem {
         const sourceY = source.coordinates.y;
         const intensity = source.data.lightIntensity || forceIntensity;
         this.processedPoints.add(source);
-        
+
         // Cast rays in 8 directions (can be expanded for more precision)
         const directions = this.getDirection(directionsCount);
-        
+
         for (const [dx, dy] of directions) {
             this.castRay(sourceX, sourceY, dx, dy, intensity);
         }
@@ -105,30 +110,34 @@ export class LightSystem {
         let currentY = y;
         let currentIntensity = intensity;
         let distance = 0;
-        
+
         // Set light at source position
         this.setLight(Math.round(currentX), Math.round(currentY), currentIntensity);
-        
+
         while (currentIntensity > 0.05 && distance < LIGHT_MAX_DISTANCE) {
             // Move along the ray
             currentX += dx;
             currentY += dy;
             distance += 1;
-            
+
             // Decay light intensity with distance
             currentIntensity *= LIGHT_DECAY_FACTOR;
-            
+
             // Round to nearest grid position
             const gridX = Math.round(currentX);
             const gridY = Math.round(currentY);
-            
+
             // Check if there's a point at this position that blocks light
             const pointAtPosition = Points.getPointByCoordinates({ x: gridX, y: gridY });
-            
+
             // Set light intensity at this position
             this.setLight(gridX, gridY, currentIntensity);
 
             if (pointAtPosition) {
+                const reflectionFactor = REFLECTION_FACTOR[pointAtPosition.type] ?? REFLECTION_FACTOR.default;
+                const reflection = reflectionFactor * currentIntensity;
+                this.processLightSource(pointAtPosition, reflection, 12);
+
                 const opacity = OPACITY[pointAtPosition.type] ?? OPACITY.default;
                 currentIntensity *= opacity;
             }
@@ -145,7 +154,7 @@ export class LightSystem {
     private static setLight(x: number, y: number, intensity: number) {
         const key = this.getKey(x, y);
         const currentIntensity = this.lightMap.get(key) || 0;
-        
+
         // Use the highest intensity if multiple light sources affect this point
         this.lightMap.set(key, Math.max(currentIntensity, intensity));
     }
