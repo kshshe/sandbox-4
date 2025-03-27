@@ -56,7 +56,7 @@ const isDirectionAvailable = (direction: TCoordinate, point: TPoint) => {
         x: point.coordinates.x + direction.x,
         y: point.coordinates.y + direction.y,
     })
-    return !pointThere || !CANT_MOVE_THROUGH_POINTS[pointThere.type]
+    return pointThere && !CANT_MOVE_THROUGH_POINTS[pointThere.type]
 }
 
 const getNewDirection = (point: TPoint): TCoordinate | undefined => {
