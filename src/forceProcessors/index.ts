@@ -331,9 +331,9 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
         ...BASIC_FORCES_EXCEPT_GRAVITY,
         ant,
         emitter(EPointType.Smoke, 0.02, 0),
-        throttle(minTemperature(700), 4),
+        throttle(minTemperature(700), 2),
         growingTemperature(10, 2000),
-        diesOnTemperature('less', 200),
+        diesOnTemperature('less', 0),
         randomProcessor(0.0003, (point) => explode(point, new Set([point])))
     ],
 }
