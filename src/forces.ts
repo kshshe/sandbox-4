@@ -9,6 +9,7 @@ import { CANT_BE_UNSED } from './config'
 import { Bounds } from './classes/bounds'
 import { TemperatureGrid } from './classes/temperatureGrid'
 import { incrementVirusSteps } from './forceProcessors/virus'
+import { LightSystem } from "./classes/lightSystem"
 
 const MAX_SPEED = 6
 const MAX_UNUSED_ITERATIONS = 50
@@ -116,6 +117,9 @@ const processFrame = () => {
     Points.save()
     Points.shufflePoints()
     Storage.set('iteration', iteration)
+
+    // After all points are processed, mark the light system as dirty
+    LightSystem.markDirty();
 }
 
 let framesTimes = [] as number[]

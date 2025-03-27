@@ -7,7 +7,7 @@ import { drowning } from "./drowning";
 import { lifetime } from "./lifetime";
 import { bomb } from "./bomb";
 import { staticForce } from "./static";
-import { staticTemperature, convertOnTemperature, moveToBaseTemperature, diesOnTemperature, minTemperature, growingTemperature, maxTemperature, decreasingTemperature } from "./temperature";
+import { staticTemperature, convertOnTemperature, moveToBaseTemperature, diesOnTemperature, minTemperature, growingTemperature, maxTemperature, decreasingTemperature, temperatureByLight } from "./temperature";
 import { INITIAL_TEMPERATURE } from "../config";
 import { chaos } from "./chaos";
 import { voidProcessor } from "./void";
@@ -41,6 +41,7 @@ import { ant } from "./ai/ant";
 import { randomProcessor } from "./utils/random";
 import { explode } from "./utils/explode";
 import { worm } from "./ai/worm";
+import { lightSource } from "./lightSource";
 
 export type TForceProcessor = (point: TPoint, step: number) => void
 
@@ -49,6 +50,7 @@ const noopDetector = () => {}
 const BASIC_TEMPERATURE_PROCESSORS = [
     noopDetector,
     throttle(moveToBaseTemperature(0.01), 10),
+    temperatureByLight
 ]
 
 const BASIC_FORCES_EXCEPT_GRAVITY = [
@@ -351,6 +353,11 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
         worm,
         diesOnTemperature('more', 120),
         diesOnTemperature('less', -20),
+    ],
+    [EPointType.LightSource]: [
+        ...BASIC_TEMPERATURE_PROCESSORS,
+        staticForce,
+        lightSource,
     ],
 }
 

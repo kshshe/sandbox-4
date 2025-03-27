@@ -3,6 +3,7 @@ import { TForceProcessor } from ".";
 import { Points } from "../classes/points";
 import { Controls } from "../classes/controls";
 import { random } from "../utils/random";
+import { LightSystem } from "../classes/lightSystem";
 
 export const minTemperature = (temperature: number): TForceProcessor => (point) => {
     if (point.data.temperature && point.data.temperature < temperature) {
@@ -99,4 +100,11 @@ export const diesOnTemperature = (type: 'more' | 'less', temperature: number): T
     if (type === 'less' && point.data.temperature && point.data.temperature < temperature) {
         Points.deletePoint(point)
     }
+}
+
+const TEMPERATURE_BY_LIGHT_FACTOR = 3
+
+export const temperatureByLight: TForceProcessor = (point) => {
+    const lightIntensity = LightSystem.getLightIntensity(point.coordinates.x, point.coordinates.y)
+    point.data.temperature += lightIntensity * TEMPERATURE_BY_LIGHT_FACTOR
 }

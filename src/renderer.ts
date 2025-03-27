@@ -11,6 +11,7 @@ import { Storage } from "./classes/storage";
 import { Connections } from "./classes/connections";
 import { WindVectors } from "./classes/windVectors";
 import { POINT_NAMES } from "./constants/pointNames";
+import { LightSystem } from "./classes/lightSystem";
 
 const previouslyUsedPixels: Set<string> = new Set();
 let frame = 0;
@@ -34,6 +35,9 @@ export const drawPoints = () => {
         Points.updateVisualCoordinates(CONFIG.movementSmoothness * timeElapsed);
     }
 
+    // Calculate lighting
+    LightSystem.calculateLighting();
+
     const iteration = Storage.get('iteration', 0)
 
     previouslyUsedPixels.clear();
@@ -51,18 +55,50 @@ export const drawPoints = () => {
         const key = `${Math.round(point.visualCoordinates.x)}:${Math.round(point.visualCoordinates.y)}`;
         const thereIsPointAlready = previouslyUsedPixels.has(key);
 
-        // Use varied color if colorVariation is set, otherwise use the default color
+        // Get base color
+        let baseColor;
         if (point.colorVariation !== undefined) {
-            ctx.fillStyle = getVariedColor(point.type, point.colorVariation * CONFIG.colorVariation);
+            baseColor = getVariedColor(point.type, point.colorVariation * CONFIG.colorVariation);
+            // Convert to RGB object
+            const result = /^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/.exec(baseColor);
+            if (result) {
+                baseColor = { 
+                    r: parseInt(result[1]), 
+                    g: parseInt(result[2]), 
+                    b: parseInt(result[3]) 
+                };
+            } else {
+                baseColor = POINTS_COLORS[point.type];
+            }
         } else {
-            const color = POINTS_COLORS[point.type];
-            ctx.fillStyle = `rgb(${color.r}, ${color.g}, ${color.b})`;
+            baseColor = POINTS_COLORS[point.type];
         }
 
         if (debugMode && thereIsPointAlready) {
-            ctx.fillStyle = 'red';
+            baseColor = { r: 255, g: 0, b: 0 }; // Red for overlapping points in debug mode
             previouslyUsedPixels.add(key);
         }
+
+        // Apply lighting effect to color
+        let finalColor = { ...baseColor };
+        
+        // Get light intensity at this position
+        const lightIntensity = LightSystem.getLightIntensity(
+            point.coordinates.x,
+            point.coordinates.y
+        );
+
+        // Only apply lighting if the point isn't a light source itself
+        if (lightIntensity > 0 && !point.data.isLightSource) {
+            // Adjust RGB values based on light intensity
+            finalColor = {
+                r: Math.min(255, baseColor.r + (255 - baseColor.r) * lightIntensity * 0.8),
+                g: Math.min(255, baseColor.g + (255 - baseColor.g) * lightIntensity * 0.8),
+                b: Math.min(255, baseColor.b + (255 - baseColor.b) * lightIntensity * 0.8)
+            };
+        }
+        
+        ctx.fillStyle = `rgb(${Math.round(finalColor.r)}, ${Math.round(finalColor.g)}, ${Math.round(finalColor.b)})`;
 
         // Use visual coordinates for rendering
         ctx.fillRect(

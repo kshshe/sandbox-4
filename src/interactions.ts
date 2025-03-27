@@ -6,6 +6,7 @@ import { isDev } from "./utils/isDev";
 import { canvas } from "./canvas";
 import { Connections } from "./classes/connections";
 import { POINT_NAMES } from "./constants/pointNames";
+import { LightSystem } from "./classes/lightSystem";
 
 export let hoveredPoint: TPoint | null = null;
 export let hoveredCoordinates: { x: number, y: number } | null = null;
@@ -76,7 +77,8 @@ const getDescription = (point: TPoint) => {
     return [
         `${point.coordinates.x}:${point.coordinates.y} ${POINT_NAMES[point.type] ?? point.type} #${point.id}`,
         `${Math.round(point.data.temperature)} °C`,
-        `speed: ${Math.round(Math.sqrt(point.speed.x ** 2 + point.speed.y ** 2) * 100) / 100} ${getVectorDiv(point.speed)}`,
+        `Light: ${Math.round(LightSystem.getLightIntensity(point.coordinates.x, point.coordinates.y) * 100)}%`,
+        `Speed: ${Math.round(Math.sqrt(point.speed.x ** 2 + point.speed.y ** 2) * 100) / 100} ${getVectorDiv(point.speed)}`,
         ...Object.entries(point.data).map(([key, value]) => renderDataPair(key, value)).filter(Boolean),
     ].join('<br>')
 }

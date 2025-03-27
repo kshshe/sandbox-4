@@ -5,6 +5,7 @@ import { addConsoleApi } from './utils/addConsoleApi';
 import './ui/main'
 import 'react-tooltip/dist/react-tooltip.css'
 import { inject } from "@vercel/analytics"
+import { LightSystem } from './classes/lightSystem';
 
 Points.init()
 

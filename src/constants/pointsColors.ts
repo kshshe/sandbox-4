@@ -57,6 +57,7 @@ export const POINTS_COLORS: Record<EPointType, { r: number, g: number, b: number
     [EPointType.FireAnt]: { r: 255, g: 69, b: 0 },           // orangered
     [EPointType.IceAnt]: { r: 30, g: 144, b: 255 },          // dodgerblue
     [EPointType.Worm]: { r: 160, g: 82, b: 45 },             // sienna/brown
+    [EPointType.LightSource]: { r: 255, g: 255, b: 128 },    // bright yellow
     eraser: { r: 200, g: 200, b: 200 },                      // gray
     heatTool: { r: 255, g: 69, b: 0 },                       // orangered
     coolTool: { r: 135, g: 206, b: 250 },                    // lightskyblue
