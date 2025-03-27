@@ -343,7 +343,7 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
     [EPointType.IceAnt]: [
         ...BASIC_FORCES_EXCEPT_GRAVITY,
         ant,
-        emitter(EPointType.Snow, 0.01, 0),
+        emitter(EPointType.IceFire, 0.01, 0),
         throttle(maxTemperature(-500), 2),
         decreasingTemperature(10, -1000),
         diesOnTemperature('more', 0),
