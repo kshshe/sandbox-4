@@ -151,7 +151,7 @@ export class LightSystem {
                 if (distance > 1) {
                     const reflectionFactor = REFLECTION_FACTOR[pointAtPosition.type] ?? REFLECTION_FACTOR.default;
                     const reflection = reflectionFactor * currentIntensity;
-                    this.processLightSource(pointAtPosition, reflection, 12);
+                    this.processLightSource(pointAtPosition, reflection, 11);
                 }
 
                 const opacity = OPACITY[pointAtPosition.type] ?? OPACITY.default;
