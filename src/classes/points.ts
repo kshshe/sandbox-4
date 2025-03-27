@@ -9,6 +9,7 @@ import { Storage } from './storage'
 import { WindVectors } from './windVectors'
 
 export type TPoint = {
+    id: number
     coordinates: TCoordinate
     type: EPointType,
     speed: TCoordinate,
@@ -23,6 +24,7 @@ export class Points {
     private static _points: TPoint[] = []
     private static coordinatesIndex: Record<number, TPoint> = Storage.get('coordinatesIndex', {})
     private static unusedPoints: WeakSet<TPoint> = new WeakSet()
+    private static idCounter = Storage.get('idCounter', 0)
 
     static init() {
         this.updatePoints()
@@ -125,6 +127,7 @@ export class Points {
         const pointWithData: TPoint = {
             data: {},
             ...point,
+            id: this.idCounter++,
             visualCoordinates: { ...point.coordinates },
             colorVariation: Math.random() * 2 - 1 // Random value between -1 and 1
         }
@@ -147,6 +150,7 @@ export class Points {
 
     static save() {
         Storage.set('coordinatesIndex', this.coordinatesIndex)
+        Storage.set('idCounter', this.idCounter)
     }
 
     static deletePoint(point: TPoint) {

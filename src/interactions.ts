@@ -74,7 +74,7 @@ const renderDataPair = (key: string, value: unknown) => {
 
 const getDescription = (point: TPoint) => {
     return [
-        `${point.coordinates.x}:${point.coordinates.y} ${POINT_NAMES[point.type] ?? point.type}`,
+        `${point.coordinates.x}:${point.coordinates.y} ${POINT_NAMES[point.type] ?? point.type} #${point.id}`,
         `${Math.round(point.data.temperature)} °C`,
         `speed: ${Math.round(Math.sqrt(point.speed.x ** 2 + point.speed.y ** 2) * 100) / 100} ${getVectorDiv(point.speed)}`,
         ...Object.entries(point.data).map(([key, value]) => renderDataPair(key, value)).filter(Boolean),

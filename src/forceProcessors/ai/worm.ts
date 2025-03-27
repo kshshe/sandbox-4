@@ -103,6 +103,22 @@ export const worm = (point: TPoint, step: number) => {
         }
     }
 
+    const farNeighbourWorms = Points.getNeighbours(point, false, 4)
+        .filter(neighbour => neighbour.type === point.type && point.id < neighbour.id)
+    if (farNeighbourWorms.length > 0) {
+        const closestFarNeighbourWorm = farNeighbourWorms.sort((a, b) => {
+            return Math.sqrt((a.coordinates.x - point.coordinates.x) ** 2 + (a.coordinates.y - point.coordinates.y) ** 2) - Math.sqrt((b.coordinates.x - point.coordinates.x) ** 2 + (b.coordinates.y - point.coordinates.y) ** 2)
+        })[0]
+        const xSign = closestFarNeighbourWorm.coordinates.x > point.coordinates.x ? 1 : -1
+        const ySign = closestFarNeighbourWorm.coordinates.y > point.coordinates.y ? 1 : -1
+        const xZero = closestFarNeighbourWorm.coordinates.x === point.coordinates.x
+        const yZero = closestFarNeighbourWorm.coordinates.y === point.coordinates.y
+        point.data.previousDirection = {
+            x: xSign * (xZero ? 0 : 1),
+            y: ySign * (yZero ? 0 : 1),
+        }
+    }
+
     if (random() < REPRODUCTION_CHANCE) {
         const slot = Speed.possibleNeighbours.find(direction => {
             const pointThere = Points.getPointByCoordinates({
