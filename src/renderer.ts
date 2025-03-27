@@ -240,7 +240,7 @@ const drawRays = () => {
                     
                     // Add color stops
                     const lightColor = POINTS_COLORS[point.type];
-                    gradient.addColorStop(0, `rgba(${lightColor.r}, ${lightColor.g}, ${lightColor.b}, 0.5)`);
+                    gradient.addColorStop(0, `rgba(${lightColor.r}, ${lightColor.g}, ${lightColor.b}, 0.2)`);
                     gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
                     
                     // Fill with gradient

@@ -357,7 +357,7 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
     [EPointType.LightSource]: [
         ...BASIC_TEMPERATURE_PROCESSORS,
         staticForce,
-        lightSource,
+        lightSource(1),
     ],
 }
 
