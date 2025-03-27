@@ -55,4 +55,6 @@ export const POINT_NAMES: {
     [EPointType.FireAnt]: 'Fire Ant',
     [EPointType.IceAnt]: 'Ice Ant',
     [EPointType.Worm]: 'Worm',
+    [EPointType.LightSource]: 'Light Source',
+    [EPointType.Mirror]: 'Mirror',
 }

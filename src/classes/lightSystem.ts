@@ -33,11 +33,13 @@ const OPACITY = {
     [EPointType.Smoke]: 0.8,
     [EPointType.Wood]: 0.3,
     [EPointType.BurningWood]: 0.5,
+    [EPointType.Mirror]: 0,
 } as const
 
 const REFLECTION_FACTOR = {
     default: 0.5,
     [EPointType.Metal]: 0.9,
+    [EPointType.Mirror]: 0.9999,
 } as const
 
 type TRay = {
@@ -134,9 +136,11 @@ export class LightSystem {
             this.setLight(gridX, gridY, currentIntensity);
 
             if (pointAtPosition) {
-                const reflectionFactor = REFLECTION_FACTOR[pointAtPosition.type] ?? REFLECTION_FACTOR.default;
-                const reflection = reflectionFactor * currentIntensity;
-                this.processLightSource(pointAtPosition, reflection, 12);
+                if (distance > 1) {
+                    const reflectionFactor = REFLECTION_FACTOR[pointAtPosition.type] ?? REFLECTION_FACTOR.default;
+                    const reflection = reflectionFactor * currentIntensity;
+                    this.processLightSource(pointAtPosition, reflection, 12);
+                }
 
                 const opacity = OPACITY[pointAtPosition.type] ?? OPACITY.default;
                 currentIntensity *= opacity;

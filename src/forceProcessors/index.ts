@@ -359,6 +359,11 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
         staticForce,
         lightSource(1),
     ],
+    [EPointType.Mirror]: [
+        ...BASIC_TEMPERATURE_PROCESSORS,
+        staticForce,
+        convertOnTemperature('more', 1400, EPointType.LiquidGlass),
+    ],
 }
 
 Object.keys(forcesByType).forEach(type => {

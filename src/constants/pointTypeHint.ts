@@ -50,6 +50,8 @@ export const POINT_TYPE_HINT: {
     [EPointType.Oil]: 'Oil - Flammable liquid that burns at high temperatures',
     [EPointType.Steam]: 'Steam - Water vapor that rises and cools into water',
     [EPointType.MoltenMetal]: 'Molten Metal - Hot liquid metal that solidifies below 1500°C',
+    [EPointType.Mirror]: 'Mirror - Perfect reflective surface that melts into liquid glass above 1400°C',
+    [EPointType.LightSource]: 'Light Source - Emits light in all directions',
     eraser: 'Eraser - Removes elements from the simulation',
     heatTool: 'Heat Tool - Increases temperature of elements',
     coolTool: 'Cool Tool - Decreases temperature of elements',

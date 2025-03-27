@@ -57,6 +57,7 @@ export enum EPointType {
     IceAnt = 'iceAnt',
     Worm = 'worm',
     LightSource = 'lightSource',
+    Mirror = 'mirror',
 }
 
 export type TPoint = {

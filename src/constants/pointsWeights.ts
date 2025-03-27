@@ -55,4 +55,5 @@ export const POINTS_WEIGHTS: Record<EPointType, number> = {
     [EPointType.WindSource]: Infinity,
     [EPointType.StaticSand]: Infinity,
     [EPointType.LightSource]: Infinity,
+    [EPointType.Mirror]: Infinity,
 } 

@@ -16,6 +16,7 @@ export const POINTS_HEAT_CAPACITY: {
     wood: 2,
     glass: 2,
     liquidGlass: 1.5,
+    mirror: 2,
 
     steam: 0.1,
     gas: 0.1,

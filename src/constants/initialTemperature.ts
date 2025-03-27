@@ -33,6 +33,7 @@ export const INITIAL_TEMPERATURE: {
     [EPointType.BurningOil]: 350,
     [EPointType.FireAnt]: 800,
     [EPointType.IceAnt]: -400,
+    [EPointType.Mirror]: 25,
 
     [EPointType.Electricity_Spark]: 100,
     [EPointType.Heater]: 20,
