@@ -97,7 +97,7 @@ export class LightSystem {
 
     private static getDirection(amount: number) {
         return Array.from({ length: amount }, (_, i) => {
-            const smallRandomFactor = Math.random() * 0.3;
+            const smallRandomFactor = Math.random() * 0.3 - 0.15;
             const angle = ((i / amount) * 2 * Math.PI) + smallRandomFactor;
             return [Math.cos(angle), Math.sin(angle)];
         });
