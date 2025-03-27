@@ -58,6 +58,7 @@ export enum EPointType {
     Worm = 'worm',
     LightSource = 'lightSource',
     Mirror = 'mirror',
+    LightDetector = 'lightDetector',
 }
 
 export type TPoint = {

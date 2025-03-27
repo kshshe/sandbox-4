@@ -10,5 +10,6 @@ export const POINTS_CAN_ACCEPT_ELECTRICITY: {
     [EPointType.ColdDetector]: true,
     [EPointType.HotDetector]: true,
     [EPointType.LiquidDetector]: true,
+    [EPointType.LightDetector]: true,
     [EPointType.Electricity_Amplifier]: true,
 } 

@@ -52,6 +52,7 @@ export const POINT_TYPE_HINT: {
     [EPointType.MoltenMetal]: 'Molten Metal - Hot liquid metal that solidifies below 1500°C',
     [EPointType.Mirror]: 'Mirror - Perfect reflective surface that melts into liquid glass above 1400°C',
     [EPointType.LightSource]: 'Light Source - Emits light in all directions',
+    [EPointType.LightDetector]: 'Light Detector - Emits electricity when exposed to light intensity above 30%',
     eraser: 'Eraser - Removes elements from the simulation',
     heatTool: 'Heat Tool - Increases temperature of elements',
     coolTool: 'Cool Tool - Decreases temperature of elements',

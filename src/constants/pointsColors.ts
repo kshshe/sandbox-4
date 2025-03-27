@@ -59,6 +59,7 @@ export const POINTS_COLORS: Record<EPointType, { r: number, g: number, b: number
     [EPointType.Worm]: { r: 160, g: 82, b: 45 },             // sienna/brown
     [EPointType.LightSource]: { r: 255, g: 255, b: 128 },    // bright yellow
     [EPointType.Mirror]: { r: 220, g: 220, b: 220 },         // silver/reflective
+    [EPointType.LightDetector]: { r: 255, g: 255, b: 0 },    // yellow
     eraser: { r: 200, g: 200, b: 200 },                      // gray
     heatTool: { r: 255, g: 69, b: 0 },                       // orangered
     coolTool: { r: 135, g: 206, b: 250 },                    // lightskyblue

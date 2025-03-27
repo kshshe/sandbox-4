@@ -42,6 +42,7 @@ import { randomProcessor } from "./utils/random";
 import { explode } from "./utils/explode";
 import { worm } from "./ai/worm";
 import { lightSource } from "./lightSource";
+import { lightDetector } from "./lightDetector";
 
 export type TForceProcessor = (point: TPoint, step: number) => void
 
@@ -363,6 +364,13 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
         ...BASIC_TEMPERATURE_PROCESSORS,
         staticForce,
         convertOnTemperature('more', 1400, EPointType.LiquidGlass),
+    ],
+    [EPointType.LightDetector]: [
+        ...BASIC_TEMPERATURE_PROCESSORS,
+        staticForce,
+        lightDetector,
+        sendCharge,
+        throttle(directionToGround, 10),
     ],
 }
 
