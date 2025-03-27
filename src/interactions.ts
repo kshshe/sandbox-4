@@ -40,37 +40,42 @@ const getVectorDiv = (vector: { x: number, y: number }) => {
     </div>`
 }
 
+const camelCaseToLabel = (key: string) => {
+    return key.replace(/([A-Z])/g, ' $1').replace(/^./, function(str){ return str.toUpperCase(); });
+}
+
 const renderDataPair = (key: string, value: unknown) => {
     if (IGNORED_KEYS.includes(key)) {
         return null;
     }
+    const label = camelCaseToLabel(key);
     if (value === null) {
-        return `${key}: empty`;
+        return `${label}: empty`;
     }
     if (typeof value === 'number') {
-        return `${key}: ${Math.round(value * 100) / 100}`;
+        return `${label}: ${Math.round(value * 100) / 100}`;
     }
     if (typeof value === 'boolean') {
-        return `${key}: ${value ? 'Yes' : 'No'}`;
+        return `${label}: ${value ? 'Yes' : 'No'}`;
     }
     if (typeof value === 'object') {
         const vectorValue = value as { x: number, y: number };
         if (typeof vectorValue.x === 'number' && typeof vectorValue.y === 'number') {
-            return `${key}: ${getVectorDiv(vectorValue)}`;
+            return `${label}: ${getVectorDiv(vectorValue)}`;
         }
         const keyValuePairs = Object.entries(value).map(([key, value]) => renderDataPair(key, value)).filter(Boolean).map(pair => `&nbsp;&nbsp;&nbsp;&nbsp;${pair}`).join('<br>');
         if (!keyValuePairs.trim()) {
             return null;
         }
-        return `${key}:<br>${keyValuePairs}`
+        return `${label}:<br>${keyValuePairs}`
     }
     if (typeof value === 'string') {
-        return `${key}: ${value}`;
+        return `${label}: ${value}`;
     }
     if (Array.isArray(value)) {
         return value.map(item => renderDataPair(key, item)).filter(Boolean).join('<br>');
     }
-    return `${key}: ${value}`;
+    return `${label}: ${value}`;
 }
 
 const getDescription = (point: TPoint) => {

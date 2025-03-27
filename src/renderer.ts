@@ -225,7 +225,7 @@ const drawRays = () => {
         // draw gradients
         Points.getPoints().forEach(point => {
             if (point.data.isLightSource) {
-                const lightIntensity = LightSystem.getLightIntensity(point.coordinates.x, point.coordinates.y, true);
+                const lightIntensity = LightSystem.getLightIntensity(point.coordinates.x, point.coordinates.y);
                 if (lightIntensity > 0) {
                     // lightIntensity is radius of the gradient
                     // circular gradient, POINTS_COLORS[EPointType.LightSource] in the center to transparent 
