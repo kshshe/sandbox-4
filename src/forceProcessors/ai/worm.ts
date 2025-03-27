@@ -3,6 +3,7 @@ import { Speed } from "../../classes/speed";
 import { EPointType, TCoordinate } from "../../types";
 import { random } from "../../utils/random";
 import { gravity } from "../gravity";
+import { CONVERT_ON_TOUCH } from "./ant";
 
 const CANT_MOVE_THROUGH_POINTS = {
     [EPointType.Border]: true,
@@ -84,14 +85,21 @@ const getNextDirection = (point: TPoint, previousDirection?: TCoordinate) => {
 }
 
 export const worm = (point: TPoint, step: number) => {
+    const possibleNeighbours = Points.getNeighbours(point)
+        .filter(neighbour => !CANT_MOVE_THROUGH_POINTS[neighbour.type])
     if (
         step % MOVE_EACH_ITERATION !== 0 ||
-        !Points.getNeighbours(point)
-            .filter(neighbour => !CANT_MOVE_THROUGH_POINTS[neighbour.type])
-            .length
+        possibleNeighbours.length === 0
     ) {
         gravity(point, step)
         return;
+    }
+
+    for (const neighbour of possibleNeighbours) {
+        const convertedType = CONVERT_ON_TOUCH[neighbour.type]
+        if (convertedType) {
+            neighbour.type = convertedType
+        }
     }
 
     const previousDirection = point.data.previousDirection

@@ -8,7 +8,7 @@ import { gravity } from "../gravity";
 import { random } from "../../utils/random";
 import { cloneDeep } from "../../utils/cloneDeep";
 
-const CONVERT_ON_TOUCH: {
+export const CONVERT_ON_TOUCH: {
     [key in EPointType]?: EPointType
 } = {
     [EPointType.Sand]: EPointType.StaticSand,
