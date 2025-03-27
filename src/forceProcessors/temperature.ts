@@ -10,9 +10,21 @@ export const minTemperature = (temperature: number): TForceProcessor => (point) 
     }
 }
 
+export const maxTemperature = (temperature: number): TForceProcessor => (point) => {
+    if (point.data.temperature && point.data.temperature > temperature) {
+        point.data.temperature = temperature
+    }
+}
+
 export const growingTemperature = (temperatureByStep: number, maxTemperature: number): TForceProcessor => (point) => {
     if (point.data.temperature && point.data.temperature < maxTemperature) {
         point.data.temperature += temperatureByStep
+    }
+}
+
+export const decreasingTemperature = (temperatureByStep: number, minTemperature: number): TForceProcessor => (point) => {
+    if (point.data.temperature && point.data.temperature > minTemperature) {
+        point.data.temperature -= temperatureByStep
     }
 }
 

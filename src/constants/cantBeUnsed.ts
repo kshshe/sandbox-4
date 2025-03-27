@@ -20,4 +20,5 @@ export const CANT_BE_UNSED: {
     [EPointType.Heal]: true,
     [EPointType.Ant]: true,
     [EPointType.FireAnt]: true,
+    [EPointType.IceAnt]: true,
 } 

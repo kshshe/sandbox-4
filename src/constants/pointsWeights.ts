@@ -26,6 +26,7 @@ export const POINTS_WEIGHTS: Record<EPointType, number> = {
     [EPointType.Magnet]: 1,
     [EPointType.Ant]: 0.5,
     [EPointType.FireAnt]: 0.5,
+    [EPointType.IceAnt]: 0.5,
 
     [EPointType.Electricity_Source]: Infinity,
     [EPointType.Electricity_Ground]: Infinity,

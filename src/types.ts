@@ -54,6 +54,7 @@ export enum EPointType {
     WindSource = 'windSource',
     Ant = 'ant',
     FireAnt = 'fireAnt',
+    IceAnt = 'iceAnt',
 }
 
 export type TPoint = {

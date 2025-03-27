@@ -82,10 +82,6 @@ export const ant: TForceProcessor = (point, step) => {
         return
     }
 
-    if (point.data.temperature !== undefined && point.data.temperature < 2) {
-        return;
-    }
-
     const lastMoveOnIteration = point.data.lastMoveOnIteration
     if (lastMoveOnIteration && step - lastMoveOnIteration > MAX_STEPS_WITHOUT_MOVE) {
         die(point, 'Max steps without move')

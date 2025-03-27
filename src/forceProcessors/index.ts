@@ -7,7 +7,7 @@ import { drowning } from "./drowning";
 import { lifetime } from "./lifetime";
 import { bomb } from "./bomb";
 import { staticForce } from "./static";
-import { staticTemperature, convertOnTemperature, moveToBaseTemperature, diesOnTemperature, minTemperature, growingTemperature } from "./temperature";
+import { staticTemperature, convertOnTemperature, moveToBaseTemperature, diesOnTemperature, minTemperature, growingTemperature, maxTemperature, decreasingTemperature } from "./temperature";
 import { INITIAL_TEMPERATURE } from "../config";
 import { chaos } from "./chaos";
 import { voidProcessor } from "./void";
@@ -326,6 +326,7 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
         ...BASIC_FORCES_EXCEPT_GRAVITY,
         ant,
         diesOnTemperature('more', 100),
+        diesOnTemperature('less', 0),
     ],
     [EPointType.FireAnt]: [
         ...BASIC_FORCES_EXCEPT_GRAVITY,
@@ -335,6 +336,14 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
         growingTemperature(10, 2000),
         diesOnTemperature('less', 0),
         randomProcessor(0.0003, (point) => explode(point, new Set([point])))
+    ],
+    [EPointType.IceAnt]: [
+        ...BASIC_FORCES_EXCEPT_GRAVITY,
+        ant,
+        emitter(EPointType.Snow, 0.02, 0),
+        throttle(maxTemperature(-500), 2),
+        decreasingTemperature(10, -1000),
+        diesOnTemperature('more', 0),
     ],
 }
 
