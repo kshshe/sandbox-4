@@ -11,14 +11,15 @@ const CANT_MOVE_THROUGH_POINTS = {
 } as const
 
 const CHANCE_TO_EAT = {
-    [EPointType.Worm]: 0.1,
-    [EPointType.Wood]: 0.1,
-    [EPointType.Sand]: 0.1,
-    default: 0.03,
+    [EPointType.Worm]: 0.01,
+    [EPointType.Wood]: 0.01,
+    [EPointType.Sand]: 0.01,
+    default: 0.003,
 } as const
 
 const MOVE_EACH_ITERATION = 6
 const DIRECTION_CHANGE_CHANCE = 0.1
+const REPRODUCTION_CHANCE = 0.005
 
 const moveTo = (point: TPoint, target: TCoordinate, iteration: number) => {
     const pointThere = Points.getPointByCoordinates(target)
@@ -102,6 +103,26 @@ export const worm = (point: TPoint, step: number) => {
         }
     }
 
+    if (random() < REPRODUCTION_CHANCE) {
+        const slot = Speed.possibleNeighbours.find(direction => {
+            const pointThere = Points.getPointByCoordinates({
+                x: point.coordinates.x + direction.x,
+                y: point.coordinates.y + direction.y,
+            })
+            return !pointThere
+        })
+        if (slot) {
+            Points.addPoint({
+                coordinates: {
+                    x: point.coordinates.x + slot.x,
+                    y: point.coordinates.y + slot.y,
+                },
+                type: EPointType.Worm,
+                speed: { x: 0, y: 0 },
+                data: {},
+            })
+        }
+    }
     const previousDirection = point.data.previousDirection
     const newDirection = getNextDirection(point, previousDirection)
     if (newDirection) {
