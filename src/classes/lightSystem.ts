@@ -9,6 +9,30 @@ const OPACITY = {
     [EPointType.LightSource]: 1,
     [EPointType.Glass]: 0.9,
     [EPointType.Border]: 0,
+    [EPointType.Water]: 0.7,
+    [EPointType.Ice]: 0.8,
+    [EPointType.Lava]: 0.4,
+    [EPointType.Fire]: 0.7,
+    [EPointType.Oil]: 0.5,
+    [EPointType.BurningOil]: 0.6,
+    [EPointType.IceFire]: 0.7,
+    [EPointType.Steam]: 0.8,
+    [EPointType.Void]: 0,
+    [EPointType.Gas]: 0.9,
+    [EPointType.LiquidGas]: 0.8,
+    [EPointType.Metal]: 0.1,
+    [EPointType.MoltenMetal]: 0.3,
+    [EPointType.Electricity_Spark]: 0.8,
+    [EPointType.Acid]: 0.6,
+    [EPointType.LiquidGlass]: 0.8,
+    [EPointType.Snow]: 0.7,
+    [EPointType.Stone]: 0.1,
+    [EPointType.StaticStone]: 0.1,
+    [EPointType.Sand]: 0.3,
+    [EPointType.StaticSand]: 0.3,
+    [EPointType.Smoke]: 0.8,
+    [EPointType.Wood]: 0.3,
+    [EPointType.BurningWood]: 0.5,
 } as const
 
 type TRay = {
@@ -34,7 +58,7 @@ export class LightSystem {
 
     static getLightIntensity(x: number, y: number): number {
         const key = this.getKey(x, y);
-        return this.lightMap.get(key) || 0;
+        return this.lightMap.get(key) || 0
     }
 
     static calculateLighting() {

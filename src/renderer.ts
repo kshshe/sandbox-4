@@ -221,6 +221,36 @@ const limitLineLength = (line: string, maxLength: number) => {
 
 const drawRays = () => {
     if (!Controls.getDebugMode()) {
+        // draw gradients
+        Points.getPoints().forEach(point => {
+            if (point.data.isLightSource) {
+                const lightIntensity = LightSystem.getLightIntensity(point.coordinates.x, point.coordinates.y);
+                if (lightIntensity > 0) {
+                    // lightIntensity is radius of the gradient
+                    // circular gradient, POINTS_COLORS[EPointType.LightSource] in the center to transparent 
+                    const x = point.coordinates.x * CONFIG.pixelSize;
+                    const y = point.coordinates.y * CONFIG.pixelSize;
+                    const radius = lightIntensity * 10 * CONFIG.pixelSize;
+                    
+                    // Create a radial gradient
+                    const gradient = ctx.createRadialGradient(
+                        x, y, 0,
+                        x, y, radius
+                    );
+                    
+                    // Add color stops
+                    const lightColor = POINTS_COLORS[point.type];
+                    gradient.addColorStop(0, `rgba(${lightColor.r}, ${lightColor.g}, ${lightColor.b}, 0.5)`);
+                    gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+                    
+                    // Fill with gradient
+                    ctx.fillStyle = gradient;
+                    ctx.beginPath();
+                    ctx.arc(x, y, radius, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+        })
         return;
     }
     LightSystem.lastRays.forEach(({
