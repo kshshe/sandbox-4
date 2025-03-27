@@ -9,7 +9,7 @@ const OPACITY = {
     [EPointType.LightSource]: 1,
     [EPointType.Glass]: 0.9,
     [EPointType.Border]: 0,
-    [EPointType.Water]: 0.7,
+    [EPointType.Water]: 0.9,
     [EPointType.Ice]: 0.8,
     [EPointType.Lava]: 0.4,
     [EPointType.Fire]: 0.7,
