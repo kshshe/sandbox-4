@@ -21,7 +21,7 @@ let wasFaviconUpdated = false;
 let lastTimeWithoutLightSources = Date.now();
 let lastTimeWithLightSources = Date.now();
 const BACKGROUND_FADE_TIME = 1000;
-const BACKGROUND_OPACITY_WHEN_THERE_IS_LIGHT_SOURCES = 0.4
+const BACKGROUND_OPACITY_WHEN_THERE_IS_LIGHT_SOURCES = 0.6
 
 export const drawPoints = () => {
     const startTime = performance.now();
