@@ -63,6 +63,20 @@ export class LightSystem {
         this.isDirty = true;
     }
 
+    private static lightSourcePoints: Set<TPoint> = new Set();
+
+    static getLightSourcePoints() {
+        return this.lightSourcePoints;
+    }
+
+    static addLightSourcePoint(point: TPoint) {
+        this.lightSourcePoints.add(point);
+    }
+
+    static removeLightSourcePoint(point: TPoint) {
+        this.lightSourcePoints.delete(point);
+    }
+
     static getKey(x: number, y: number): string {
         return `${x},${y}`;
     }
@@ -89,7 +103,7 @@ export class LightSystem {
         if (this.lightMapHistory.length > MAX_HISTORY_LENGTH) {
             this.lightMapHistory.shift();
         }
-        const lightSources = Points.getPoints().filter(point => point.data.isLightSource);
+        const lightSources = Array.from(this.lightSourcePoints);
 
         for (const source of lightSources) {
             this.processLightSource(source);

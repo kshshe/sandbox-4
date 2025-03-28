@@ -4,6 +4,10 @@ export type TConfig = {
     [key in EPointType]?: true
 }
 
+export const IS_LIGHT_SOURCE: TConfig = {
+    [EPointType.LightSource]: true,
+}
+
 export const IGNORE_DROWNING: TConfig = {
     [EPointType.Worm]: true,
 }

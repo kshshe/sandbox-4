@@ -1,9 +1,11 @@
 import { CANT_BE_UNSED, INITIAL_TEMPERATURE } from '../config'
+import { IS_LIGHT_SOURCE } from '../constants/pointsExceptions'
 import { TCoordinate, EPointType } from '../types'
 import { shake } from '../utils/shake'
 import { Bounds } from './bounds'
 import { Connections } from './connections'
 import { Controls } from './controls'
+import { LightSystem } from './lightSystem'
 import { Speed, TRoundedSpeed } from './speed'
 import { Storage } from './storage'
 import { WindVectors } from './windVectors'
@@ -28,6 +30,11 @@ export class Points {
 
     static init() {
         this.updatePoints()
+        for (const point of this._points) {
+            if (IS_LIGHT_SOURCE[point.type]) {
+                LightSystem.addLightSourcePoint(point)
+            }
+        }
     }
 
     static deleteAllPoints() {
@@ -137,6 +144,9 @@ export class Points {
         if (!pointWithData.data.temperature) {
             pointWithData.data.temperature = INITIAL_TEMPERATURE[point.type] ?? Controls.getBaseTemperature()
         }
+        if (IS_LIGHT_SOURCE[point.type]) {
+            LightSystem.addLightSourcePoint(pointWithData)
+        }
         this.setPointInIndex(point.coordinates, pointWithData)
         this._points.push(pointWithData)
         this.markNeighboursAsUsed(pointWithData)
@@ -165,6 +175,9 @@ export class Points {
             this.updatePoints()
         } else if (pointByCoordinates) {
             console.warn('Point not found by coordinates', point)
+        }
+        if (IS_LIGHT_SOURCE[point.type]) {
+            LightSystem.removeLightSourcePoint(point)
         }
     }
 
