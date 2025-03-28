@@ -21,7 +21,7 @@ let wasFaviconUpdated = false;
 let lastTimeWithoutLightSources = Date.now();
 let lastTimeWithLightSources = Date.now();
 const BACKGROUND_FADE_TIME = 1000;
-const BACKGROUND_OPACITY_WHEN_THERE_IS_LIGHT_SOURCES = 0.85
+const BACKGROUND_OPACITY_WHEN_THERE_IS_LIGHT_SOURCES = 0.9
 
 export const drawPoints = () => {
     const startTime = performance.now();
@@ -36,18 +36,8 @@ export const drawPoints = () => {
         const fadeFactor = Math.min(BACKGROUND_OPACITY_WHEN_THERE_IS_LIGHT_SOURCES, timeSinceLastLightSource / BACKGROUND_FADE_TIME);
         ctx.fillStyle = `rgba(0, 0, 0, ${fadeFactor})`;
         ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-        const bounds = Bounds.getBounds();
-        for (let x = bounds.left; x <= bounds.right; x++) {
-            for (let y = bounds.top; y <= bounds.bottom; y++) {
-                const lightIntensity = LightSystem.getLightIntensity(x, y);
-                if (lightIntensity > 0) {
-                    // Original light effect
-                    ctx.fillStyle = `rgba(255, 255, 255, ${lightIntensity / 20})`;
-                    ctx.fillRect(x * CONFIG.pixelSize, y * CONFIG.pixelSize, CONFIG.pixelSize, CONFIG.pixelSize);
-                }
-            }
-        }
     }
+
     const timeSinceLastLightSource = Date.now() - lastTimeWithLightSources;
     if (!hasLightSources && timeSinceLastLightSource < BACKGROUND_FADE_TIME) {
         const fadeFactor =BACKGROUND_OPACITY_WHEN_THERE_IS_LIGHT_SOURCES - Math.min(BACKGROUND_OPACITY_WHEN_THERE_IS_LIGHT_SOURCES, timeSinceLastLightSource / BACKGROUND_FADE_TIME);
@@ -111,24 +101,7 @@ export const drawPoints = () => {
         }
 
         // Apply lighting effect to color
-        let finalColor = { ...baseColor };
-        
-        // Get light intensity at this position
-        const lightIntensity = LightSystem.getLightIntensity(
-            point.coordinates.x,
-            point.coordinates.y,
-        );
-
-        // Only apply lighting if the point isn't a light source itself
-        if (lightIntensity > 0 && !point.data.isLightSource) {
-            // Adjust RGB values based on light intensity
-            finalColor = {
-                r: Math.min(255, baseColor.r + (255 - baseColor.r) * lightIntensity * 0.05),
-                g: Math.min(255, baseColor.g + (255 - baseColor.g) * lightIntensity * 0.05),
-                b: Math.min(255, baseColor.b + (255 - baseColor.b) * lightIntensity * 0.05)
-            };
-        }
-        
+        const finalColor = { ...baseColor };
         ctx.fillStyle = `rgb(${Math.round(finalColor.r)}, ${Math.round(finalColor.g)}, ${Math.round(finalColor.b)})`;
 
         // Use visual coordinates for rendering
@@ -236,6 +209,25 @@ export const drawPoints = () => {
         (brushSize * 2 - 1) * CONFIG.pixelSize,
         (brushSize * 2 - 1) * CONFIG.pixelSize
     );
+
+    if (hasLightSources) {
+        lastTimeWithLightSources = Date.now();
+        const bounds = Bounds.getBounds();
+        for (let x = bounds.left; x <= bounds.right; x++) {
+            for (let y = bounds.top; y <= bounds.bottom; y++) {
+                const lightIntensity = LightSystem.getLightIntensity(x, y);
+                if (lightIntensity > 0) {
+                    let opacity = Math.min(1, lightIntensity / 20);
+                    const isPointThere = Points.getPointByCoordinates({ x, y });
+                    if (isPointThere) {
+                        opacity *= 0.5;
+                    }
+                    ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
+                    ctx.fillRect(x * CONFIG.pixelSize, y * CONFIG.pixelSize, CONFIG.pixelSize, CONFIG.pixelSize);
+                }
+            }
+        }
+    }
 
     updateStats();
     drawConnections();
