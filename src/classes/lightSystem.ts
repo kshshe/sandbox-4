@@ -33,7 +33,7 @@ const OPACITY = {
     [EPointType.StaticStone]: 0.1,
     [EPointType.Sand]: 0.3,
     [EPointType.StaticSand]: 0.3,
-    [EPointType.Smoke]: 0.8,
+    [EPointType.Smoke]: 0.2,
     [EPointType.Wood]: 0.3,
     [EPointType.BurningWood]: 0.5,
     [EPointType.Mirror]: 0,
