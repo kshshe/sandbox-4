@@ -6,6 +6,7 @@ export type TConfig = {
 
 export const IS_LIGHT_SOURCE: TConfig = {
     [EPointType.LightSource]: true,
+    [EPointType.Fire]: true,
 }
 
 export const IGNORE_DROWNING: TConfig = {
