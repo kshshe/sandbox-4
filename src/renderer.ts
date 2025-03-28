@@ -24,6 +24,7 @@ const BACKGROUND_FADE_TIME = 1000;
 const BACKGROUND_OPACITY_WHEN_THERE_IS_LIGHT_SOURCES = 0.85
 
 export const drawPoints = () => {
+    const startTime = performance.now();
     const debugMode = Controls.getDebugMode();
     const points = Points.getPoints();
     const hasLightSources = LightSystem.getLightSourcePoints().size > 0;
@@ -43,25 +44,6 @@ export const drawPoints = () => {
                     // Original light effect
                     ctx.fillStyle = `rgba(255, 255, 255, ${lightIntensity / 20})`;
                     ctx.fillRect(x * CONFIG.pixelSize, y * CONFIG.pixelSize, CONFIG.pixelSize, CONFIG.pixelSize);
-                    
-                    // Add gradient effect (3x size)
-                    const gradientSize = 3;
-                    const gradientRadius = gradientSize * CONFIG.pixelSize;
-                    const centerX = (x * CONFIG.pixelSize) + (CONFIG.pixelSize / 2);
-                    const centerY = (y * CONFIG.pixelSize) + (CONFIG.pixelSize / 2);
-                    
-                    const gradient = ctx.createRadialGradient(
-                        centerX, centerY, 0,
-                        centerX, centerY, gradientRadius
-                    );
-                    
-                    gradient.addColorStop(0, `rgba(255, 255, 255, ${lightIntensity / 40})`);
-                    gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
-                    
-                    ctx.fillStyle = gradient;
-                    ctx.beginPath();
-                    ctx.arc(centerX, centerY, gradientRadius, 0, Math.PI * 2);
-                    ctx.fill();
                 }
             }
         }
@@ -264,6 +246,8 @@ export const drawPoints = () => {
         wasFaviconUpdated = true;
     }
 
+    const renderTime = performance.now() - startTime;
+    Stats.setRenderTime(renderTime);
     requestAnimationFrame(drawPoints);
 };
 
@@ -304,6 +288,7 @@ const updateStats = () => {
             debugMode && `Random: ${__fromRandomCount()} from random, ${__fromBufferCount()} from buffer`,
             process.env.VERCEL_GIT_COMMIT_MESSAGE && `Commit: ${limitLineLength(process.env.VERCEL_GIT_COMMIT_MESSAGE, 20)}`,
             `Frame: ${(Math.round(Stats.data.elapsedTime * 10) / 10).toFixed(1)} ms`,
+            `Render: ${(Math.round(Stats.data.renderTime * 10) / 10).toFixed(1)} ms`,
             `Iteration: ${iteration}`,
             Object.entries(pointsGroupedByType)
                 .sort((a, b) => a[0].localeCompare(b[0]))

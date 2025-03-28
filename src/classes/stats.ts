@@ -4,6 +4,7 @@ export class Stats {
         averageSpeed: 0,
         load: 0,
         elapsedTime: 0,
+        renderTime: 0,
     }
 
     static setLoad(load: number) {
@@ -20,5 +21,9 @@ export class Stats {
 
     static setElapsedTime(elapsedTime: number) {
         Stats.data.elapsedTime = elapsedTime
+    }
+
+    static setRenderTime(renderTime: number) {
+        Stats.data.renderTime = renderTime
     }
 }
