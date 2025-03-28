@@ -118,10 +118,7 @@ const processFrame = () => {
     Points.shufflePoints()
     Storage.set('iteration', iteration)
 
-    // After all points are processed, mark the light system as dirty
-    if (iteration % 3 === 0) {
-        LightSystem.calculateLighting();
-    }
+    LightSystem.calculateLighting();
 }
 
 let framesTimes = [] as number[]
