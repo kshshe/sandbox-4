@@ -21,7 +21,7 @@ let wasFaviconUpdated = false;
 let lastTimeWithoutLightSources = Date.now();
 let lastTimeWithLightSources = Date.now();
 const BACKGROUND_FADE_TIME = 1000;
-const BACKGROUND_OPACITY_WHEN_THERE_IS_LIGHT_SOURCES = 0.9
+const BACKGROUND_OPACITY_WHEN_THERE_IS_LIGHT_SOURCES = 0.75
 
 export const drawPoints = () => {
     const startTime = performance.now();
@@ -30,13 +30,6 @@ export const drawPoints = () => {
     const hasLightSources = LightSystem.getLightSourcePoints().size > 0;
     ctx.fillStyle = 'white';
     ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-    if (hasLightSources) {
-        lastTimeWithLightSources = Date.now();
-        const timeSinceLastLightSource = Date.now() - lastTimeWithoutLightSources;
-        const fadeFactor = Math.min(BACKGROUND_OPACITY_WHEN_THERE_IS_LIGHT_SOURCES, timeSinceLastLightSource / BACKGROUND_FADE_TIME);
-        ctx.fillStyle = `rgba(0, 0, 0, ${fadeFactor})`;
-        ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-    }
 
     const timeSinceLastLightSource = Date.now() - lastTimeWithLightSources;
     if (!hasLightSources && timeSinceLastLightSource < BACKGROUND_FADE_TIME) {
@@ -211,6 +204,11 @@ export const drawPoints = () => {
     );
 
     if (hasLightSources) {
+        lastTimeWithLightSources = Date.now();
+        const timeSinceLastLightSource = Date.now() - lastTimeWithoutLightSources;
+        const fadeFactor = Math.min(BACKGROUND_OPACITY_WHEN_THERE_IS_LIGHT_SOURCES, timeSinceLastLightSource / BACKGROUND_FADE_TIME);
+        ctx.fillStyle = `rgba(0, 0, 0, ${fadeFactor})`;
+        ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
         lastTimeWithLightSources = Date.now();
         const bounds = Bounds.getBounds();
         for (let x = bounds.left; x <= bounds.right; x++) {

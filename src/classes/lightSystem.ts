@@ -8,7 +8,7 @@ const LIGHT_FADE_FACTOR = 0.9;
 // 1 - totally transparent
 // 0 - totally opaque
 const OPACITY = {
-    default: 0.1,
+    default: 0.4,
     [EPointType.LightSource]: 1,
     [EPointType.LightBulb]: 1,
     [EPointType.Glass]: 0.9,
@@ -97,6 +97,7 @@ export class LightSystem {
         const sourceY = source.coordinates.y;
         const intensity = typeof source.data.lightIntensity === 'number' ? source.data.lightIntensity : forceIntensity;
         this.processedPoints.add(source);
+        this.setLight(sourceX, sourceY, intensity);
 
         // Cast rays in 8 directions (can be expanded for more precision)
         const directions = this.getDirection(directionsCount);
