@@ -120,7 +120,9 @@ const processFrame = () => {
 
     // After all points are processed, mark the light system as dirty
     LightSystem.markDirty();
-    LightSystem.calculateLighting();
+    if (iteration % 3 === 0) {
+        LightSystem.calculateLighting();
+    }
 }
 
 let framesTimes = [] as number[]
