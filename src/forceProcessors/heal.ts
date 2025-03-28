@@ -11,6 +11,7 @@ export const heal: TForceProcessor = (point) => {
         if (neighbor.type === EPointType.Virus && random() < 0.25) {
             hasVirusNearby = true;
             neighbor.type = EPointType.Heal;
+            Points.onPointUpdated(neighbor);
             point.data.lastHealType = point.data.lastHealType ?? neighbor.data.originalType;
             Points.markNeighboursAsUsed(neighbor);
             Points.markPointAsUsed(point);
@@ -25,6 +26,7 @@ export const heal: TForceProcessor = (point) => {
             if (point.data.lastHealType) {
                 point.type = point.data.lastHealType;
                 point.data.lastHealType = undefined;
+                Points.onPointUpdated(point);
             } else {
                 Points.deletePoint(point);
             }

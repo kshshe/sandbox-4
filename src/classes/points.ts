@@ -31,9 +31,19 @@ export class Points {
     static init() {
         this.updatePoints()
         for (const point of this._points) {
-            if (IS_LIGHT_SOURCE[point.type]) {
-                LightSystem.addLightSourcePoint(point)
-            }
+            this.checkPointIsLightSource(point)
+        }
+    }
+
+    static onPointUpdated(point: TPoint) {
+        this.checkPointIsLightSource(point)
+    }
+
+    static checkPointIsLightSource(point: TPoint) {
+        if (IS_LIGHT_SOURCE[point.type]) {
+            LightSystem.addLightSourcePoint(point)
+        } else {
+            LightSystem.removeLightSourcePoint(point)
         }
     }
 
@@ -144,9 +154,7 @@ export class Points {
         if (!pointWithData.data.temperature) {
             pointWithData.data.temperature = INITIAL_TEMPERATURE[point.type] ?? Controls.getBaseTemperature()
         }
-        if (IS_LIGHT_SOURCE[point.type]) {
-            LightSystem.addLightSourcePoint(pointWithData)
-        }
+        this.checkPointIsLightSource(pointWithData)
         this.setPointInIndex(point.coordinates, pointWithData)
         this._points.push(pointWithData)
         this.markNeighboursAsUsed(pointWithData)

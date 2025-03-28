@@ -31,6 +31,7 @@ export const explode = (point: TPoint, processedPoints: Set<TPoint>, rest = 3) =
             neighbor.data.temperature = (neighbor.data.temperature ?? 0) + 30
             if (CONVERTION_MAP[neighbor.type]) {
                 neighbor.type = CONVERTION_MAP[neighbor.type]!
+                Points.onPointUpdated(neighbor)
             }
             processedPoints.add(neighbor)
         }

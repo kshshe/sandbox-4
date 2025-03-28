@@ -69,6 +69,7 @@ export const convertOnTemperature = (
         Points.markNeighboursAsUsed(point)
         if (random() < CHANCE_TO_CONVERT) {
             point.type = typeToConvert
+            Points.onPointUpdated(point)
         }
     }
 
@@ -76,6 +77,7 @@ export const convertOnTemperature = (
         Points.markNeighboursAsUsed(point)
         if (random() < CHANCE_TO_CONVERT) {
             point.type = typeToConvert
+            Points.onPointUpdated(point)
         }
     }
 }

@@ -102,6 +102,7 @@ export const worm = (point: TPoint, step: number) => {
         const convertedType = CONVERT_ON_TOUCH[neighbour.type]
         if (convertedType) {
             neighbour.type = convertedType
+            Points.onPointUpdated(neighbour)
         }
     }
 

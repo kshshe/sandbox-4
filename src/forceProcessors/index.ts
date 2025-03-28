@@ -34,17 +34,20 @@ import { LIQUID_POINT_TYPES } from "../constants/pointsLiquids";
 import { smoke } from "./smoke";
 import { electricityAmplifier } from "./electricityAmplifier";
 import { magnetAttraction } from "./magnetAttraction";
-import { MAGNET_POINTS_TO_MAGNETIZE } from "../constants/pointsExceptions";
+import { IS_LIGHT_SOURCE, MAGNET_POINTS_TO_MAGNETIZE } from "../constants/pointsExceptions";
 import { windForce } from "./wind";
 import { windSource } from "./windSource";
 import { ant } from "./ai/ant";
 import { randomProcessor } from "./utils/random";
 import { explode } from "./utils/explode";
 import { worm } from "./ai/worm";
-import { lightSource } from "./lightSource";
+import { LIGHT_SOURCE_NAME, lightSource } from "./lightSource";
 import { lightDetector } from "./lightDetector";
 
-export type TForceProcessor = (point: TPoint, step: number) => void
+export interface TForceProcessor {
+    (point: TPoint, step: number): void
+    processorName?: string
+}
 
 const noopDetector = () => {}
 
@@ -132,6 +135,7 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
         ...BASIC_FORCES,
         liquid,
         convertOnTemperature('less', 1200, EPointType.StaticStone),
+        lightSource(0.1),
     ],
     [EPointType.StaticSand]: [
         ...BASIC_TEMPERATURE_PROCESSORS,
@@ -380,6 +384,10 @@ Object.keys(forcesByType).forEach(type => {
         console.warn(`Noop detector is missing for ${type}`)
     } else {
         forcesByType[type as EPointType] = forcesByType[type as EPointType].filter(force => force !== noopDetector)
+    }
+
+    if (IS_LIGHT_SOURCE[type as EPointType] && !forcesByType[type as EPointType].some(force => force.processorName === LIGHT_SOURCE_NAME)) {
+        console.warn(`Light source is missing for ${type}`)
     }
 })
 

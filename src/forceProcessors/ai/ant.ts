@@ -164,6 +164,7 @@ export const ant: TForceProcessor = (point, step) => {
         const convertOnTouch = CONVERT_ON_TOUCH[neighbor.type]
         if (convertOnTouch) {
             neighbor.type = convertOnTouch
+            Points.onPointUpdated(neighbor)
         }
 
         for (const position of Speed.possibleNeighbours) {

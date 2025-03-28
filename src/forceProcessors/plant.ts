@@ -59,8 +59,10 @@ export const plant: TForceProcessor = (point: TPoint) => {
 
         if (randomGrowthPoint) {
             point.type = EPointType.Plant
+            Points.onPointUpdated(point);
             if (pointBelow.type === EPointType.PlantSeed) {
                 pointBelow.type = EPointType.Plant;
+                Points.onPointUpdated(pointBelow);
             }
 
             Points.addPoint({

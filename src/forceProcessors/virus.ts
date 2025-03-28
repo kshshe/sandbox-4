@@ -25,6 +25,7 @@ export const virus: TForceProcessor = (point) => {
         if (random() < 0.01) {
             neighbor.data.originalType = neighbor.type;
             neighbor.type = EPointType.Virus;
+            Points.onPointUpdated(neighbor);
             Points.markNeighboursAsUsed(neighbor);
             stepsSinceLastActivity = 0;
         }
