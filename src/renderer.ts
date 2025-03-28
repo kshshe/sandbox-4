@@ -12,6 +12,7 @@ import { Connections } from "./classes/connections";
 import { WindVectors } from "./classes/windVectors";
 import { POINT_NAMES } from "./constants/pointNames";
 import { LightSystem } from "./classes/lightSystem";
+import { __fromBufferCount, __fromRandomCount } from "./utils/random";
 
 const previouslyUsedPixels: Set<string> = new Set();
 let frame = 0;
@@ -280,6 +281,7 @@ const updateStats = () => {
         }, {} as Record<EPointType, number>)
         stats.innerHTML = [
             debugMode && `Cache: ${WindVectors.getCacheStats().hits} hits, ${WindVectors.getCacheStats().misses} misses`,
+            debugMode && `Random: ${__fromRandomCount()} from random, ${__fromBufferCount()} from buffer`,
             process.env.VERCEL_GIT_COMMIT_MESSAGE && `Commit: ${limitLineLength(process.env.VERCEL_GIT_COMMIT_MESSAGE, 20)}`,
             `Frame: ${(Math.round(Stats.data.elapsedTime * 10) / 10).toFixed(1)} ms`,
             `Iteration: ${iteration}`,
