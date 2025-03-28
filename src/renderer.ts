@@ -40,8 +40,28 @@ export const drawPoints = () => {
             for (let y = bounds.top; y <= bounds.bottom; y++) {
                 const lightIntensity = LightSystem.getLightIntensity(x, y);
                 if (lightIntensity > 0) {
+                    // Original light effect
                     ctx.fillStyle = `rgba(255, 255, 255, ${lightIntensity / 20})`;
                     ctx.fillRect(x * CONFIG.pixelSize, y * CONFIG.pixelSize, CONFIG.pixelSize, CONFIG.pixelSize);
+                    
+                    // Add gradient effect (3x size)
+                    const gradientSize = 3;
+                    const gradientRadius = gradientSize * CONFIG.pixelSize;
+                    const centerX = (x * CONFIG.pixelSize) + (CONFIG.pixelSize / 2);
+                    const centerY = (y * CONFIG.pixelSize) + (CONFIG.pixelSize / 2);
+                    
+                    const gradient = ctx.createRadialGradient(
+                        centerX, centerY, 0,
+                        centerX, centerY, gradientRadius
+                    );
+                    
+                    gradient.addColorStop(0, `rgba(255, 255, 255, ${lightIntensity / 20})`);
+                    gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+                    
+                    ctx.fillStyle = gradient;
+                    ctx.beginPath();
+                    ctx.arc(centerX, centerY, gradientRadius, 0, Math.PI * 2);
+                    ctx.fill();
                 }
             }
         }
@@ -121,9 +141,9 @@ export const drawPoints = () => {
         if (lightIntensity > 0 && !point.data.isLightSource) {
             // Adjust RGB values based on light intensity
             finalColor = {
-                r: Math.min(255, baseColor.r + (255 - baseColor.r) * lightIntensity * 0.2),
-                g: Math.min(255, baseColor.g + (255 - baseColor.g) * lightIntensity * 0.2),
-                b: Math.min(255, baseColor.b + (255 - baseColor.b) * lightIntensity * 0.2)
+                r: Math.min(255, baseColor.r + (255 - baseColor.r) * lightIntensity * 0.05),
+                g: Math.min(255, baseColor.g + (255 - baseColor.g) * lightIntensity * 0.05),
+                b: Math.min(255, baseColor.b + (255 - baseColor.b) * lightIntensity * 0.05)
             };
         }
         
