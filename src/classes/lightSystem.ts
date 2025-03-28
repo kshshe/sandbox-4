@@ -144,9 +144,10 @@ export class LightSystem {
 
             // Check if there's a point at this position that blocks light
             const pointAtPosition = Points.getPointByCoordinates({ x: gridX, y: gridY });
+            const previousLightAtPosition = this.getLightIntensity(gridX, gridY);
 
             // Set light intensity at this position
-            this.setLight(gridX, gridY, currentIntensity);
+            this.setLight(gridX, gridY, currentIntensity + previousLightAtPosition);
 
             if (pointAtPosition) {
                 if (distance > 1) {
