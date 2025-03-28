@@ -3,7 +3,7 @@ import { LIGHT_MAX_DISTANCE, LIGHT_DECAY_FACTOR } from "../forceProcessors/light
 import { EPointType } from "../types";
 import { random } from "../utils/random";
 
-const MAX_HISTORY_LENGTH = 10;
+const LIGHT_FADE_FACTOR = 0.8;
 
 // 1 - totally transparent
 // 0 - totally opaque
@@ -54,7 +54,6 @@ type TRay = {
 
 export class LightSystem {
     private static lightMap: Map<string, number> = new Map();
-    private static lightMapHistory: Array<Map<string, number>> = [];
     private static processedPoints: Set<TPoint> = new Set();
     private static isDirty = true;
     static lastRays: TRay[] = [];
@@ -81,28 +80,24 @@ export class LightSystem {
         return `${x},${y}`;
     }
 
-    static getLightIntensity(x: number, y: number, withHistory = false): number {
+    static getLightIntensity(x: number, y: number): number {
         const key = this.getKey(x, y);
         const lightIntensity = this.lightMap.get(key) || 0
-        if (withHistory) {
-            return [
-                lightIntensity,
-                ...this.lightMapHistory.map(map => map.get(key) || 0),
-            ].reduce((acc, intensity) => acc + intensity, 0) / (this.lightMapHistory.length + 1);
-        }
         return lightIntensity;
     }
 
+    private static fadeLightMap() {
+        for (const [key, intensity] of this.lightMap.entries()) {
+            this.lightMap.set(key, intensity * LIGHT_FADE_FACTOR);
+        }
+    } 
+    
     static calculateLighting() {
         if (!this.isDirty) return;
 
-        this.lightMap.clear();
+        this.fadeLightMap();
         this.processedPoints.clear();
         this.lastRays = [];
-        this.lightMapHistory.push(new Map(this.lightMap));
-        if (this.lightMapHistory.length > MAX_HISTORY_LENGTH) {
-            this.lightMapHistory.shift();
-        }
         const lightSources = Array.from(this.lightSourcePoints);
 
         for (const source of lightSources) {
@@ -113,9 +108,9 @@ export class LightSystem {
     }
 
     private static getDirection(amount: number) {
+        const initialAngle = random() * 2 * Math.PI;
         return Array.from({ length: amount }, (_, i) => {
-            const smallRandomFactor = random() * 0.3 - 0.15;
-            const angle = ((i / amount) * 2 * Math.PI) + smallRandomFactor;
+            const angle = ((i / amount) * 2 * Math.PI) + initialAngle;
             return [Math.cos(angle), Math.sin(angle)];
         });
     }

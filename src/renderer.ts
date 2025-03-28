@@ -22,8 +22,23 @@ let wasFaviconUpdated = false;
 export const drawPoints = () => {
     const debugMode = Controls.getDebugMode();
     const points = Points.getPoints();
+    const hasLightSources = LightSystem.getLightSourcePoints().size > 0;
     ctx.fillStyle = 'white';
     ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    if (hasLightSources) {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.85)';
+        ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        const bounds = Bounds.getBounds();
+        for (let x = bounds.left; x <= bounds.right; x++) {
+            for (let y = bounds.top; y <= bounds.bottom; y++) {
+                const lightIntensity = LightSystem.getLightIntensity(x, y);
+                if (lightIntensity > 0) {
+                    ctx.fillStyle = `rgba(255, 255, 255, ${lightIntensity / 20})`;
+                    ctx.fillRect(x * CONFIG.pixelSize, y * CONFIG.pixelSize, CONFIG.pixelSize, CONFIG.pixelSize);
+                }
+            }
+        }
+    }
 
     // Calculate time since last frame for smooth interpolation
     const currentTime = performance.now();
@@ -84,16 +99,15 @@ export const drawPoints = () => {
         const lightIntensity = LightSystem.getLightIntensity(
             point.coordinates.x,
             point.coordinates.y,
-            true
         );
 
         // Only apply lighting if the point isn't a light source itself
         if (lightIntensity > 0 && !point.data.isLightSource) {
             // Adjust RGB values based on light intensity
             finalColor = {
-                r: Math.min(255, baseColor.r + (255 - baseColor.r) * lightIntensity * 0.8),
-                g: Math.min(255, baseColor.g + (255 - baseColor.g) * lightIntensity * 0.8),
-                b: Math.min(255, baseColor.b + (255 - baseColor.b) * lightIntensity * 0.8)
+                r: Math.min(255, baseColor.r + (255 - baseColor.r) * lightIntensity * 0.2),
+                g: Math.min(255, baseColor.g + (255 - baseColor.g) * lightIntensity * 0.2),
+                b: Math.min(255, baseColor.b + (255 - baseColor.b) * lightIntensity * 0.2)
             };
         }
         
@@ -223,36 +237,6 @@ const limitLineLength = (line: string, maxLength: number) => {
 
 const drawRays = () => {
     if (!Controls.getDebugMode()) {
-        // draw gradients
-        Points.getPoints().forEach(point => {
-            if (point.data.isLightSource) {
-                const lightIntensity = point.data.lightIntensity;
-                if (lightIntensity > 0) {
-                    // lightIntensity is radius of the gradient
-                    // circular gradient, POINTS_COLORS[EPointType.LightSource] in the center to transparent 
-                    const x = point.coordinates.x * CONFIG.pixelSize;
-                    const y = point.coordinates.y * CONFIG.pixelSize;
-                    const radius = lightIntensity * 10 * CONFIG.pixelSize;
-                    
-                    // Create a radial gradient
-                    const gradient = ctx.createRadialGradient(
-                        x, y, 0,
-                        x, y, radius
-                    );
-                    
-                    // Add color stops
-                    const lightColor = POINTS_COLORS[point.type];
-                    gradient.addColorStop(0, `rgba(${lightColor.r}, ${lightColor.g}, ${lightColor.b}, 0.03)`);
-                    gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
-                    
-                    // Fill with gradient
-                    ctx.fillStyle = gradient;
-                    ctx.beginPath();
-                    ctx.arc(x, y, radius, 0, Math.PI * 2);
-                    ctx.fill();
-                }
-            }
-        })
         return;
     }
     LightSystem.lastRays.forEach(({
