@@ -136,7 +136,7 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
         ...BASIC_FORCES,
         liquid,
         convertOnTemperature('less', 1200, EPointType.StaticStone),
-        lightSource(0.1),
+        lightSource(0.3),
     ],
     [EPointType.StaticSand]: [
         ...BASIC_TEMPERATURE_PROCESSORS,
@@ -166,7 +166,7 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
         lifetime(8, 50),
         staticTemperature(() => INITIAL_TEMPERATURE[EPointType.Fire] ?? 2000),
         emitter(EPointType.Smoke, 0.02, 0.001),
-        lightSource(0.1),
+        lightSource(0.3),
     ],
     [EPointType.IceFire]: [
         ...BASIC_FORCES,
@@ -224,7 +224,7 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
         staticTemperature(() => INITIAL_TEMPERATURE[EPointType.BurningWood] ?? 800),
         emitter(EPointType.Fire, 0.2),
         emitter(EPointType.Smoke, 0.2, 0.001),
-        lightSource(0.1),
+        lightSource(0.3),
     ],
     [EPointType.FireEmitter]: [
         ...BASIC_FORCES,
@@ -249,7 +249,7 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
         emitter(EPointType.Smoke, 0.05, 0.001),
         staticTemperature(() => INITIAL_TEMPERATURE[EPointType.BurningOil] ?? 400),
         lifetime(100, 200),
-        lightSource(0.1),
+        lightSource(0.3),
     ],
     [EPointType.Steam]: [
         ...BASIC_FORCES,
