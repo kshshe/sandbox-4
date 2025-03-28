@@ -90,9 +90,9 @@ export const drawPoints = () => {
         if (lightIntensity > 0 && !point.data.isLightSource) {
             // Adjust RGB values based on light intensity
             finalColor = {
-                r: Math.min(255, baseColor.r + (255 - baseColor.r) * lightIntensity * 0.8),
-                g: Math.min(255, baseColor.g + (255 - baseColor.g) * lightIntensity * 0.8),
-                b: Math.min(255, baseColor.b + (255 - baseColor.b) * lightIntensity * 0.8)
+                r: Math.min(255, baseColor.r + (255 - baseColor.r) * lightIntensity * 0.3),
+                g: Math.min(255, baseColor.g + (255 - baseColor.g) * lightIntensity * 0.3),
+                b: Math.min(255, baseColor.b + (255 - baseColor.b) * lightIntensity * 0.3)
             };
         }
         
@@ -225,7 +225,7 @@ const drawRays = () => {
         // draw gradients
         Points.getPoints().forEach(point => {
             if (point.data.isLightSource) {
-                const lightIntensity = LightSystem.getLightIntensity(point.coordinates.x, point.coordinates.y);
+                const lightIntensity = point.data.lightIntensity;
                 if (lightIntensity > 0) {
                     // lightIntensity is radius of the gradient
                     // circular gradient, POINTS_COLORS[EPointType.LightSource] in the center to transparent 
