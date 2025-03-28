@@ -1,4 +1,4 @@
-import { CONFIG, POINTS_COLORS, getVariedColor } from "./config";
+import { CONFIG, getColor, getVariedColor } from "./config";
 import { Points } from "./classes/points";
 import { Controls } from "./classes/controls";
 import { Bounds } from "./classes/bounds";
@@ -73,7 +73,7 @@ export const drawPoints = () => {
         // Get base color
         let baseColor;
         if (point.colorVariation !== undefined) {
-            baseColor = getVariedColor(point.type, point.colorVariation * CONFIG.colorVariation);
+            baseColor = getVariedColor(point);
             // Convert to RGB object
             const result = /^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/.exec(baseColor);
             if (result) {
@@ -83,10 +83,10 @@ export const drawPoints = () => {
                     b: parseInt(result[3]) 
                 };
             } else {
-                baseColor = POINTS_COLORS[point.type];
+                baseColor = getColor(point);
             }
         } else {
-            baseColor = POINTS_COLORS[point.type];
+            baseColor = getColor(point);
         }
 
         if (debugMode && thereIsPointAlready) {
@@ -149,7 +149,8 @@ export const drawPoints = () => {
 
         if (point.data.carriedPoint) {
             // round dot in the center of the point
-            const color = `rgba(${POINTS_COLORS[point.data.carriedPoint.type].r}, ${POINTS_COLORS[point.data.carriedPoint.type].g}, ${POINTS_COLORS[point.data.carriedPoint.type].b}, 1)`;
+            const pointColor = getColor(point.data.carriedPoint)
+            const color = `rgba(${pointColor.r}, ${pointColor.g}, ${pointColor.b}, 1)`;
             ctx.fillStyle = color;
             ctx.beginPath();
             ctx.arc(point.visualCoordinates.x * CONFIG.pixelSize + CONFIG.pixelSize / 2, point.visualCoordinates.y * CONFIG.pixelSize + CONFIG.pixelSize / 2, CONFIG.pixelSize / 3, 0, 2 * Math.PI);

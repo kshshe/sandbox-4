@@ -1,7 +1,7 @@
 export { CONFIG } from './config'
 export { POINTS_PROBABILITY_TO_CHANGE_DIRECTION_MODIFIERS } from './pointsDirectionModifiers'
 export { POINTS_CAN_ACCEPT_ELECTRICITY } from './pointsElectricity'
-export { POINTS_COLORS } from './pointsColors'
+export { getColor } from './pointsColors'
 export { CANT_BE_UNSED } from './cantBeUnsed'
 export { POINTS_HEAT_CAPACITY } from './pointsHeatCapacity'
 export { POINTS_WEIGHTS } from './pointsWeights'

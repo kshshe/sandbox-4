@@ -2,7 +2,7 @@ import React from "react";
 import { useControls } from "../../hooks/useControls";
 import * as styles from "./elements-panel.module.scss";
 import classNames from "classnames";
-import { POINTS_COLORS, POINT_TYPE_ICON, POINTS_SHORTCUTS, REVERSED_POINTS_SHORTCUTS } from "../../../config";
+import { POINT_TYPE_ICON, POINTS_SHORTCUTS, REVERSED_POINTS_SHORTCUTS, getColor } from "../../../config";
 import { Tooltip } from 'react-tooltip'
 import { POINT_TYPE_HINT } from "../../../constants/pointTypeHint";
 import { ELEMENT_GROUPS, TElementInGroup } from "../../../constants/pointTypeIcon";
@@ -101,7 +101,7 @@ export const ElementsPanel: React.FC = () => {
       type = groupElement.type
       data = groupElement.data
     }
-    const color = POINTS_COLORS[type] ?? { r: 0, g: 0, b: 0 }
+    const color = getColor({ type: type as EPointType, coordinates: { x: 0, y: 0 }, speed: { x: 0, y: 0 }, data: {} })
     return (
       <button
         key={type + JSON.stringify(data)}

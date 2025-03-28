@@ -1,9 +1,25 @@
-import { EPointType } from "../types"
+import { EPointType, TPoint } from "../types"
 
-export const POINTS_COLORS: Record<EPointType, { r: number, g: number, b: number }> & {
-    eraser: { r: number, g: number, b: number },
-    heatTool: { r: number, g: number, b: number },
-    coolTool: { r: number, g: number, b: number },
+export type TColor = {
+    r: number;
+    g: number;
+    b: number;
+} 
+
+type TColorOrColorGetter = TColor | ((point: TPoint) => TColor)
+
+export const getColor = (point: TPoint): TColor => {
+    const colorGetter = POINTS_COLORS[point.type]
+    if (typeof colorGetter === 'function') {
+        return colorGetter(point)
+    }
+    return colorGetter
+}
+
+const POINTS_COLORS: Record<EPointType, TColorOrColorGetter> & {
+    eraser: TColor,
+    heatTool: TColor,
+    coolTool: TColor,
 } = {
     [EPointType.Water]: { r: 0, g: 0, b: 255 },              // blue
     [EPointType.Sand]: { r: 255, g: 204, b: 0 },             // #ffcc00
@@ -61,6 +77,18 @@ export const POINTS_COLORS: Record<EPointType, { r: number, g: number, b: number
     [EPointType.Mirror]: { r: 200, g: 200, b: 255 },         // light blueish
     [EPointType.LightDetector]: { r: 255, g: 230, b: 100 },  // amber
     [EPointType.LightBulb]: { r: 255, g: 240, b: 150 },      // warm yellow
+    [EPointType.Thermometer]: (point) => {
+        const temperature = point.data.temperature || 0;
+        if (temperature === 0) {
+            return { r: 255, g: 255, b: 255 };
+        } else if (temperature > 0) {
+            const red = Math.min(255, temperature * 2.55 / 10);
+            return { r: red, g: 0, b: 0 };
+        } else {
+            const blue = Math.min(255, Math.abs(temperature) * 2.55 / 10);
+            return { r: 0, g: 0, b: blue };
+        }
+    },  
     eraser: { r: 200, g: 200, b: 200 },                      // gray
     heatTool: { r: 255, g: 69, b: 0 },                       // orangered
     coolTool: { r: 135, g: 206, b: 250 },                    // lightskyblue

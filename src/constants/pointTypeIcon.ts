@@ -57,6 +57,7 @@ export const POINT_TYPE_ICON: {
     [EPointType.Mirror]: '🪞',
     [EPointType.LightDetector]: '👁️',
     [EPointType.LightBulb]: '💡⚡',
+    [EPointType.Thermometer]: '🌡️',
     eraser: '🧽',
     heatTool: '🔥🔧',
     coolTool: '❄️🔧',
@@ -102,6 +103,7 @@ export const ELEMENT_GROUPS: ElementGroup[] = [
             'eraser',
             'heatTool',
             'coolTool',
+            EPointType.Thermometer,
         ]
     },
     {
