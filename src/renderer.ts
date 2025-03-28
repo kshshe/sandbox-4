@@ -18,6 +18,10 @@ const previouslyUsedPixels: Set<string> = new Set();
 let frame = 0;
 let lastFrameTime = 0;
 let wasFaviconUpdated = false;
+let lastTimeWithoutLightSources = Date.now();
+let lastTimeWithLightSources = Date.now();
+const BACKGROUND_FADE_TIME = 1000;
+const BACKGROUND_OPACITY_WHEN_THERE_IS_LIGHT_SOURCES = 0.85
 
 export const drawPoints = () => {
     const debugMode = Controls.getDebugMode();
@@ -26,7 +30,10 @@ export const drawPoints = () => {
     ctx.fillStyle = 'white';
     ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     if (hasLightSources) {
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.85)';
+        lastTimeWithLightSources = Date.now();
+        const timeSinceLastLightSource = Date.now() - lastTimeWithoutLightSources;
+        const fadeFactor = Math.min(BACKGROUND_OPACITY_WHEN_THERE_IS_LIGHT_SOURCES, timeSinceLastLightSource / BACKGROUND_FADE_TIME);
+        ctx.fillStyle = `rgba(0, 0, 0, ${fadeFactor})`;
         ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
         const bounds = Bounds.getBounds();
         for (let x = bounds.left; x <= bounds.right; x++) {
@@ -38,6 +45,15 @@ export const drawPoints = () => {
                 }
             }
         }
+    }
+    const timeSinceLastLightSource = Date.now() - lastTimeWithLightSources;
+    if (!hasLightSources && timeSinceLastLightSource < BACKGROUND_FADE_TIME) {
+        const fadeFactor =BACKGROUND_OPACITY_WHEN_THERE_IS_LIGHT_SOURCES - Math.min(BACKGROUND_OPACITY_WHEN_THERE_IS_LIGHT_SOURCES, timeSinceLastLightSource / BACKGROUND_FADE_TIME);
+        ctx.fillStyle = `rgba(0, 0, 0, ${fadeFactor})`;
+        ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    }
+    if (!hasLightSources) {
+        lastTimeWithoutLightSources = Date.now();
     }
 
     // Calculate time since last frame for smooth interpolation
