@@ -40,6 +40,7 @@ export const INITIAL_TEMPERATURE: {
     [EPointType.Cooler]: 20,
     [EPointType.ColdDetector]: 20,
     [EPointType.HotDetector]: 20,
+    [EPointType.LightBulb]: 20,
 } 
 
 setInterval(() => {

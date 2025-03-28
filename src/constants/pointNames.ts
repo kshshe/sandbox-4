@@ -58,4 +58,5 @@ export const POINT_NAMES: {
     [EPointType.LightSource]: 'Light Source',
     [EPointType.Mirror]: 'Mirror',
     [EPointType.LightDetector]: 'Light Detector',
+    [EPointType.LightBulb]: 'Light Bulb',
 }

@@ -55,7 +55,8 @@ export const POINT_TYPE_ICON: {
     [EPointType.Worm]: '🪱',
     [EPointType.LightSource]: '💡',
     [EPointType.Mirror]: '🪞',
-    [EPointType.LightDetector]: '💡🔋',
+    [EPointType.LightDetector]: '👁️',
+    [EPointType.LightBulb]: '💡⚡',
     eraser: '🧽',
     heatTool: '🔥🔧',
     coolTool: '❄️🔧',
@@ -84,6 +85,15 @@ export const ELEMENT_GROUPS: ElementGroup[] = [
             EPointType.Mirror,
             EPointType.Magnet,
             EPointType.LightSource,
+        ]
+    },
+    {
+        name: "Light Elements",
+        elements: [
+            EPointType.LightSource,
+            EPointType.Mirror,
+            EPointType.LightDetector,
+            EPointType.LightBulb,
         ]
     },
     {
@@ -142,6 +152,7 @@ export const ELEMENT_GROUPS: ElementGroup[] = [
             EPointType.Electricity_Amplifier,
             EPointType.Heater,
             EPointType.Cooler,
+            EPointType.LightBulb,
             EPointType.ColdDetector,
             EPointType.HotDetector,
             EPointType.LiquidDetector,

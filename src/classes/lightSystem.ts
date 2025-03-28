@@ -10,6 +10,7 @@ const LIGHT_FADE_FACTOR = 0.8;
 const OPACITY = {
     default: 0.2,
     [EPointType.LightSource]: 1,
+    [EPointType.LightBulb]: 1,
     [EPointType.Glass]: 0.9,
     [EPointType.Border]: 0,
     [EPointType.Water]: 0.9,
@@ -112,7 +113,7 @@ export class LightSystem {
         }
         const sourceX = source.coordinates.x;
         const sourceY = source.coordinates.y;
-        const intensity = source.data.lightIntensity || forceIntensity;
+        const intensity = typeof source.data.lightIntensity === 'number' ? source.data.lightIntensity : forceIntensity;
         this.processedPoints.add(source);
 
         // Cast rays in 8 directions (can be expanded for more precision)

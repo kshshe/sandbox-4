@@ -32,6 +32,8 @@ export const POINTS_HEAT_CAPACITY: {
     [EPointType.ColdDetector]: 0.5,
     [EPointType.HotDetector]: 0.5,
     [EPointType.LiquidDetector]: 0.5,
+    [EPointType.LightDetector]: 0.5,
+    [EPointType.LightBulb]: 0.5,
 
     constantCold: 100,
     constantHot: 100,

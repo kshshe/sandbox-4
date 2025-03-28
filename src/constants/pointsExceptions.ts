@@ -8,6 +8,7 @@ export const IS_LIGHT_SOURCE: TConfig = {
     [EPointType.LightSource]: true,
     [EPointType.Fire]: true,
     [EPointType.Lava]: true,
+    [EPointType.LightBulb]: true,
 }
 
 export const IGNORE_DROWNING: TConfig = {

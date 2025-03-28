@@ -59,6 +59,7 @@ export enum EPointType {
     LightSource = 'lightSource',
     Mirror = 'mirror',
     LightDetector = 'lightDetector',
+    LightBulb = 'lightBulb',
 }
 
 export type TPoint = {

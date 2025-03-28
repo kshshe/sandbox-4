@@ -43,6 +43,7 @@ import { explode } from "./utils/explode";
 import { worm } from "./ai/worm";
 import { LIGHT_SOURCE_NAME, lightSource } from "./lightSource";
 import { lightDetector } from "./lightDetector";
+import { lightBulb } from "./lightBulb";
 
 export interface TForceProcessor {
     (point: TPoint, step: number): void
@@ -375,6 +376,14 @@ export const forcesByType: Record<EPointType, TForceProcessor[]> = {
         lightDetector,
         sendCharge,
         throttle(directionToGround, 10),
+    ],
+    [EPointType.LightBulb]: [
+        ...BASIC_TEMPERATURE_PROCESSORS,
+        staticForce,
+        lightBulb,
+        sendCharge,
+        ground,
+        moveToBaseTemperature(0.1),
     ],
 }
 
