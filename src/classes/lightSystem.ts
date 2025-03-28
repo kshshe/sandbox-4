@@ -3,45 +3,27 @@ import { LIGHT_MAX_DISTANCE, LIGHT_DECAY_FACTOR } from "../forceProcessors/light
 import { EPointType } from "../types";
 import { random } from "../utils/random";
 
-const LIGHT_FADE_FACTOR = 0.8;
+const LIGHT_FADE_FACTOR = 0.9;
 
 // 1 - totally transparent
 // 0 - totally opaque
 const OPACITY = {
-    default: 0.2,
+    default: 0.1,
     [EPointType.LightSource]: 1,
     [EPointType.LightBulb]: 1,
     [EPointType.Glass]: 0.9,
     [EPointType.Border]: 0,
     [EPointType.Water]: 0.9,
     [EPointType.Ice]: 0.8,
-    [EPointType.Lava]: 0.4,
-    [EPointType.Fire]: 0.7,
-    [EPointType.Oil]: 0.5,
-    [EPointType.BurningOil]: 0.6,
-    [EPointType.IceFire]: 0.7,
-    [EPointType.Steam]: 0.8,
     [EPointType.Void]: 0,
     [EPointType.Gas]: 0.9,
-    [EPointType.LiquidGas]: 0.8,
     [EPointType.Metal]: 0.05,
-    [EPointType.MoltenMetal]: 0.3,
-    [EPointType.Electricity_Spark]: 0.8,
-    [EPointType.Acid]: 0.6,
-    [EPointType.LiquidGlass]: 0.8,
-    [EPointType.Snow]: 0.7,
-    [EPointType.Stone]: 0.1,
-    [EPointType.StaticStone]: 0.1,
-    [EPointType.Sand]: 0.3,
-    [EPointType.StaticSand]: 0.3,
     [EPointType.Smoke]: 0.2,
-    [EPointType.Wood]: 0.3,
-    [EPointType.BurningWood]: 0.5,
     [EPointType.Mirror]: 0,
 } as const
 
 const REFLECTION_FACTOR = {
-    default: 0.5,
+    default: 0.1,
     [EPointType.Metal]: 0.9,
     [EPointType.Mirror]: 0.9999,
 } as const
@@ -107,7 +89,7 @@ export class LightSystem {
         });
     }
 
-    private static processLightSource(source: TPoint, forceIntensity = 1, directionsCount = 11) {
+    private static processLightSource(source: TPoint, forceIntensity = 1, directionsCount = 11, initialDistance = 0) {
         if (this.processedPoints.has(source)) {
             return;
         }
@@ -120,20 +102,20 @@ export class LightSystem {
         const directions = this.getDirection(directionsCount);
 
         for (const [dx, dy] of directions) {
-            this.castRay(sourceX, sourceY, dx, dy, intensity);
+            this.castRay(sourceX, sourceY, dx, dy, intensity, initialDistance);
         }
     }
 
-    private static castRay(x: number, y: number, dx: number, dy: number, intensity: number) {
+    private static castRay(x: number, y: number, dx: number, dy: number, intensity: number, initialDistance = 0) {
         let currentX = x;
         let currentY = y;
         let currentIntensity = intensity;
-        let distance = 0;
+        let distance = initialDistance;
 
         // Set light at source position
         this.setLight(Math.round(currentX), Math.round(currentY), currentIntensity);
 
-        while (currentIntensity > 0.01 && distance < LIGHT_MAX_DISTANCE) {
+        while (currentIntensity > 0.02 && distance < LIGHT_MAX_DISTANCE) {
             // Move along the ray
             currentX += dx;
             currentY += dy;
@@ -157,7 +139,7 @@ export class LightSystem {
                 if (distance > 1) {
                     const reflectionFactor = REFLECTION_FACTOR[pointAtPosition.type] ?? REFLECTION_FACTOR.default;
                     const reflection = reflectionFactor * currentIntensity;
-                    this.processLightSource(pointAtPosition, reflection, 11);
+                    this.processLightSource(pointAtPosition, reflection, 11, distance);
                 }
 
                 const opacity = OPACITY[pointAtPosition.type] ?? OPACITY.default;
