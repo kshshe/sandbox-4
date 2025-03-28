@@ -80,7 +80,7 @@ const POINTS_COLORS: Record<EPointType, TColorOrColorGetter> & {
     [EPointType.Thermometer]: (point) => {
         const temperature = point.data.temperature || 0;
         if (temperature === 0) {
-            return { r: 255, g: 255, b: 255 };
+            return { r: 0, g: 0, b: 0 };
         } else if (temperature > 0) {
             const red = Math.min(255, temperature * 2.55 / 10);
             return { r: red, g: 0, b: 0 };
