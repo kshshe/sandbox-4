@@ -15,7 +15,7 @@ export const POINTS_SHORTCUTS: {
     e: 'eraser',
     a: EPointType.Acid,
     h: 'heatTool',
-    l: 'coolTool',
+    l: EPointType.LightSource,
 }
 
 export const REVERSED_POINTS_SHORTCUTS: {

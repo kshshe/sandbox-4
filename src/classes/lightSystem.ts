@@ -141,7 +141,7 @@ export class LightSystem {
         // Set light at source position
         this.setLight(Math.round(currentX), Math.round(currentY), currentIntensity);
 
-        while (currentIntensity > 0.05 && distance < LIGHT_MAX_DISTANCE) {
+        while (currentIntensity > 0.01 && distance < LIGHT_MAX_DISTANCE) {
             // Move along the ray
             currentX += dx;
             currentY += dy;
