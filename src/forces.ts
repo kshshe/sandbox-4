@@ -119,7 +119,6 @@ const processFrame = () => {
     Storage.set('iteration', iteration)
 
     // After all points are processed, mark the light system as dirty
-    LightSystem.markDirty();
     if (iteration % 3 === 0) {
         LightSystem.calculateLighting();
     }

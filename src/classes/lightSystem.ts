@@ -55,12 +55,7 @@ type TRay = {
 export class LightSystem {
     private static lightMap: Map<string, number> = new Map();
     private static processedPoints: Set<TPoint> = new Set();
-    private static isDirty = true;
     static lastRays: TRay[] = [];
-
-    static markDirty() {
-        this.isDirty = true;
-    }
 
     private static lightSourcePoints: Set<TPoint> = new Set();
 
@@ -93,8 +88,6 @@ export class LightSystem {
     } 
     
     static calculateLighting() {
-        if (!this.isDirty) return;
-
         this.fadeLightMap();
         this.processedPoints.clear();
         this.lastRays = [];
@@ -103,8 +96,6 @@ export class LightSystem {
         for (const source of lightSources) {
             this.processLightSource(source);
         }
-
-        this.isDirty = false;
     }
 
     private static getDirection(amount: number) {
