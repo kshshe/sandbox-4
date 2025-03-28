@@ -2,6 +2,8 @@ import { Points, TPoint } from "./points";
 import { LIGHT_MAX_DISTANCE, LIGHT_DECAY_FACTOR } from "../forceProcessors/lightSource";
 import { EPointType } from "../types";
 
+const MAX_HISTORY_LENGTH = 10;
+
 // 1 - totally transparent
 // 0 - totally opaque
 const OPACITY = {
@@ -83,7 +85,7 @@ export class LightSystem {
         this.processedPoints.clear();
         this.lastRays = [];
         this.lightMapHistory.push(new Map(this.lightMap));
-        if (this.lightMapHistory.length > 10) {
+        if (this.lightMapHistory.length > MAX_HISTORY_LENGTH) {
             this.lightMapHistory.shift();
         }
         const lightSources = Points.getPoints().filter(point => point.data.isLightSource);
