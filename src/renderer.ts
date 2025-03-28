@@ -55,7 +55,7 @@ export const drawPoints = () => {
                         centerX, centerY, gradientRadius
                     );
                     
-                    gradient.addColorStop(0, `rgba(255, 255, 255, ${lightIntensity / 20})`);
+                    gradient.addColorStop(0, `rgba(255, 255, 255, ${lightIntensity / 40})`);
                     gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
                     
                     ctx.fillStyle = gradient;
