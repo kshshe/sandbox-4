@@ -1,5 +1,4 @@
 import { EPointType } from "../types"
-import { isDev } from "../utils/isDev"
 import { Storage } from "./storage"
 
 type TSubscriber = {
