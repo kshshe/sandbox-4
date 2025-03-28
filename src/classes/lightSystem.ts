@@ -112,6 +112,7 @@ export class LightSystem {
         let currentY = y;
         let currentIntensity = intensity;
         let distance = initialDistance;
+        let distanceFromSource = 0;
 
         // Set light at source position
         this.setLight(Math.round(currentX), Math.round(currentY), currentIntensity);
@@ -121,7 +122,7 @@ export class LightSystem {
             currentX += dx;
             currentY += dy;
             distance += 1;
-
+            distanceFromSource += 1;
             // Decay light intensity with distance
             currentIntensity *= LIGHT_DECAY_FACTOR;
 
@@ -137,7 +138,7 @@ export class LightSystem {
             this.setLight(gridX, gridY, currentIntensity + previousLightAtPosition);
 
             if (pointAtPosition) {
-                if (distance > 1) {
+                if (distanceFromSource > 1) {
                     const reflectionFactor = REFLECTION_FACTOR[pointAtPosition.type] ?? REFLECTION_FACTOR.default;
                     const reflection = reflectionFactor * currentIntensity;
                     this.processLightSource(pointAtPosition, reflection, 11, distance);
