@@ -216,10 +216,6 @@ export const drawPoints = () => {
                 const lightIntensity = LightSystem.getLightIntensity(x, y);
                 if (lightIntensity > 0) {
                     let opacity = Math.min(1, lightIntensity / 20);
-                    const isPointThere = Points.getPointByCoordinates({ x, y });
-                    if (isPointThere) {
-                        opacity *= 0.5;
-                    }
                     ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
                     ctx.fillRect(x * CONFIG.pixelSize, y * CONFIG.pixelSize, CONFIG.pixelSize, CONFIG.pixelSize);
                 }
