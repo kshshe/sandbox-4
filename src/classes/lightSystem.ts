@@ -23,7 +23,7 @@ const OPACITY = {
     [EPointType.Void]: 0,
     [EPointType.Gas]: 0.9,
     [EPointType.LiquidGas]: 0.8,
-    [EPointType.Metal]: 0.3,
+    [EPointType.Metal]: 0.05,
     [EPointType.MoltenMetal]: 0.3,
     [EPointType.Electricity_Spark]: 0.8,
     [EPointType.Acid]: 0.6,
