@@ -21,6 +21,8 @@ const OPACITY = {
     [EPointType.Metal]: 0.05,
     [EPointType.Smoke]: 0.2,
     [EPointType.Mirror]: 0,
+    [EPointType.Fire]: 1,
+    [EPointType.IceFire]: 1,
 } as const
 
 const REFLECTION_FACTOR = {
