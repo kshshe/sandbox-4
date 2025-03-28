@@ -27,6 +27,7 @@ const REFLECTION_FACTOR = {
     default: 0.1,
     [EPointType.Metal]: 0.9,
     [EPointType.Mirror]: 0.9999,
+    [EPointType.Border]: 0.5,
 } as const
 
 type TRay = {
@@ -124,7 +125,7 @@ export class LightSystem {
         // Set light at source position
         this.setLight(Math.round(currentX), Math.round(currentY), currentIntensity);
 
-        while (currentIntensity > 0.02 && distance < LIGHT_MAX_DISTANCE) {
+        while (currentIntensity > 0.01 && distance < LIGHT_MAX_DISTANCE) {
             // Move along the ray
             currentX += dx;
             currentY += dy;
