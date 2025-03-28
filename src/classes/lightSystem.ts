@@ -2,6 +2,7 @@ import { Points, TPoint } from "./points";
 import { LIGHT_MAX_DISTANCE, LIGHT_DECAY_FACTOR } from "../forceProcessors/lightSource";
 import { EPointType } from "../types";
 import { random } from "../utils/random";
+import { Controls } from "./controls";
 
 const LIGHT_FADE_FACTOR = 0.9;
 
@@ -43,6 +44,9 @@ export class LightSystem {
     private static lightSourcePoints: Set<TPoint> = new Set();
 
     static getLightSourcePoints() {
+        if (!Controls.getIsLightSourcesEnabled()) {
+            return new Set();
+        }
         return this.lightSourcePoints;
     }
 
@@ -71,6 +75,9 @@ export class LightSystem {
     } 
     
     static calculateLighting() {
+        if (!Controls.getIsLightSourcesEnabled()) {
+            return;
+        }
         this.fadeLightMap();
         this.processedPoints.clear();
         this.lastRays = [];

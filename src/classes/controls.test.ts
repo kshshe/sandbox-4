@@ -30,6 +30,7 @@ describe('Controls', () => {
       isSmoothMovementEnabled: true,
       drawingData: {},
       isConnectionMode: false,
+      isLightSourcesEnabled: true,
     };
     Controls['subscribers'] = [];
   });

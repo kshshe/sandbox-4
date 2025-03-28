@@ -7,6 +7,7 @@ export const SettingsPanel: React.FC = () => {
   const [isDebugMode, setIsDebugMode] = useControls("debugMode");
   const [maxSpeedMode, setMaxSpeedMode] = useControls("maxSpeedMode");
   const [isTemperatureEnabled, setIsTemperatureEnabled] = useControls("isTemperatureEnabled");
+  const [isLightSourcesEnabled, setIsLightSourcesEnabled] = useControls("isLightSourcesEnabled");
   const [baseTemperature, setBaseTemperature] = useControls("baseTemperature");
   const [isSmoothMovementEnabled, setIsSmoothMovementEnabled] = useControls("isSmoothMovementEnabled");
 
@@ -80,6 +81,14 @@ export const SettingsPanel: React.FC = () => {
             onChange={(e) => setIsTemperatureEnabled(e.target.checked)}
           />{" "}
           Temperature processing
+        </label>
+        <label>
+          <input
+            type="checkbox"
+            checked={isLightSourcesEnabled}
+            onChange={(e) => setIsLightSourcesEnabled(e.target.checked)}
+          />{" "}
+          Light sources
         </label>
         <label>
           <input

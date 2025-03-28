@@ -20,6 +20,7 @@ export class Controls {
         isPaused: boolean
         isSmoothMovementEnabled: boolean
         isConnectionMode: boolean
+        isLightSourcesEnabled: boolean
     } = {
         maxSpeedMode: Storage.get('Controls.maxSpeedMode', false),
         debugMode: Storage.get('Controls.debugMode', false),
@@ -32,6 +33,7 @@ export class Controls {
         isPaused: Storage.get('Controls.isPaused', false),
         isSmoothMovementEnabled: Storage.get('Controls.isSmoothMovementEnabled', true),
         isConnectionMode: false,
+        isLightSourcesEnabled: Storage.get('Controls.isLightSourcesEnabled', true),
         // don't forget to update initial state in controls.test.ts
     }
 
@@ -158,5 +160,13 @@ export class Controls {
 
     public static setConnectionStartPoint(value: { x: number, y: number } | null) {
         this.connectionStartPoint = value
+    }
+
+    public static getIsLightSourcesEnabled() {
+        return this.state.isLightSourcesEnabled
+    }
+
+    public static setIsLightSourcesEnabled(value: boolean) {
+        this.setState('isLightSourcesEnabled', value)
     }
 }
