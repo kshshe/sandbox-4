@@ -8,7 +8,7 @@ export const POINTS_SHORTCUTS: {
     r: EPointType.Stone,
     f: EPointType.Fire,
     i: EPointType.IceFire,
-    b: EPointType.Bomb,
+    b: EPointType.Border,
     c: EPointType.Clone,
     g: EPointType.Gas,
     v: EPointType.Void,

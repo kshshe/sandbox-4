@@ -4,7 +4,7 @@ import { Controls } from "./classes/controls";
 import { Bounds } from "./classes/bounds";
 import { TemperatureGrid } from "./classes/temperatureGrid";
 import { Stats } from "./classes/stats";
-import { ctx } from "./canvas";
+import { ctx, lightCanvas, lightCtx } from "./canvas";
 import { drawingX, drawingY, hoveredCoordinates, isDrawing } from "./interactions";
 import { EPointType } from "./types";
 import { Storage } from "./classes/storage";
@@ -21,7 +21,7 @@ let wasFaviconUpdated = false;
 let lastTimeWithoutLightSources = Date.now();
 let lastTimeWithLightSources = Date.now();
 const BACKGROUND_FADE_TIME = 1000;
-const BACKGROUND_OPACITY_WHEN_THERE_IS_LIGHT_SOURCES = 0.75
+const BACKGROUND_OPACITY_WHEN_THERE_IS_LIGHT_SOURCES = 0.4
 
 export const drawPoints = () => {
     const startTime = performance.now();
@@ -33,12 +33,13 @@ export const drawPoints = () => {
 
     const timeSinceLastLightSource = Date.now() - lastTimeWithLightSources;
     if (!hasLightSources && timeSinceLastLightSource < BACKGROUND_FADE_TIME) {
-        const fadeFactor =BACKGROUND_OPACITY_WHEN_THERE_IS_LIGHT_SOURCES - Math.min(BACKGROUND_OPACITY_WHEN_THERE_IS_LIGHT_SOURCES, timeSinceLastLightSource / BACKGROUND_FADE_TIME);
+        const fadeFactor = BACKGROUND_OPACITY_WHEN_THERE_IS_LIGHT_SOURCES - Math.min(BACKGROUND_OPACITY_WHEN_THERE_IS_LIGHT_SOURCES, timeSinceLastLightSource / BACKGROUND_FADE_TIME);
         ctx.fillStyle = `rgba(0, 0, 0, ${fadeFactor})`;
         ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     }
     if (!hasLightSources) {
         lastTimeWithoutLightSources = Date.now();
+        lightCtx.clearRect(0, 0, lightCanvas.width, lightCanvas.height);
     }
 
     // Calculate time since last frame for smooth interpolation
@@ -205,19 +206,32 @@ export const drawPoints = () => {
 
     if (hasLightSources) {
         lastTimeWithLightSources = Date.now();
+        lightCtx.fillStyle = 'black';
+        lightCtx.fillRect(0, 0, lightCanvas.width, lightCanvas.height);
         const timeSinceLastLightSource = Date.now() - lastTimeWithoutLightSources;
         const fadeFactor = Math.min(BACKGROUND_OPACITY_WHEN_THERE_IS_LIGHT_SOURCES, timeSinceLastLightSource / BACKGROUND_FADE_TIME);
         ctx.fillStyle = `rgba(0, 0, 0, ${fadeFactor})`;
-        ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        ctx.fillRect(0, 0, lightCanvas.width, lightCanvas.height);
         lastTimeWithLightSources = Date.now();
         const bounds = Bounds.getBounds();
-        for (let x = bounds.left; x <= bounds.right; x++) {
-            for (let y = bounds.top; y <= bounds.bottom; y++) {
-                const lightIntensity = LightSystem.getLightIntensity(x, y);
+        // Render light in 2x2 boxes instead of per-pixel
+        for (let x = bounds.left; x <= bounds.right; x += 2) {
+            for (let y = bounds.top; y <= bounds.bottom; y += 2) {
+                // Get light intensity from the center point of each 2x2 box
+                const centerX = x;
+                const centerY = y;
+                const lightIntensities = [
+                    LightSystem.getLightIntensity(centerX, centerY),
+                    LightSystem.getLightIntensity(centerX + 1, centerY),
+                    LightSystem.getLightIntensity(centerX, centerY + 1),
+                    LightSystem.getLightIntensity(centerX + 1, centerY + 1),
+                ]
+                const lightIntensity = Math.max(...lightIntensities);
                 if (lightIntensity > 0) {
-                    let opacity = Math.min(1, lightIntensity / 20);
-                    ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
-                    ctx.fillRect(x * CONFIG.pixelSize, y * CONFIG.pixelSize, CONFIG.pixelSize, CONFIG.pixelSize);
+                    let opacity = Math.min(1, lightIntensity / 15);
+                    lightCtx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
+                    // Draw a 2x2 box
+                    lightCtx.fillRect(x * CONFIG.pixelSize, y * CONFIG.pixelSize, 2 * CONFIG.pixelSize, 2 * CONFIG.pixelSize);
                 }
             }
         }
