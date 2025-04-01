@@ -1,10 +1,10 @@
-[![Website](https://img.shields.io/website?url=https%3A%2F%2Fsandgame.fyi)](https://sandgame.fyi)
+[![Website](https://img.shields.io/website?url=https%3A%2F%2Fsandbox.a-laud.ru)](https://sandbox.a-laud.ru)
 
 # Sandbox-4 (or 3 🤷‍♂️): Interactive Particle Simulation
 
 This project is an interactive particle simulation sandbox where users can experiment with different element types and observe their behaviors in a physics-based environment. 
 
-[Play the game](https://sandgame.fyi)
+[Play the game](https://sandbox.a-laud.ru)
 
 ## Getting Started
 
