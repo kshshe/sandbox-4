@@ -32,7 +32,7 @@ export class Controls {
         isPaused: Storage.get('Controls.isPaused', false),
         isSmoothMovementEnabled: Storage.get('Controls.isSmoothMovementEnabled', true),
         isConnectionMode: false,
-        isLightSourcesEnabled: Storage.get('Controls.isLightSourcesEnabled', true),
+        isLightSourcesEnabled: Storage.get('Controls.isLightSourcesEnabled', false),
         // don't forget to update initial state in controls.test.ts
     }
 

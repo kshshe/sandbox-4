@@ -116,6 +116,7 @@ export const SettingsPanel: React.FC = () => {
               setIsDebugMode(false);
               setMaxSpeedMode(false);
               setIsTemperatureEnabled(true);
+              setIsLightSourcesEnabled(false);
               setBaseTemperature(20);
               setIsSmoothMovementEnabled(true);
               setIsOpened(false);
